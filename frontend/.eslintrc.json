@@ -14,6 +14,7 @@
   },
   "plugins": ["react", "prettier", "html"],
   "rules": {
+    "no-console": "off",
     "prettier/prettier": [
       "error",
       {

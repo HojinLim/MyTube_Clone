@@ -1,17 +1,17 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-
-import { MainPage } from "pages/MainPage"
+import { GoogleOAuthProvider } from "@react-oauth/google"
+import { HomePage } from "pages/HomePage"
 import React from "react"
 // 새로운 테마 생성
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#ffffff", // 주 색상
+      main: "#ffdee", // 주 색상
     },
     // 연한 파란색
     blue: {
-      main: "#03a9f4", // 보조 색상
+      main: "#ffdee", // 보조 색상
     },
   },
   typography: {
@@ -23,9 +23,11 @@ const theme = createTheme({
 })
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <MainPage />
-    </ThemeProvider>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
+      <ThemeProvider theme={theme}>
+        <HomePage />
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   )
 }
 export default App

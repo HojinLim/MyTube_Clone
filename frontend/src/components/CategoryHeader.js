@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { AppBar } from "@mui/material"
 const CategoryHeader = () => {
   return (
