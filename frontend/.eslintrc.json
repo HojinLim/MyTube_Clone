@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "es6": true
+    "es6": true,
+    "node": true
   },
   "extends": ["plugin:react/recommended", "prettier"],
   "parserOptions": {
@@ -15,6 +16,7 @@
   "plugins": ["react", "prettier", "html"],
   "rules": {
     "no-console": "off",
+    "react/prop-types": "off",
     "prettier/prettier": [
       "error",
       {

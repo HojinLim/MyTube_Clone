@@ -12,7 +12,7 @@ const Router = () => {
       <SideBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/watch" element={<DetailVideo />} />
+        <Route path="/watch/:id" element={<DetailVideo />} />
       </Routes>
     </BrowserRouter>
   )

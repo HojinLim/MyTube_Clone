@@ -4,8 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu"
 import YoutubeLogo from "assets/images/logos/logo.png"
 import SearchIcon from "@mui/icons-material/Search"
 import MicIcon from "@mui/icons-material/Mic"
-import Box from "@mui/material/Box"
-import Grid from "@mui/material/Grid"
+
 import { styled, alpha } from "@mui/material/styles"
 import InputBase from "@mui/material/InputBase"
 import { GoogleLoginButton } from "./GoogleLoginButton"
@@ -16,28 +15,14 @@ import MenuItem from "@mui/material/MenuItem"
 import { UserProfileButton } from "./UserProfileButton"
 import { accountState } from "atom/accountState"
 import Divider from "@mui/material/Divider"
-const StyledIconButton = styled(IconButton)({
-  backgroundColor: "lightgray",
-  borderRadius: "50%",
-  padding: "10px", // 아이콘 주위 여백 조절
-})
-
-// const StyledInputBase = styled(InputBase)(({ theme }) => ({
-//   color: "inherit",
-
-//   "& .MuiInputBase-input": {
-//     padding: theme.spacing(1, 1, 1, 0),
-//     // vertical padding + font size from searchIcon
-//     paddingLeft: `calc(1em + ${theme.spacing(1)})`,
-//     transition: theme.transitions.create("width"),
-//     width: "500px",
-//   },
-// }))
+import { useNavigate } from "react-router-dom"
+import SideBar from "./SideBar"
 
 function Header() {
   const [state, toggleState] = useRecoilState(changeState)
   const [user, setUser] = useRecoilState(accountState)
-  const matches = useMediaQuery("(min-width:768px)")
+
+  const navigate = useNavigate()
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user"), null))
   }, [])
@@ -45,19 +30,34 @@ function Header() {
   return (
     <div
       id="container"
-      style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+      style={{
+        position: "fixed",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        zIndex: 3,
+        backgroundColor: "white",
+        width: "100%",
+        height: "10vh",
+      }}
     >
       {/* 좌측 */}
 
       <div style={{ display: "flex" }}>
-        <IconButton>
+        <Button
+          sx={{ borderRadius: "50%" }}
+          onClick={() => {
+            toggleState((prev) => !prev)
+          }}
+        >
           <MenuIcon />
-        </IconButton>
+        </Button>
         <Button
           aria-label="logo"
           sx={{
             display: { xs: "none", sm: "block" },
           }}
+          onClick={() => navigate("/")}
         >
           <img src={YoutubeLogo} alt="Youtube" width="100" height="50" />
         </Button>

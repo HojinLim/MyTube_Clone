@@ -3,13 +3,14 @@ import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import ReactPlayer from "react-player/lazy"
 import Typography from "@mui/material/Typography"
-
+import { useNavigate } from "react-router-dom"
 import Avatar from "@mui/material/Avatar"
 import { formatTime } from "functions/formatTime"
 export const VideoContainer = (data) => {
   const { thumb, title, subtitle, sources, duration } = data.data
   const [hover, setHover] = useState(false)
   const [timer, setTimer] = useState(0)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -27,6 +28,9 @@ export const VideoContainer = (data) => {
   const mouseHoverOut = () => {
     setHover(false)
     setTimer(0)
+  }
+  const moveDetailPage = () => {
+    navigate(`/watch/${data.data.id}`)
   }
   return (
     <Container
@@ -51,11 +55,12 @@ export const VideoContainer = (data) => {
         }}
       >
         {/* 썸네일 또는 영상 */}
-
         <div
+          className="video-container"
           style={{ width: "100%", height: "100%", borderRadius: "20px" }}
           onMouseOver={mouseHoverOver}
           onMouseOut={mouseHoverOut}
+          onClick={moveDetailPage}
         >
           {hover ? (
             <ReactPlayer

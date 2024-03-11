@@ -65,7 +65,7 @@ function SideBar(props) {
   }
 
   const drawer = (
-    <div style={{ marginTop: "50px" }}>
+    <div style={{ marginTop: "80px" }}>
       <Divider />
       {/* 윗 리스트 아이콘 */}
       <List>
@@ -200,8 +200,6 @@ function SideBar(props) {
       </Typography>
     </div>
   )
-
-  // Remove this const when copying and pasting into your project.
 
   return (
     <Box position="fixed">
