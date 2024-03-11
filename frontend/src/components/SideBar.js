@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useApolloClient } from "@apollo/client"
 import PropTypes from "prop-types"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
@@ -28,32 +29,43 @@ import Toolbar from "@mui/material/Toolbar"
 import { Typography } from "@mui/material"
 import { GoogleLoginButton } from "./GoogleLoginButton"
 import SmartDisplay from "@mui/icons-material/SmartDisplay"
+import { styled } from "@mui/material/styles"
+import Avatar from "@mui/material/Avatar"
+import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from "recoil"
+import { changeState } from "atom/changeState"
+import { accountState } from "atom/accountState"
+import youtuber1 from "assets/images/logos/youtuber_logo_1.jpg"
+import youtuber2 from "assets/images/logos/youtuber_logo_2.png"
 
 const drawerWidth = 240
 
 function SideBar(props) {
-  const { window } = props
+  const StyledGrid = styled("div")(({ theme }) => ({
+    padding: theme.spacing(1),
+    [theme.breakpoints.down("md")]: {
+      width: "150%",
+      marginTop: "130px",
+      marginLeft: "15vw",
+      display: "grid",
+      gridTemplateColumns: "1fr",
+      gridTemplateRows: "1fr 1fr 1fr 1fr",
+      backgroundColor: "#cfeeee",
+      paddingTop: "30px",
+    },
+  }))
+
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [isClosing, setIsClosing] = React.useState(false)
-
+  const [dummy, setDummy] = React.useState()
+  const [state, toggleState] = useRecoilState(changeState)
+  const [user, setUser] = useRecoilState(accountState)
   const handleDrawerClose = () => {
     setIsClosing(true)
     setMobileOpen(false)
   }
 
-  const handleDrawerTransitionEnd = () => {
-    setIsClosing(false)
-  }
-
-  const handleDrawerToggle = () => {
-    if (!isClosing) {
-      setMobileOpen(!mobileOpen)
-    }
-  }
-
   const drawer = (
-    <div>
-      <Toolbar />
+    <div style={{ marginTop: "50px" }}>
       <Divider />
       {/* 윗 리스트 아이콘 */}
       <List>
@@ -89,10 +101,34 @@ function SideBar(props) {
       </List>
       <Divider />
       <Box component="section" sx={{ p: 2 }} flexDirection={"column"} display={"flex"}>
-        <Typography fontSize={20} variant="h9">
-          로그인하면 동영상에 좋아요를 표시하고 댓글을 달거나 구독할 수 있습니다.
-        </Typography>
-        <GoogleLoginButton />
+        {!user ? (
+          <>
+            <Typography fontSize={20} variant="h9">
+              로그인하면 동영상에 좋아요를 표시하고 댓글을 달거나 구독할 수 있습니다.
+            </Typography>
+            <GoogleLoginButton />
+          </>
+        ) : (
+          <>
+            <Typography fontSize={20} variant="h8">
+              구독
+            </Typography>
+
+            <List>
+              {["침착맨", "슈카월드"].map((text, index) => (
+                <ListItem key={text} disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {index === 0 && <Avatar src={youtuber1} />}
+                      {index === 1 && <Avatar src={youtuber2} />}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        )}
       </Box>
       <Divider />
 
@@ -166,68 +202,29 @@ function SideBar(props) {
   )
 
   // Remove this const when copying and pasting into your project.
-  const container = window !== undefined ? () => window().document.body : undefined
 
   return (
     <Box position="fixed">
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      ></AppBar>
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onTransitionEnd={handleDrawerTransitionEnd}
-          onClose={handleDrawerClose}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+            display: state ? "block" : "none", // 상태에 따라 display 설정
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
-          open
         >
           {drawer}
         </Drawer>
       </Box>
-
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
-        <Toolbar />
-      </Box>
     </Box>
   )
-}
-
-SideBar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
-  window: PropTypes.func,
 }
 
 export default SideBar

@@ -1,11 +1,33 @@
-import React from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
-
+import ReactPlayer from "react-player/lazy"
 import Typography from "@mui/material/Typography"
 
 import Avatar from "@mui/material/Avatar"
-export const VideoContainer = () => {
+import { formatTime } from "functions/formatTime"
+export const VideoContainer = (data) => {
+  const { thumb, title, subtitle, sources, duration } = data.data
+  const [hover, setHover] = useState(false)
+  const [timer, setTimer] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimer((prevCount) => prevCount + 1)
+    }, 1000)
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
+  useEffect(() => {}, [timer])
+  const mouseHoverOver = () => {
+    setHover(true)
+  }
+  const mouseHoverOut = () => {
+    setHover(false)
+    setTimer(0)
+  }
   return (
     <Container
       sx={{
@@ -13,19 +35,42 @@ export const VideoContainer = () => {
         flexDirection: "column",
         display: "flex",
         gap: "10px",
+        justifyContent: "center",
+        alignContent: "center",
       }}
     >
-      {/* 영상 길이 */}
       <Box
         sx={{
           position: "relative",
           flexGrow: 1,
           bgcolor: "#ccc",
-          width: "350px",
-          height: "200px",
+          width: "100%",
+          maxWidth: "450px",
+          height: "250px",
           borderRadius: "20px",
         }}
       >
+        {/* 썸네일 또는 영상 */}
+
+        <div
+          style={{ width: "100%", height: "100%", borderRadius: "20px" }}
+          onMouseOver={mouseHoverOver}
+          onMouseOut={mouseHoverOut}
+        >
+          {hover ? (
+            <ReactPlayer
+              url={sources[0]}
+              width="100%"
+              height="100%"
+              playing={true}
+              autoPlay={true}
+              style={{ borderRadius: "20px" }}
+            />
+          ) : (
+            <img src={thumb} alt="Video Thumbnail" style={{ width: "100%", height: "100%" }} />
+          )}
+        </div>
+        {/* 영상 길이 */}
         <Typography
           sx={{
             position: "absolute",
@@ -40,7 +85,7 @@ export const VideoContainer = () => {
           variant="body2"
           gutterBottom
         >
-          27:13
+          {hover ? `${formatTime(timer)} / ${duration ?? "00:00"}` : `${duration ?? "00:00"}`}
         </Typography>
       </Box>
       {/* 프로필, 제목, 조회수 */}
@@ -60,10 +105,10 @@ export const VideoContainer = () => {
           }}
         >
           <Typography variant="h6" gutterBottom>
-            -제목-
+            {title}
           </Typography>
           <Typography variant="body2" gutterBottom color={"gray"}>
-            -채널명-
+            {subtitle}
           </Typography>
           <Typography variant="body2" gutterBottom color={"gray"}>
             조회수 100회 ⦁ 10시간 전

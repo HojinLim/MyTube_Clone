@@ -4,8 +4,8 @@ import { IconButton, Typography } from "@mui/material"
 import { styled, alpha } from "@mui/material/styles"
 import { useGoogleLogin } from "@react-oauth/google"
 import axios from "axios"
-import useGoogleAuth from "hooks/useGoogleAuth"
-
+import { useRecoilState } from "recoil"
+import { accountState } from "atom/accountState"
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(1),
   "&:hover": {
@@ -23,17 +23,33 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }))
 
 export const GoogleLoginButton = () => {
+  const [user, setUser] = useRecoilState(accountState)
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse)
-      // fetching userinfo can be done on the client or the server
+      window.localStorage.setItem("token", tokenResponse.access_token)
       const userInfo = await axios
         .get("https://www.googleapis.com/oauth2/v3/userinfo", {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         })
-        .then((res) => res.data)
+        .then((res) => {
+          console.log(res.data)
+          return res.data
+        })
 
-      console.log(userInfo)
+      const { email, pitcure } = userInfo
+      let user = null
+      if (!pitcure) {
+        user = { email, pitcure: null }
+      } else {
+        user = { email, pitcure }
+      }
+
+      localStorage.setItem("user", JSON.stringify(user))
+      setUser(user)
+      // window.location.reload()
+
+      console.log(user)
     },
     // flow: 'implicit', // implicit is the default
   })

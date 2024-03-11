@@ -1,20 +1,14 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import { BrowserRouter } from "react-router-dom"
+
 import App from "App"
-
+import "./styles.css"
 // Redux setting
-import { Provider } from "react-redux"
-import { createStore } from "redux"
-import reducers from "./reducers"
 
-const store = createStore(reducers)
-
+import { RecoilRoot } from "recoil"
 ReactDOM.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>,
+  <RecoilRoot>
+    <App />
+  </RecoilRoot>,
   document.getElementById("root")
 )
