@@ -25,23 +25,50 @@ import VolumeOffIcon from "@mui/icons-material/VolumeOff"
 import VolumeDownIcon from "@mui/icons-material/VolumeDown"
 import VolumeUpIcon from "@mui/icons-material/VolumeUp"
 import Slider from "@mui/material/Slider"
+import Tooltip from "@mui/material/Tooltip"
+import { secondsToTime } from "functions/secondsToTime"
 
 export const DetailVideo = () => {
   const params = useParams()
   const [startVid, setStartVid] = useState("true")
+
+  // Time
   const [playTime, setPlayTime] = useState(0)
+  const [playedTime, setPlayedTime] = useState("0:00")
   const [percent, setPercent] = useState(0)
+
+  // Screen
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isMoviescreen, setIsMoviescreen] = useState(false)
   const [recoFull, setRecoFull] = useRecoilState(fullScreenState)
 
   // Volumn
   const [volumn, setVolumn] = React.useState(30)
-  const [prevVolumn, setPrevVolumn] = React.useState(0)
+  const [prevVolumn, setPrevVolumn] = React.useState(volumn)
 
   const handleChange = (event, newValue) => {
     setVolumn(newValue)
   }
+  const muteHandler = () => {
+    if (volumn !== 0) {
+      setPrevVolumn(volumn)
+    }
+    setVolumn((prev) => (prev === 0 ? prevVolumn : 0))
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "m") {
+        muteHandler()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [volumn])
 
   const videoId = params.id
   const video = dummyData.find((video) => video.id + "" === videoId)
@@ -49,6 +76,7 @@ export const DetailVideo = () => {
 
   useMemo(() => {
     setPercent((playTime / stringToSeconds(duration)) * 100)
+    setPlayedTime(secondsToTime(Math.trunc(playTime)))
   }, [playTime])
 
   const clickSreen = () => {
@@ -148,16 +176,16 @@ export const DetailVideo = () => {
               >
                 {!startVid ? <PlayArrowIcon fontSize="large" /> : <PauseIcon fontSize="large" />}
               </Button>
-              <Button
-                onClick={() => {
-                  setPrevVolumn(volumn)
-                  setVolumn((prev) => (prev === 0 ? prevVolumn : 0))
-                }}
-              >
+              {/* 볼륨 조절 */}
+              <Button onClick={muteHandler}>
                 {volumn === 0 ? (
-                  <VolumeOffIcon fontSize="large" />
+                  <Tooltip title="음소거 해제(m)" placement="top">
+                    <VolumeOffIcon fontSize="large" />
+                  </Tooltip>
                 ) : volumn < 60 ? (
-                  <VolumeDownIcon fontSize="large" />
+                  <Tooltip title="음소거(m)" placement="top">
+                    <VolumeDownIcon fontSize="large" />
+                  </Tooltip>
                 ) : (
                   <VolumeUpIcon fontSize="large" />
                 )}
@@ -173,8 +201,9 @@ export const DetailVideo = () => {
                   padding: "3px 0px",
                 }}
               />
+              {/* 영상 길이 , 남은 시간 */}
               <Typography variant="caption" gutterBottom style={{ margin: "0px 15px" }}>
-                0:05 / 13:14
+                {`${playedTime} / ${duration}`}
               </Typography>
 
               <Button>
