@@ -20,11 +20,14 @@ import screenfull from "screenfull"
 import { useRecoilState } from "recoil"
 import { fullScreenState } from "atom/fullScreenState"
 
+// Slider
+import Slider, { SliderThumb } from "@mui/material/Slider"
+import { styled } from "@mui/material/styles"
+
 // Volumn
 import VolumeOffIcon from "@mui/icons-material/VolumeOff"
 import VolumeDownIcon from "@mui/icons-material/VolumeDown"
 import VolumeUpIcon from "@mui/icons-material/VolumeUp"
-import Slider from "@mui/material/Slider"
 import Tooltip from "@mui/material/Tooltip"
 import { secondsToTime } from "functions/secondsToTime"
 
@@ -35,7 +38,7 @@ export const DetailVideo = () => {
   // Time
   const [playTime, setPlayTime] = useState(0)
   const [playedTime, setPlayedTime] = useState("0:00")
-  const [percent, setPercent] = useState(0)
+  const [timePercent, setTimePercent] = useState(0)
 
   // Screen
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -49,6 +52,20 @@ export const DetailVideo = () => {
   const handleChange = (event, newValue) => {
     setVolumn(newValue)
   }
+  const playerRef = React.useRef()
+
+  const goToThere = (seconds) => {
+    playerRef.current.seekTo(seconds, "seconds")
+  }
+
+  const handleVideoChange = (event, newValue) => {
+    // newValue = 0 ~ 100
+
+    setTimePercent(newValue)
+    const time = (newValue / 100) * stringToSeconds(duration)
+    goToThere(time)
+  }
+
   const muteHandler = () => {
     if (volumn !== 0) {
       setPrevVolumn(volumn)
@@ -75,7 +92,7 @@ export const DetailVideo = () => {
   const { thumb, title, subtitle, sources, duration } = video
 
   useMemo(() => {
-    setPercent((playTime / stringToSeconds(duration)) * 100)
+    setTimePercent((playTime / stringToSeconds(duration)) * 100)
     setPlayedTime(secondsToTime(Math.trunc(playTime)))
   }, [playTime])
 
@@ -99,6 +116,33 @@ export const DetailVideo = () => {
     }
   }, [])
 
+  const VideoPlaySlider = styled(Slider)({
+    color: "#eb4034",
+    height: 5,
+    "& .MuiSlider-track": {
+      border: "none",
+    },
+    "& .MuiSlider-thumb": {
+      height: 12,
+      width: 12,
+      backgroundColor: "#eb4034",
+      border: "2px solid currentColor",
+      "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
+        boxShadow: "inherit",
+      },
+      "&::before": {
+        display: "none",
+      },
+    },
+    "&.MuiSlider-dragging": {
+      "& .MuiSlider-thumb": {
+        height: 20,
+        width: 20,
+      },
+    },
+    "& .MuiSlider-valueLabel": {},
+  })
+
   return (
     <div className="detail_container" style={!isFullscreen ? { paddingTop: "100px" } : {}}>
       <div className="left_container">
@@ -119,6 +163,7 @@ export const DetailVideo = () => {
             }}
           >
             <ReactPlayer
+              ref={playerRef}
               onClick={clickSreen}
               volume={volumn / 100}
               onProgress={(progress) => {
@@ -129,6 +174,7 @@ export const DetailVideo = () => {
               height="100%"
               playing={startVid}
               autoPlay={true}
+              // onReady={onReady}
             />
             {startVid ? (
               <PlayCircleIcon
@@ -166,9 +212,8 @@ export const DetailVideo = () => {
                 marginBottom: "5px",
               }}
             >
-              <div className="progressbar">
-                <div className="progressbarfill" style={{ width: `${percent}%` }}></div>
-              </div>
+              <VideoPlaySlider value={timePercent} onChange={handleVideoChange} />
+
               <Button
                 onClick={() => {
                   setStartVid((prev) => !prev)
@@ -196,6 +241,7 @@ export const DetailVideo = () => {
                 aria-label="Volume"
                 value={volumn}
                 onChange={handleChange}
+                marks={false}
                 sx={{
                   width: "80px",
                   padding: "3px 0px",
