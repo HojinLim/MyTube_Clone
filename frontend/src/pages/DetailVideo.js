@@ -210,67 +210,81 @@ export const DetailVideo = () => {
                 color: "white",
                 width: "100%",
                 marginBottom: "5px",
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "column",
               }}
             >
               <VideoPlaySlider value={timePercent} onChange={handleVideoChange} />
 
-              <Button
-                onClick={() => {
-                  setStartVid((prev) => !prev)
-                }}
+              <div
+                style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}
               >
-                {!startVid ? <PlayArrowIcon fontSize="large" /> : <PauseIcon fontSize="large" />}
-              </Button>
-              {/* 볼륨 조절 */}
-              <Button onClick={muteHandler}>
-                {volumn === 0 ? (
-                  <Tooltip title="음소거 해제(m)" placement="top">
-                    <VolumeOffIcon fontSize="large" />
-                  </Tooltip>
-                ) : volumn < 60 ? (
-                  <Tooltip title="음소거(m)" placement="top">
-                    <VolumeDownIcon fontSize="large" />
-                  </Tooltip>
-                ) : (
-                  <VolumeUpIcon fontSize="large" />
-                )}
-              </Button>
+                <div>
+                  <Button
+                    onClick={() => {
+                      setStartVid((prev) => !prev)
+                    }}
+                  >
+                    {!startVid ? (
+                      <PlayArrowIcon fontSize="large" />
+                    ) : (
+                      <PauseIcon fontSize="large" />
+                    )}
+                  </Button>
+                  {/* 볼륨 조절 */}
+                  <Button onClick={muteHandler}>
+                    {volumn === 0 ? (
+                      <Tooltip title="음소거 해제(m)" placement="top">
+                        <VolumeOffIcon fontSize="large" />
+                      </Tooltip>
+                    ) : volumn < 60 ? (
+                      <Tooltip title="음소거(m)" placement="top">
+                        <VolumeDownIcon fontSize="large" />
+                      </Tooltip>
+                    ) : (
+                      <VolumeUpIcon fontSize="large" />
+                    )}
+                  </Button>
+                  <Button>
+                    <SkipNextIcon fontSize="large" />
+                  </Button>
+                  <Slider
+                    className="volunn_slider"
+                    aria-label="Volume"
+                    value={volumn}
+                    onChange={handleChange}
+                    marks={false}
+                    sx={{
+                      width: "80px",
+                      padding: "3px 0px",
+                    }}
+                  />
+                  {/* 영상 길이 , 남은 시간 */}
+                  <Typography variant="caption" gutterBottom style={{ margin: "0px 15px" }}>
+                    {`${playedTime} / ${duration}`}
+                  </Typography>
+                </div>
 
-              <Slider
-                className="volunn_slider"
-                aria-label="Volume"
-                value={volumn}
-                onChange={handleChange}
-                marks={false}
-                sx={{
-                  width: "80px",
-                  padding: "3px 0px",
-                }}
-              />
-              {/* 영상 길이 , 남은 시간 */}
-              <Typography variant="caption" gutterBottom style={{ margin: "0px 15px" }}>
-                {`${playedTime} / ${duration}`}
-              </Typography>
-
-              <Button>
-                <SkipNextIcon fontSize="large" />
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsMoviescreen((prev) => !prev)
-                }}
-              >
-                <Crop75Icon fontSize="large" />
-              </Button>
-              <Button
-                onClick={() => {
-                  if (screenfull.isEnabled) {
-                    screenfull.toggle()
-                  }
-                }}
-              >
-                <FullscreenIcon fontSize="large" />
-              </Button>
+                <div>
+                  <Button
+                    onClick={() => {
+                      setIsMoviescreen((prev) => !prev)
+                    }}
+                  >
+                    <Crop75Icon fontSize="large" />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (screenfull.isEnabled) {
+                        screenfull.toggle()
+                      }
+                    }}
+                  >
+                    <FullscreenIcon fontSize="large" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
