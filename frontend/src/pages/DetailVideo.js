@@ -20,6 +20,12 @@ import screenfull from "screenfull"
 import { useRecoilState } from "recoil"
 import { fullScreenState } from "atom/fullScreenState"
 
+// Volumn
+import VolumeOffIcon from "@mui/icons-material/VolumeOff"
+import VolumeDownIcon from "@mui/icons-material/VolumeDown"
+import VolumeUpIcon from "@mui/icons-material/VolumeUp"
+import Slider from "@mui/material/Slider"
+
 export const DetailVideo = () => {
   const params = useParams()
   const [startVid, setStartVid] = useState("true")
@@ -28,6 +34,14 @@ export const DetailVideo = () => {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isMoviescreen, setIsMoviescreen] = useState(false)
   const [recoFull, setRecoFull] = useRecoilState(fullScreenState)
+
+  // Volumn
+  const [volumn, setVolumn] = React.useState(30)
+  const [prevVolumn, setPrevVolumn] = React.useState(0)
+
+  const handleChange = (event, newValue) => {
+    setVolumn(newValue)
+  }
 
   const videoId = params.id
   const video = dummyData.find((video) => video.id + "" === videoId)
@@ -41,15 +55,21 @@ export const DetailVideo = () => {
     setStartVid((prev) => !prev)
   }
 
-  screenfull.on("change", () => {
-    if (screenfull.isFullscreen) {
-      setIsFullscreen(true)
-      setRecoFull(true)
-    } else {
-      setIsFullscreen(false)
-      setRecoFull(false)
+  useEffect(() => {
+    screenfull.on("change", () => {
+      if (screenfull.isFullscreen) {
+        setIsFullscreen(true)
+        setRecoFull(true)
+      } else {
+        setIsFullscreen(false)
+        setRecoFull(false)
+      }
+    })
+
+    return () => {
+      screenfull.off("change")
     }
-  })
+  }, [])
 
   return (
     <div className="detail_container" style={!isFullscreen ? { paddingTop: "100px" } : {}}>
@@ -72,6 +92,7 @@ export const DetailVideo = () => {
           >
             <ReactPlayer
               onClick={clickSreen}
+              volume={volumn / 100}
               onProgress={(progress) => {
                 setPlayTime(progress.playedSeconds)
               }}
@@ -127,10 +148,38 @@ export const DetailVideo = () => {
               >
                 {!startVid ? <PlayArrowIcon fontSize="large" /> : <PauseIcon fontSize="large" />}
               </Button>
+              <Button
+                onClick={() => {
+                  setPrevVolumn(volumn)
+                  setVolumn((prev) => (prev === 0 ? prevVolumn : 0))
+                }}
+              >
+                {volumn === 0 ? (
+                  <VolumeOffIcon fontSize="large" />
+                ) : volumn < 60 ? (
+                  <VolumeDownIcon fontSize="large" />
+                ) : (
+                  <VolumeUpIcon fontSize="large" />
+                )}
+              </Button>
+
+              <Slider
+                className="volunn_slider"
+                aria-label="Volume"
+                value={volumn}
+                onChange={handleChange}
+                sx={{
+                  width: "80px",
+                  padding: "3px 0px",
+                }}
+              />
+              <Typography variant="caption" gutterBottom style={{ margin: "0px 15px" }}>
+                0:05 / 13:14
+              </Typography>
+
               <Button>
                 <SkipNextIcon fontSize="large" />
               </Button>
-
               <Button
                 onClick={() => {
                   setIsMoviescreen((prev) => !prev)
