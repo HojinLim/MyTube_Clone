@@ -16,6 +16,7 @@
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.1.0",
     "@testing-library/user-event": "12.1.10",
+    "@types/screenfull": "^4.1.0",
     "apollo-link-http": "^1.5.17",
     "axios": "^1.6.7",
     "chart.js": "3.4.1",
@@ -37,6 +38,7 @@
     "react-scripts": "4.0.3",
     "recoil": "^0.7.7",
     "redux": "^5.0.1",
+    "screenfull": "^6.0.2",
     "styled-components": "^6.1.8",
     "stylis": "4.0.10",
     "stylis-plugin-rtl": "2.1.0",
@@ -57,18 +59,11 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+   "not dead",
+   "not op_mini all"
+ ],
   "devDependencies": {
     "eslint": "7.30.0",
     "eslint-config-airbnb": "18.2.1",

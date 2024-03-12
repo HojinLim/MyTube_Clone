@@ -10,13 +10,11 @@ import InputBase from "@mui/material/InputBase"
 import { GoogleLoginButton } from "./GoogleLoginButton"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { changeState } from "atom/changeState"
-import useMediaQuery from "@mui/material/useMediaQuery"
-import MenuItem from "@mui/material/MenuItem"
+
 import { UserProfileButton } from "./UserProfileButton"
 import { accountState } from "atom/accountState"
 import Divider from "@mui/material/Divider"
 import { useNavigate } from "react-router-dom"
-import SideBar from "./SideBar"
 
 function Header() {
   const [state, toggleState] = useRecoilState(changeState)
@@ -39,6 +37,9 @@ function Header() {
         backgroundColor: "white",
         width: "100%",
         height: "10vh",
+        left: 0,
+        right: 0,
+        top: 0,
       }}
     >
       {/* 좌측 */}

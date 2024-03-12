@@ -17,7 +17,6 @@ body {
   .detail_container{
     border: 1px solid #e0e0e0;
     height:100%;
-    
     display: flex;
   }
 
@@ -32,19 +31,23 @@ body {
   .right_container{
     width: 50%;
     height: 100%;
-    border: 1px solid #cc4141;
+    border: 1px solid #16d757;
     background-color: #a830c0;
     flex-direction: column;
     display: none;
+
   }
+
+
   @media screen and (min-width: 1024px){
     .left_container{
       width: 80%;
+      display: block;
     }
     .right_container{
       width: 20%;
       display: block;
-      background-color: #cc4141;
+     
     }
   }
 
@@ -60,6 +63,7 @@ body {
     height: 20%;
     border: 1px solid #3a4c82;
     background-color: #494f99;
+    
   }
   .left_item_3{
     width: 100%;
@@ -90,5 +94,16 @@ body {
     background-color: red;
     transition:  width 0.5 ease-out;
     color: #fff;
+  }
 
+
+  @keyframes growAndFade {
+    0% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 0;
+    }
   }
