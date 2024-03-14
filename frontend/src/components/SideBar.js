@@ -1,19 +1,16 @@
 import * as React from "react"
-import { useApolloClient } from "@apollo/client"
-import PropTypes from "prop-types"
-import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
-import CssBaseline from "@mui/material/CssBaseline"
-import Divider from "@mui/material/Divider"
 import Drawer from "@mui/material/Drawer"
-import HomeIcon from "@mui/icons-material/Home"
-import SubscriptionIcon from "@mui/icons-material/Subscriptions"
+import Button from "@mui/material/Button"
 import List from "@mui/material/List"
+import Divider from "@mui/material/Divider"
 import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
-import Shorts from "@mui/icons-material/Speed"
+import YoutubeLogo from "assets/images/logos/logo.png"
+
+// Icons
 import RestoreIcon from "@mui/icons-material/Restore"
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary"
 import WhatshotIcon from "@mui/icons-material/Whatshot"
@@ -25,48 +22,67 @@ import SettingIcon from "@mui/icons-material/Settings"
 import FlagIcon from "@mui/icons-material/Flag"
 import HelpIcon from "@mui/icons-material/HelpOutline"
 import LiveHelpIcon from "@mui/icons-material/LiveHelp"
-import Toolbar from "@mui/material/Toolbar"
+import HomeIcon from "@mui/icons-material/Home"
+import Shorts from "@mui/icons-material/Speed"
+import SubscriptionIcon from "@mui/icons-material/Subscriptions"
+import SmartDisplay from "@mui/icons-material/SmartDisplay"
+import MenuIcon from "@mui/icons-material/Menu"
+
+import Avatar from "@mui/material/Avatar"
 import { Typography } from "@mui/material"
 import { GoogleLoginButton } from "./GoogleLoginButton"
-import SmartDisplay from "@mui/icons-material/SmartDisplay"
-import { styled } from "@mui/material/styles"
-import Avatar from "@mui/material/Avatar"
-import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from "recoil"
-import { changeState } from "atom/changeState"
-import { accountState } from "atom/accountState"
 import youtuber1 from "assets/images/logos/youtuber_logo_1.jpg"
 import youtuber2 from "assets/images/logos/youtuber_logo_2.png"
+import { accountState } from "atom/accountState"
+import { useRecoilState } from "recoil"
 
-const drawerWidth = 240
-
-function SideBar(props) {
-  const StyledGrid = styled("div")(({ theme }) => ({
-    padding: theme.spacing(1),
-    [theme.breakpoints.down("md")]: {
-      width: "150%",
-      marginTop: "130px",
-      marginLeft: "15vw",
-      display: "grid",
-      gridTemplateColumns: "1fr",
-      gridTemplateRows: "1fr 1fr 1fr 1fr",
-      backgroundColor: "#cfeeee",
-      paddingTop: "30px",
-    },
-  }))
-
+export default function SideBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [isClosing, setIsClosing] = React.useState(false)
   const [dummy, setDummy] = React.useState()
-  const [state, toggleState] = useRecoilState(changeState)
+  //   const [state, toggleState] = useRecoilState(changeState)
   const [user, setUser] = useRecoilState(accountState)
   const handleDrawerClose = () => {
     setIsClosing(true)
     setMobileOpen(false)
   }
+  const commonStyle = {
+    color: "black",
+  }
 
-  const drawer = (
-    <div style={{ marginTop: "80px" }}>
-      <Divider />
+  const [state, setState] = React.useState({
+    left: false,
+  })
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+      return
+    }
+
+    setState({ ...state, [anchor]: open })
+  }
+
+  const list = (anchor) => (
+    <Box
+      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <div style={{ display: "flex" }}>
+        <Button onClick={toggleDrawer("left", true)}>
+          <MenuIcon />
+        </Button>
+        <Button
+          aria-label="logo"
+          sx={{
+            display: { xs: "none", sm: "block" },
+          }}
+          onClick={() => navigate("/")}
+        >
+          <img src={YoutubeLogo} alt="Youtube" width="100" height="50" />
+        </Button>
+      </div>
       {/* 윗 리스트 아이콘 */}
       <List>
         <List>
@@ -74,9 +90,9 @@ function SideBar(props) {
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  {index === 0 && <HomeIcon />}
-                  {index === 1 && <Shorts />}
-                  {index === 2 && <SubscriptionIcon />}
+                  {index === 0 && <HomeIcon style={commonStyle} />}
+                  {index === 1 && <Shorts style={commonStyle} />}
+                  {index === 2 && <SubscriptionIcon style={commonStyle} />}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -91,8 +107,8 @@ function SideBar(props) {
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index === 0 && <VideoLibraryIcon />}
-                {index === 1 && <RestoreIcon />}
+                {index === 0 && <VideoLibraryIcon style={commonStyle} />}
+                {index === 1 && <RestoreIcon style={commonStyle} />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -141,11 +157,11 @@ function SideBar(props) {
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index === 0 && <WhatshotIcon />}
-                {index === 1 && <MusicNoteIcon />}
-                {index === 2 && <MovieIcon />}
-                {index === 3 && <GameIcon />}
-                {index === 4 && <SportsIcon />}
+                {index === 0 && <WhatshotIcon style={commonStyle} />}
+                {index === 1 && <MusicNoteIcon style={commonStyle} />}
+                {index === 2 && <MovieIcon style={commonStyle} />}
+                {index === 3 && <GameIcon style={commonStyle} />}
+                {index === 4 && <SportsIcon style={commonStyle} />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -161,9 +177,9 @@ function SideBar(props) {
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index === 0 && <SmartDisplay />}
-                {index === 1 && <SmartDisplay />}
-                {index === 2 && <SmartDisplay />}
+                {index === 0 && <SmartDisplay style={commonStyle} />}
+                {index === 1 && <SmartDisplay style={commonStyle} />}
+                {index === 2 && <SmartDisplay style={commonStyle} />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -176,10 +192,10 @@ function SideBar(props) {
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index === 0 && <SettingIcon />}
-                {index === 1 && <FlagIcon />}
-                {index === 2 && <HelpIcon />}
-                {index === 3 && <LiveHelpIcon />}
+                {index === 0 && <SettingIcon style={commonStyle} />}
+                {index === 1 && <FlagIcon style={commonStyle} />}
+                {index === 2 && <HelpIcon style={commonStyle} />}
+                {index === 3 && <LiveHelpIcon style={commonStyle} />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -198,31 +214,19 @@ function SideBar(props) {
         판매자들의 약관에 따라 판매됩니다. 유튜브는 이러한 제품들을 판매하지 않으며, 그에 대한
         책임을 지지 않습니다.
       </Typography>
-    </div>
+    </Box>
   )
 
   return (
-    <Box position="fixed">
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: state ? "block" : "none", // 상태에 따라 display 설정
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
+    <div>
+      <React.Fragment key="left">
+        <Button onClick={toggleDrawer("left", true)}>
+          <MenuIcon />
+        </Button>
+        <Drawer anchor="left" open={state.left} onClose={toggleDrawer("left", false)}>
+          {list("left")}
         </Drawer>
-      </Box>
-    </Box>
+      </React.Fragment>
+    </div>
   )
 }
-
-export default SideBar

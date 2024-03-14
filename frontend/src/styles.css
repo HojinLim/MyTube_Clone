@@ -4,6 +4,13 @@ html {
 body {
   min-height: 100%;
 }
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+.logo:hover{
+  cursor: pointer;
+}
 .buttonContainer {
     display: none; /* 초기에는 버튼을 숨깁니다 */
   }
@@ -17,19 +24,28 @@ body {
   .detail_container{
     border: 1px solid #e0e0e0;
     height:100%;
+    width: 100%;
     display: flex;
+    background-color: #eee;
   }
 
   .left_container{
     width: 100%;
-
     height: 100%;
-    border: 1px solid #cc4141;
+    border: 4px solid #3237c2;
     display: flex;
     flex-direction: column;
   }
-  .right_container{
-    width: 50%;
+  /* .right_container{
+    width: 20%;
+    height: 100%;
+    border: 1px solid #0fd7e9;
+    display: flex;
+    background-color: #226185;
+    flex-direction: column;
+  } */
+  .videos_side_container{
+    width: 100%;
     height: 100%;
     border: 1px solid #16d757;
     background-color: #a830c0;
@@ -37,6 +53,22 @@ body {
     display: none;
 
   }
+  .videos_bottom_container {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #16d757;
+    background-color: #a830c0;
+    flex-direction: column;
+    display: block;
+  }
+ 
+  @media screen and (min-width: 1024px){
+    .videos_bottom_container {
+      display: none;
+    }
+
+  }
+
 
   .volunn_slider:hover {
   cursor: pointer;
@@ -48,17 +80,30 @@ body {
       width: 80%;
       display: block;
     }
-    .right_container{
+    .videos_side_container{
       width: 20%;
       display: block;
-     
+      height: 100%;
+      background-color: #a6cc33;
     }
+
+   
+
+  }
+  .side_container{
+    width: 20%;
+    height: 100%;
+    border: 1px solid #cc4141;
+    display: none;
+    flex-direction: column;
+    background-color: #cc4141;
+
   }
 
 
   .left_item_1{
     width: 100%;
-    height: 60%;
+    height: 30%;
     border: 1px solid #22419e;
     background-color: #cc4141;
   }
@@ -81,24 +126,6 @@ body {
     cursor: pointer;
   }
 
-
-  /* .progressbar{
-    width: 100%;
-    height: 3px;
-    border-radius: 50px;
-    border: 1px solid #000;
-    margin-bottom: 10px;
-    text-align: center;
-    background-color: #ebebeb;
-    
- 
-  }
-  .progressbarfill{
-    height: 100%;
-    background-color: red;
-    transition:  width 0.5 ease-out;
-    color: #fff;
-  } */
 
 
   @keyframes growAndFade {

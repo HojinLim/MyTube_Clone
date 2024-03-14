@@ -39,19 +39,24 @@ export const VideoContainer = (data) => {
         flexGrow: 1,
         flexDirection: "column",
         display: "flex",
-        gap: "10px",
+        gap: "15px",
         justifyContent: "center",
         alignContent: "center",
+        maxWidth: "500px",
+        width: "500px",
+        width: { xl: "450px" },
+        margin: "auto",
+        padding: "auto",
       }}
     >
       <Box
         sx={{
           position: "relative",
           flexGrow: 1,
-          bgcolor: "#ccc",
           width: "100%",
           maxWidth: "450px",
-          height: "250px",
+          // height: "250px",
+          height: { xs: "250px", sm: "250px", md: "250px", lg: "250px", xl: "220px" },
           borderRadius: "20px",
         }}
       >
@@ -73,7 +78,11 @@ export const VideoContainer = (data) => {
               style={{ borderRadius: "20px" }}
             />
           ) : (
-            <img src={thumb} alt="Video Thumbnail" style={{ width: "100%", height: "100%" }} />
+            <img
+              src={thumb}
+              alt="Video Thumbnail"
+              style={{ width: "100%", height: "100%", borderRadius: "20px" }}
+            />
           )}
         </div>
         {/* 영상 길이 */}
@@ -100,6 +109,7 @@ export const VideoContainer = (data) => {
           flexGrow: 1,
           flexDirection: "row",
           display: "flex",
+          overflow: "hidden",
         }}
       >
         <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />

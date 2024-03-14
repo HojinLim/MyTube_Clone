@@ -6,6 +6,7 @@ import { useGoogleLogin } from "@react-oauth/google"
 import axios from "axios"
 import { useRecoilState } from "recoil"
 import { accountState } from "atom/accountState"
+import { changeState } from "atom/accountState"
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(1),
   "&:hover": {
@@ -24,6 +25,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 export const GoogleLoginButton = () => {
   const [user, setUser] = useRecoilState(accountState)
+
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse)

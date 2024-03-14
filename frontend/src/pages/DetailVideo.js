@@ -9,13 +9,17 @@ import Avatar from "@mui/material/Avatar"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import { dummyData } from "dummy"
 import { UserFeedBackContainer } from "components/UserFeedBackContainer"
+
+import Button from "@mui/material/Button"
+import { stringToSeconds } from "functions/stringToSeconds"
+//Icons
+import PauseCircleIcon from "@mui/icons-material/PauseCircle"
+import FullscreenIcon from "@mui/icons-material/Fullscreen"
+import FullscreenExitIcon from "@mui/icons-material/FullscreenExit"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import SkipNextIcon from "@mui/icons-material/SkipNext"
 import PauseIcon from "@mui/icons-material/Pause"
-import Button from "@mui/material/Button"
-import { stringToSeconds } from "functions/stringToSeconds"
-import PauseCircleIcon from "@mui/icons-material/PauseCircle"
-import FullscreenIcon from "@mui/icons-material/Fullscreen"
+
 import screenfull from "screenfull"
 import { useRecoilState } from "recoil"
 import { fullScreenState } from "atom/fullScreenState"
@@ -30,10 +34,12 @@ import VolumeDownIcon from "@mui/icons-material/VolumeDown"
 import VolumeUpIcon from "@mui/icons-material/VolumeUp"
 import Tooltip from "@mui/material/Tooltip"
 import { secondsToTime } from "functions/secondsToTime"
-
+import useMediaQuery from "@mui/material/useMediaQuery"
 export const DetailVideo = () => {
   const params = useParams()
   const [startVid, setStartVid] = useState("true")
+
+  const matches = useMediaQuery("(min-width:1024px)")
 
   // Time
   const [playTime, setPlayTime] = useState(0)
@@ -144,13 +150,10 @@ export const DetailVideo = () => {
   })
 
   return (
-    <div className="detail_container" style={!isFullscreen ? { paddingTop: "100px" } : {}}>
+    <div className="detail_container" style={!isFullscreen ? { paddingTop: "60px" } : {}}>
       <div className="left_container">
         {/* 영상 컨테이너 */}
-        <div
-          className="left_item_1"
-          style={isFullscreen || isMoviescreen ? { width: "100vw" } : {}}
-        >
+        <div className="left_item_1" style={isFullscreen || isMoviescreen ? { width: "97vw" } : {}}>
           <div
             style={{
               flexGrow: 1,
@@ -174,7 +177,6 @@ export const DetailVideo = () => {
               height="100%"
               playing={startVid}
               autoPlay={true}
-              // onReady={onReady}
             />
             {startVid ? (
               <PlayCircleIcon
@@ -218,7 +220,11 @@ export const DetailVideo = () => {
               <VideoPlaySlider value={timePercent} onChange={handleVideoChange} />
 
               <div
-                style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
               >
                 <div>
                   <Button
@@ -266,14 +272,18 @@ export const DetailVideo = () => {
                   </Typography>
                 </div>
 
+                {/* 전체 화면, 스크린 화면 조절 */}
                 <div>
-                  <Button
-                    onClick={() => {
-                      setIsMoviescreen((prev) => !prev)
-                    }}
-                  >
-                    <Crop75Icon fontSize="large" />
-                  </Button>
+                  {!isFullscreen && (
+                    <Button
+                      onClick={() => {
+                        setIsMoviescreen((prev) => !prev)
+                      }}
+                    >
+                      <Crop75Icon fontSize={isMoviescreen ? "medium" : "large"} />
+                    </Button>
+                  )}
+
                   <Button
                     onClick={() => {
                       if (screenfull.isEnabled) {
@@ -281,7 +291,11 @@ export const DetailVideo = () => {
                       }
                     }}
                   >
-                    <FullscreenIcon fontSize="large" />
+                    {isFullscreen ? (
+                      <FullscreenExitIcon fontSize="large" />
+                    ) : (
+                      <FullscreenIcon fontSize="large" />
+                    )}
                   </Button>
                 </div>
               </div>
@@ -349,17 +363,35 @@ export const DetailVideo = () => {
             </Button>
           </Container>
         </div>
+
+        <div className={"videos_bottom_container"}>
+          <div>fff</div>
+          <div>fff</div>
+          <div>fff</div>
+          <div>fff</div>
+          <div>fff</div>
+          <div>fff</div>
+          <div>fff</div>
+          <div>fff</div>
+        </div>
+
         {/* 댓글 컨테이너 */}
         <div className="left_item_3" style={isFullscreen ? { display: "none" } : {}}>
           <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
           <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
           <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
           <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
-          <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
+          {/* <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} /> */}
         </div>
       </div>
+      <div className="videos_side_container">
+        <div>fff</div>
+        <div>fff</div>
+        <div>fff</div>
+        <div>fff</div>
+        <div>fff</div>
+      </div>
       {/* 다른 영상들 컨테이너 */}
-      <div className={"right_container"}>ddd</div>
     </div>
   )
 }

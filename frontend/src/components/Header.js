@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
-import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material"
-import MenuIcon from "@mui/icons-material/Menu"
+import { Button, IconButton } from "@mui/material"
 import YoutubeLogo from "assets/images/logos/logo.png"
 import SearchIcon from "@mui/icons-material/Search"
+//Icons
 import MicIcon from "@mui/icons-material/Mic"
-
-import { styled, alpha } from "@mui/material/styles"
+import MenuIcon from "@mui/icons-material/Menu"
 import InputBase from "@mui/material/InputBase"
+
 import { GoogleLoginButton } from "./GoogleLoginButton"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { changeState } from "atom/changeState"
@@ -15,6 +15,10 @@ import { UserProfileButton } from "./UserProfileButton"
 import { accountState } from "atom/accountState"
 import Divider from "@mui/material/Divider"
 import { useNavigate } from "react-router-dom"
+import SideBar from "./SideBar"
+import AddVideoMenu from "./Video/AddVideoMenu"
+import NotificationMenu from "./Notification/NotificationMenu"
+import MicModal from "./Search/MicModal"
 
 function Header() {
   const [state, toggleState] = useRecoilState(changeState)
@@ -45,23 +49,19 @@ function Header() {
       {/* 좌측 */}
 
       <div style={{ display: "flex" }}>
-        <Button
-          sx={{ borderRadius: "50%" }}
-          onClick={() => {
-            toggleState((prev) => !prev)
-          }}
-        >
-          <MenuIcon />
-        </Button>
-        <Button
-          aria-label="logo"
-          sx={{
-            display: { xs: "none", sm: "block" },
-          }}
+        <div style={{ margin: "auto" }}>
+          <SideBar />
+        </div>
+        {/* <Button aria-label="logo" onClick={() => navigate("/")}> */}
+        <img
+          className="logo"
           onClick={() => navigate("/")}
-        >
-          <img src={YoutubeLogo} alt="Youtube" width="100" height="50" />
-        </Button>
+          src={YoutubeLogo}
+          alt="Youtube"
+          width="100"
+          height="50"
+        />
+        {/* </Button> */}
       </div>
       {/* 중앙 */}
       <div
@@ -97,12 +97,17 @@ function Header() {
             <SearchIcon />
           </IconButton>
         </div>
-        <IconButton aria-label="logo" sx={{ backgroundColor: "lightgray", marginLeft: "10px" }}>
+        {/* <IconButton aria-label="logo" sx={{ backgroundColor: "lightgray", marginLeft: "10px" }}>
           <MicIcon />
-        </IconButton>
+        </IconButton> */}
+        <MicModal />
       </div>
       {/* 우측 */}
-      <div>{!user ? <GoogleLoginButton /> : <UserProfileButton />}</div>
+      <div style={{ margin: "0px 5px", display: "flex" }}>
+        <AddVideoMenu />
+        <NotificationMenu />
+        {!user ? <GoogleLoginButton /> : <UserProfileButton />}
+      </div>
     </div>
   )
 }

@@ -8,11 +8,16 @@ import ListItemIcon from "@mui/material/ListItemIcon"
 import Divider from "@mui/material/Divider"
 import IconButton from "@mui/material/IconButton"
 import Tooltip from "@mui/material/Tooltip"
-import PersonAdd from "@mui/icons-material/PersonAdd"
+
+// Icons
 import Settings from "@mui/icons-material/Settings"
 import Logout from "@mui/icons-material/Logout"
+import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined"
+
 import { accountState } from "atom/accountState"
 import { useRecoilState } from "recoil"
+import { Typography } from "@mui/material"
+import { Link } from "react-router-dom"
 
 export const UserProfileButton = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -83,35 +88,38 @@ export const UserProfileButton = () => {
               transform: "translateY(-50%) rotate(45deg)",
               zIndex: 0,
             },
+            width: 200,
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
-        </MenuItem>
+        <div style={{ display: "flex", margin: "auto", flexDirection: "column", gap: "8px" }}>
+          <MenuItem onClick={handleClose}>
+            <Avatar /> 닉네임
+          </MenuItem>
+          <Link to="/profile">내 채널보기</Link>
+        </div>
         <Divider />
-        <MenuItem onClick={handleClose}>
+
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
-            <PersonAdd fontSize="small" />
+            <Logout fontSize="small" />
           </ListItemIcon>
-          Add another account
+          로그아웃
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Settings
+          설정
         </MenuItem>
-        <MenuItem onClick={handleLogout}>
+        <Divider />
+        <MenuItem onClick={handleClose}>
           <ListItemIcon>
-            <Logout fontSize="small" />
+            <FeedbackOutlinedIcon />
           </ListItemIcon>
-          Logout
+          의견 보내기
         </MenuItem>
       </Menu>
     </React.Fragment>
