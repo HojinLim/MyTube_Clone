@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography"
 import { useNavigate } from "react-router-dom"
 import Avatar from "@mui/material/Avatar"
 import { formatTime } from "functions/formatTime"
-import Crop75Icon from "@mui/icons-material/Crop75"
+
 export const VideoContainer = (data) => {
   const { thumb, title, subtitle, sources, duration } = data.data
   const [hover, setHover] = useState(false)
@@ -44,7 +44,7 @@ export const VideoContainer = (data) => {
         alignContent: "center",
         maxWidth: "500px",
         width: "500px",
-        width: { xl: "450px" },
+        width: { xl: "420px" },
         margin: "auto",
         padding: "auto",
       }}

@@ -19,6 +19,7 @@ import SideBar from "./SideBar"
 import AddVideoMenu from "./Video/AddVideoMenu"
 import NotificationMenu from "./Notification/NotificationMenu"
 import MicModal from "./Search/MicModal"
+import OpinionDrawer from "./opinion/OpinionDrawer"
 
 function Header() {
   const [state, toggleState] = useRecoilState(changeState)
@@ -52,7 +53,7 @@ function Header() {
         <div style={{ margin: "auto" }}>
           <SideBar />
         </div>
-        {/* <Button aria-label="logo" onClick={() => navigate("/")}> */}
+
         <img
           className="logo"
           onClick={() => navigate("/")}
@@ -61,7 +62,6 @@ function Header() {
           width="100"
           height="50"
         />
-        {/* </Button> */}
       </div>
       {/* 중앙 */}
       <div
@@ -91,21 +91,18 @@ function Header() {
             inputProps={{ "aria-label": "search" }}
             style={{ width: "100%" }}
           />
-
           <Divider orientation="vertical" flexItem />
           <IconButton aria-label="logo">
             <SearchIcon />
           </IconButton>
         </div>
-        {/* <IconButton aria-label="logo" sx={{ backgroundColor: "lightgray", marginLeft: "10px" }}>
-          <MicIcon />
-        </IconButton> */}
         <MicModal />
       </div>
       {/* 우측 */}
       <div style={{ margin: "0px 5px", display: "flex" }}>
         <AddVideoMenu />
         <NotificationMenu />
+        {/* <OpinionDrawer /> */}
         {!user ? <GoogleLoginButton /> : <UserProfileButton />}
       </div>
     </div>

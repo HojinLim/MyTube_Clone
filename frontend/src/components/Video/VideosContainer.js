@@ -3,8 +3,6 @@ import React from "react"
 import { VideoContainer } from "./VideoContainer"
 import { dummyData } from "dummy"
 import { styled } from "@mui/material/styles"
-import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from "recoil"
-import { changeState } from "atom/changeState"
 
 export default function VideosContainer() {
   const [dummy, setDummy] = React.useState()

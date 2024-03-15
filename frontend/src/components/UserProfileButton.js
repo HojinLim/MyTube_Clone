@@ -16,8 +16,9 @@ import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined"
 
 import { accountState } from "atom/accountState"
 import { useRecoilState } from "recoil"
-import { Typography } from "@mui/material"
+
 import { Link } from "react-router-dom"
+import OpinionDrawer from "./opinion/OpinionDrawer"
 
 export const UserProfileButton = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -38,6 +39,10 @@ export const UserProfileButton = () => {
     setUser(null)
     window.location.reload()
     alert("로그아웃 되었습니다.")
+  }
+  const handleFeedbackClick = () => {
+    setAnchorEl(null) // 메뉴를 닫습니다.
+    OpinionDrawer.toggleDrawer("right", true) // OpinionDrawer를 엽니다.
   }
 
   return (
@@ -98,7 +103,7 @@ export const UserProfileButton = () => {
           <MenuItem onClick={handleClose}>
             <Avatar /> 닉네임
           </MenuItem>
-          <Link to="/profile">내 채널보기</Link>
+          <Link to="/studio">내 채널보기</Link>
         </div>
         <Divider />
 
@@ -115,11 +120,10 @@ export const UserProfileButton = () => {
           설정
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem>
           <ListItemIcon>
             <FeedbackOutlinedIcon />
           </ListItemIcon>
-          의견 보내기
         </MenuItem>
       </Menu>
     </React.Fragment>

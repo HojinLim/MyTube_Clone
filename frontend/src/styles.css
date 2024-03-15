@@ -1,8 +1,7 @@
-html {
+body, html {
+  margin: 0;
+  padding: 0;
   height: 100%;
-}
-body {
-  min-height: 100%;
 }
 ::-webkit-scrollbar {
   width: 6px !important;
@@ -138,3 +137,58 @@ body {
       opacity: 0;
     }
   }
+
+
+  .avatar-container{
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+
+  }
+  
+  .menu {
+    margin-top: 100px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 220px; /* 메뉴 너비 지정 */
+    background-color: #eee; /* 배경색 지정 */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 아이템을 수직 방향 중앙 정렬 */
+    justify-content: space-between; /* 수직 방향 상단 정렬 */
+}
+
+.avatar_container {
+    margin-top: 20px; /* 아바타와 텍스트 사이의 간격 조정 */
+    text-align: center; /* 내부 텍스트 가운데 정렬 */
+}
+
+.menu_middle_container {
+    margin-top: 20px; /* 아바타와 메뉴 사이의 간격 조정 */
+    flex-grow: 1; /* 메뉴 컨테이너가 화면 전체를 채우도록 설정 */
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+    
+    
+}
+.menu_bottom_container {
+ 
+  flex-grow: 1; /* 메뉴 컨테이너가 화면 전체를 채우도록 설정 */
+  display: flex;
+  flex-direction: column;
+  margin:'auto';
+  bottom: 0%;
+  }
+
+.menu-divider {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 2px; /* 세로선 너비 지정 */
+        background-color: #bdb9b9; /* 세로선 색상 지정 */
+    }

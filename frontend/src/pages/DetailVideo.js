@@ -153,6 +153,7 @@ export const DetailVideo = () => {
     <div className="detail_container" style={!isFullscreen ? { paddingTop: "60px" } : {}}>
       <div className="left_container">
         {/* 영상 컨테이너 */}
+
         <div className="left_item_1" style={isFullscreen || isMoviescreen ? { width: "97vw" } : {}}>
           <div
             style={{
