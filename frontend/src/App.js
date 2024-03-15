@@ -22,7 +22,7 @@ const theme = createTheme({
     },
     // 연한 파란색
     blue: {
-      main: "#ffdee", // 보조 색상
+      secondary: "#026be3", // 보조 색상
     },
   },
   typography: {

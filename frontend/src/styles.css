@@ -154,7 +154,6 @@ body, html {
     height: 100%;
     width: 220px; /* 메뉴 너비 지정 */
     background-color: #eee; /* 배경색 지정 */
-
     display: flex;
     flex-direction: column;
     align-items: center; /* 아이템을 수직 방향 중앙 정렬 */
@@ -176,7 +175,6 @@ body, html {
     
 }
 .menu_bottom_container {
- 
   flex-grow: 1; /* 메뉴 컨테이너가 화면 전체를 채우도록 설정 */
   display: flex;
   flex-direction: column;

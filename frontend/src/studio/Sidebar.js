@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Avatar from "@mui/material/Avatar"
 import { Typography } from "@mui/material"
 
@@ -19,15 +19,19 @@ import DashboardIcon from "@mui/icons-material/Dashboard"
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary"
 import SettingsIcon from "@mui/icons-material/Settings"
 import LiveHelpIcon from "@mui/icons-material/LiveHelp"
-import UploadModal from "components/Studio/UploadModal"
-import { Dashboard } from "@mui/icons-material"
+
+import { useSetRecoilState } from "recoil"
+import { studioMenuState } from "atom/studioMenuState"
 
 export const Sidebar = () => {
-  const [selectedItem, setSelectedItem] = useState(null)
+  const [selectedItem, setSelectedItem] = useState("dashboard")
+  const setMenu = useSetRecoilState(studioMenuState)
 
   const handleItemClick = (item) => {
     setSelectedItem(item)
+    setMenu(item)
   }
+
   return (
     <div className="menu">
       <div className="avatar_container">
@@ -55,12 +59,12 @@ export const Sidebar = () => {
                 {selectedItem === "dashboard" ? (
                   <DashboardIcon
                     fontSize="medium"
-                    color={selectedItem === "dashboard" ? "primary" : "inherit"}
+                    color={selectedItem === "dashboard" ? "error" : "inherit"}
                   />
                 ) : (
                   <DashboardOutlinedIcon
                     fontSize="medium"
-                    color={selectedItem === "dashboard" ? "primary" : "inherit"}
+                    color={selectedItem === "dashboard" ? "error" : "inherit"}
                   />
                 )}
               </ListItemIcon>
@@ -81,12 +85,12 @@ export const Sidebar = () => {
                 {selectedItem === "content" ? (
                   <VideoLibraryIcon
                     fontSize="medium"
-                    color={selectedItem === "content" ? "primary" : "inherit"}
+                    color={selectedItem === "content" ? "error" : "inherit"}
                   />
                 ) : (
                   <VideoLibraryOutlinedIcon
                     fontSize="medium"
-                    color={selectedItem === "content" ? "primary" : "inherit"}
+                    color={selectedItem === "content" ? "error" : "inherit"}
                   />
                 )}
               </ListItemIcon>
@@ -110,7 +114,7 @@ export const Sidebar = () => {
               <ListItemIcon>
                 <SettingsIcon
                   fontSize="medium"
-                  color={selectedItem === "settings" ? "primary" : "inherit"}
+                  color={selectedItem === "settings" ? "error" : "inherit"}
                 />
               </ListItemIcon>
               <ListItemText>설정</ListItemText>
@@ -129,7 +133,7 @@ export const Sidebar = () => {
               <ListItemIcon>
                 <LiveHelpIcon
                   fontSize="medium"
-                  color={selectedItem === "feedback" ? "primary" : "inherit"}
+                  color={selectedItem === "feedback" ? "error" : "inherit"}
                 />
               </ListItemIcon>
               <ListItemText>의견보내기</ListItemText>

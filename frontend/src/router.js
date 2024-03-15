@@ -1,3 +1,4 @@
+import { Common } from "Common"
 import { fullScreenState } from "atom/fullScreenState"
 import Header from "components/Header"
 import SideBar from "components/SideBar"
@@ -12,7 +13,8 @@ const Router = () => {
   return (
     <BrowserRouter>
       {!isFull && <Header />}
-      <SideBar />
+      {/* <SideBar /> */}
+      <Common />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/watch/:id" element={<DetailVideo />} />
