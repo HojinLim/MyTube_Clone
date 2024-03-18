@@ -38,7 +38,7 @@ function createData(id, name, date, isPublic, views, comments, likes) {
   }
 }
 
-const rows = [
+const rows_data = [
   createData(1, "제목1", "2024.03.02", "공개", 67, 4.3, 3),
   createData(2, "제목2", 452, "비공개", 51, 4.9, 5),
   createData(3, "제목3", 262, "비공개", 24, 6.0, 3),
@@ -205,7 +205,7 @@ function ContentsTableToolbar(props) {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={() => deleteHandler(numSelected)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -231,6 +231,8 @@ export default function ContentsTable() {
   const [page, setPage] = React.useState(0)
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
+
+  const [rows, setRows] = React.useState(rows_data)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc"
@@ -288,11 +290,20 @@ export default function ContentsTable() {
       ),
     [order, orderBy, page, rowsPerPage]
   )
+  const deleteHandler = (selected) => {
+    setRows(rows.filter((row) => !selected.includes(row.id)))
+    // console.log(rowss)
+  }
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <ContentsTableToolbar numSelected={selected.length} />
+        <Tooltip title="Delete">
+          <IconButton onClick={() => deleteHandler(selected)}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={"medium"}>
             <ContentsTableHead
@@ -303,6 +314,7 @@ export default function ContentsTable() {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
+
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id)
@@ -338,7 +350,7 @@ export default function ContentsTable() {
                       {row.name}
                     </TableCell>
 
-                    <TableCell align="right">
+                    <TableCell align="left">
                       {row.isPublic === "공개" ? <PublicIcon /> : <HttpsOutlinedIcon />}
                       {row.isPublic}
                       <Button

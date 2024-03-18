@@ -9,6 +9,7 @@ import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
 import YoutubeLogo from "assets/images/logos/logo.png"
+import { useNavigate } from "react-router-dom"
 
 // Icons
 import RestoreIcon from "@mui/icons-material/Restore"
@@ -23,10 +24,17 @@ import FlagIcon from "@mui/icons-material/Flag"
 import HelpIcon from "@mui/icons-material/HelpOutline"
 import LiveHelpIcon from "@mui/icons-material/LiveHelp"
 import HomeIcon from "@mui/icons-material/Home"
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined"
 import Shorts from "@mui/icons-material/Speed"
 import SubscriptionIcon from "@mui/icons-material/Subscriptions"
+import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined"
 import SmartDisplay from "@mui/icons-material/SmartDisplay"
 import MenuIcon from "@mui/icons-material/Menu"
+import SlideshowIcon from "@mui/icons-material/Slideshow"
+import AccessTimeIcon from "@mui/icons-material/AccessTime"
+import WatchLaterIcon from "@mui/icons-material/WatchLater"
+import ThumbUpIcon from "@mui/icons-material/ThumbUp"
+import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined"
 
 import Avatar from "@mui/material/Avatar"
 import { Typography } from "@mui/material"
@@ -40,6 +48,7 @@ export default function SideBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [isClosing, setIsClosing] = React.useState(false)
   const [dummy, setDummy] = React.useState()
+  const navigate = useNavigate()
   //   const [state, toggleState] = useRecoilState(changeState)
   const [user, setUser] = useRecoilState(accountState)
   const handleDrawerClose = () => {
@@ -61,6 +70,33 @@ export default function SideBar() {
 
     setState({ ...state, [anchor]: open })
   }
+  const movePage = (name) => {
+    switch (name) {
+      case "나":
+        navigate("/")
+        break
+      case "Home":
+        navigate("/")
+        break
+      case "시청 기록":
+        navigate("/history")
+        break
+      case "구독":
+        navigate("/subscription")
+        break
+      case "좋아요 표시한 동영상":
+        navigate("/like")
+        break
+      case "나중에 볼 동영상":
+        navigate("/later")
+        break
+      case "내 동영상":
+        navigate("/studio")
+        break
+      default:
+        break
+    }
+  }
 
   const list = (anchor) => (
     <Box
@@ -78,7 +114,7 @@ export default function SideBar() {
           sx={{
             display: { xs: "none", sm: "block" },
           }}
-          onClick={() => navigate("/")}
+          onClick={() => movePage(name)}
         >
           <img src={YoutubeLogo} alt="Youtube" width="100" height="50" />
         </Button>
@@ -88,11 +124,11 @@ export default function SideBar() {
         <List>
           {["Home", "Shorts", "구독"].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => movePage(text)}>
                 <ListItemIcon>
-                  {index === 0 && <HomeIcon style={commonStyle} />}
+                  {index === 0 && <HomeOutlinedIcon style={commonStyle} />}
                   {index === 1 && <Shorts style={commonStyle} />}
-                  {index === 2 && <SubscriptionIcon style={commonStyle} />}
+                  {index === 2 && <SubscriptionsOutlinedIcon style={commonStyle} />}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -103,17 +139,22 @@ export default function SideBar() {
       <Divider />
       {/* 밑 리스트 아이콘 */}
       <List>
-        {["나", "시청 기록"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index === 0 && <VideoLibraryIcon style={commonStyle} />}
-                {index === 1 && <RestoreIcon style={commonStyle} />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {["나", "시청 기록", "내 동영상", "나중에 볼 동영상", "좋아요 표시한 동영상"].map(
+          (text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton onClick={() => movePage(text)}>
+                <ListItemIcon>
+                  {index === 0 && <VideoLibraryIcon style={commonStyle} />}
+                  {index === 1 && <RestoreIcon style={commonStyle} />}
+                  {index === 2 && <SlideshowIcon style={commonStyle} />}
+                  {index === 3 && <AccessTimeIcon style={commonStyle} />}
+                  {index === 4 && <ThumbUpAltOutlinedIcon style={commonStyle} />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          )
+        )}
       </List>
       <Divider />
       <Box component="section" sx={{ p: 2 }} flexDirection={"column"} display={"flex"}>
