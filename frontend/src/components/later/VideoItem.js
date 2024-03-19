@@ -1,4 +1,5 @@
 import React from "react"
+import person from "assets/images/person.png"
 
 export const VideoItem = () => {
   return (
@@ -10,11 +11,13 @@ export const VideoItem = () => {
         padding: "5px",
 
         alignItems: "center",
+        width: "100%",
+        height: "100%",
       }}
     >
       <div>1</div>
       <img
-        src="https://source.unsplash.com/random"
+        src={person}
         style={{
           backgroundColor: "wheat",
           // width: "60vw",

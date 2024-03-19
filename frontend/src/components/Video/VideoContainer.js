@@ -120,7 +120,14 @@ export const VideoContainer = (data) => {
             display: "flex",
           }}
         >
-          <Typography variant="h6" gutterBottom>
+          <Typography
+            variant="h6"
+            gutterBottom
+            style={{
+              overflow: "auto",
+              maxHeight: "1.5em",
+            }}
+          >
             {title}
           </Typography>
           <Typography variant="body2" gutterBottom color={"gray"}>

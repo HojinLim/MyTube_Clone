@@ -9,7 +9,7 @@ import Avatar from "@mui/material/Avatar"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import { dummyData } from "dummy"
 import { UserFeedBackContainer } from "components/UserFeedBackContainer"
-
+import Grid from "@mui/material/Grid"
 import Button from "@mui/material/Button"
 import { stringToSeconds } from "functions/stringToSeconds"
 //Icons
@@ -19,6 +19,7 @@ import FullscreenExitIcon from "@mui/icons-material/FullscreenExit"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import SkipNextIcon from "@mui/icons-material/SkipNext"
 import PauseIcon from "@mui/icons-material/Pause"
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined"
 
 import screenfull from "screenfull"
 import { useRecoilState } from "recoil"
@@ -35,6 +36,7 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp"
 import Tooltip from "@mui/material/Tooltip"
 import { secondsToTime } from "functions/secondsToTime"
 import useMediaQuery from "@mui/material/useMediaQuery"
+import { VideoInfoContainer } from "components/DetailVideo/VideoInfoContainer"
 export const DetailVideo = () => {
   const params = useParams()
   const [startVid, setStartVid] = useState("true")
@@ -154,7 +156,10 @@ export const DetailVideo = () => {
       <div className="left_container">
         {/* 영상 컨테이너 */}
 
-        <div className="left_item_1" style={isFullscreen || isMoviescreen ? { width: "97vw" } : {}}>
+        <div
+          className="left_item_1"
+          style={isFullscreen || isMoviescreen ? { width: "50vw", height: "50vh" } : {}}
+        >
           <div
             style={{
               flexGrow: 1,
@@ -164,6 +169,11 @@ export const DetailVideo = () => {
               justifyContent: "end",
               position: "relative",
               alignContent: "end",
+              overflow: "hidden",
+              borderRadius: "20px",
+
+              width: "100%",
+              height: "100%",
             }}
           >
             <ReactPlayer
@@ -305,64 +315,7 @@ export const DetailVideo = () => {
         </div>
         {/* 영상 정보 컨테이너 */}
         <div className="left_item_2" style={isFullscreen ? { display: "none" } : {}}>
-          <Container
-            sx={{
-              flexGrow: 1,
-              flexDirection: "row",
-              display: "flex",
-              padding: "15px",
-            }}
-          >
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-
-            <Container
-              sx={{
-                flexGrow: 1,
-                flexDirection: "column",
-                display: "flex",
-              }}
-            >
-              <Typography variant="h6" gutterBottom>
-                {title}
-              </Typography>
-              <Typography variant="body2" gutterBottom color={"gray"}>
-                {subtitle}
-              </Typography>
-              <Typography variant="body2" gutterBottom color={"gray"}>
-                구독자 100만명
-              </Typography>
-              <Box
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "gray",
-                  flexDirection: "column",
-                  display: "flex",
-                  borderRadius: "10px",
-                  padding: "10px",
-                }}
-              >
-                <Typography variant="caption" gutterBottom>
-                  조회수 100회 10시간 전
-                </Typography>
-                <Typography variant="caption" gutterBottom>
-                  React JS Tutorial for Beginners - Learn React 18 with TypeScript and build awesome
-                  frontend app!
-                </Typography>
-              </Box>
-            </Container>
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                alignSelf: "center",
-                borderRadius: "20px",
-              }}
-            >
-              구독
-            </Button>
-          </Container>
+          <VideoInfoContainer title={title} subtitle={subtitle} />
         </div>
 
         <div className={"videos_bottom_container"}>

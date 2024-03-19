@@ -63,6 +63,10 @@ export default function SideBar() {
     left: false,
   })
 
+  const middleList = user
+    ? ["나", "시청 기록", "내 동영상", "나중에 볼 동영상", "좋아요 표시한 동영상"]
+    : ["나", "시청 기록"]
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return
@@ -139,22 +143,20 @@ export default function SideBar() {
       <Divider />
       {/* 밑 리스트 아이콘 */}
       <List>
-        {["나", "시청 기록", "내 동영상", "나중에 볼 동영상", "좋아요 표시한 동영상"].map(
-          (text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => movePage(text)}>
-                <ListItemIcon>
-                  {index === 0 && <VideoLibraryIcon style={commonStyle} />}
-                  {index === 1 && <RestoreIcon style={commonStyle} />}
-                  {index === 2 && <SlideshowIcon style={commonStyle} />}
-                  {index === 3 && <AccessTimeIcon style={commonStyle} />}
-                  {index === 4 && <ThumbUpAltOutlinedIcon style={commonStyle} />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          )
-        )}
+        {middleList.map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton onClick={() => movePage(text)}>
+              <ListItemIcon>
+                {index === 0 && <VideoLibraryIcon style={commonStyle} />}
+                {index === 1 && <RestoreIcon style={commonStyle} />}
+                {index === 2 && <SlideshowIcon style={commonStyle} />}
+                {index === 3 && <AccessTimeIcon style={commonStyle} />}
+                {index === 4 && <ThumbUpAltOutlinedIcon style={commonStyle} />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
       <Divider />
       <Box component="section" sx={{ p: 2 }} flexDirection={"column"} display={"flex"}>

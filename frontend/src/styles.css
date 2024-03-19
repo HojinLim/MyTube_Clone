@@ -1,17 +1,24 @@
 body, html {
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   height: 100%;
+  width: 100%;
+  /* 메뉴열때 흔들림 방지 */
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 ::-webkit-scrollbar {
   width: 6px !important;
-  height: 6px !important;
-}
+  height: 6px !important; 
+ }
 .logo:hover{
   cursor: pointer;
 }
 .buttonContainer {
     display: none; /* 초기에는 버튼을 숨깁니다 */
+  }
+  .hover:hover{
+    cursor: pointer;
   }
   
   @media screen and (min-width: 768px) {
@@ -102,7 +109,7 @@ body, html {
 
   .left_item_1{
     width: 100%;
-    height: 30%;
+    height: 100%;
     border: 1px solid #22419e;
     background-color: #cc4141;
   }

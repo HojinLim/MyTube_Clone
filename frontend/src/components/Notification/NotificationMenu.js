@@ -48,6 +48,14 @@ export default function NotificationMenu() {
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
       >
         <div
           style={{

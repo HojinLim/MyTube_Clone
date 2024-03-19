@@ -57,6 +57,14 @@ export default function AddVideoMenu() {
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
       >
         <MenuItem style={commonStyle} onClick={handleUpload}>
           <SlideshowIcon />

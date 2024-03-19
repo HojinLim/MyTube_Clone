@@ -2,11 +2,13 @@ import React from "react"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
+import person from "assets/images/person.png"
 
 // Icons
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import ShuffleIcon from "@mui/icons-material/Shuffle"
 import { VideoItem } from "components/later/VideoItem"
+import { MenuSelector } from "components/common/MenuSelector"
 export const LaterPage = () => {
   return (
     <div style={{ marginTop: "150px" }}>
@@ -25,7 +27,7 @@ export const LaterPage = () => {
             }}
           >
             <img
-              src="https://source.unsplash.com/random"
+              src={person}
               style={{
                 backgroundColor: "wheat",
                 width: "60vw",
@@ -47,7 +49,7 @@ export const LaterPage = () => {
             }}
           >
             <Typography color={"white"} variant="h6" fontWeight={"600"}>
-              좋아요 표시한 동영상
+              나중에 볼 동영상
             </Typography>
             <Typography color={"white"}>주인장</Typography>
             <Box display={"flex"} flexDirection={"column"}>
@@ -110,6 +112,9 @@ export const LaterPage = () => {
         </Box>
       </div>
       <div className="video_container">
+        <div style={{ display: "flex" }}>
+          <MenuSelector categories={["전체", "동영상", "Shorts"]} />
+        </div>
         <VideoItem />
         <VideoItem />
         <VideoItem />

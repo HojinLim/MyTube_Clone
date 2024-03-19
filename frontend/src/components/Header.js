@@ -19,12 +19,10 @@ import SideBar from "./SideBar"
 import AddVideoMenu from "./Video/AddVideoMenu"
 import NotificationMenu from "./Notification/NotificationMenu"
 import MicModal from "./Search/MicModal"
-import OpinionDrawer from "./opinion/OpinionDrawer"
-
+import useMediaQuery from "@mui/material/useMediaQuery"
 function Header() {
-  const [state, toggleState] = useRecoilState(changeState)
   const [user, setUser] = useRecoilState(accountState)
-
+  const matches = useMediaQuery("(min-width:650px)")
   const navigate = useNavigate()
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user"), null))
@@ -45,6 +43,7 @@ function Header() {
         left: 0,
         right: 0,
         top: 0,
+        // paddingBottom: "50px",
       }}
     >
       {/* 좌측 */}
@@ -64,45 +63,47 @@ function Header() {
         />
       </div>
       {/* 중앙 */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+      {matches && (
         <div
-          id="center-container"
           style={{
-            border: "1px lightgray solid",
-            borderRadius: "20px",
-            borderWidth: "2px",
-            width: "40vw",
             display: "flex",
             justifyContent: "space-between",
-            padding: "1px",
+            alignItems: "center",
           }}
         >
-          <IconButton aria-label="logo">
-            <SearchIcon />
-          </IconButton>
-          <InputBase
-            placeholder="검색"
-            inputProps={{ "aria-label": "search" }}
-            style={{ width: "100%" }}
-          />
-          <Divider orientation="vertical" flexItem />
-          <IconButton aria-label="logo">
-            <SearchIcon />
-          </IconButton>
+          <div
+            id="center-container"
+            style={{
+              border: "1px lightgray solid",
+              borderRadius: "20px",
+              borderWidth: "2px",
+              width: "40vw",
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "1px",
+            }}
+          >
+            <IconButton aria-label="logo">
+              <SearchIcon />
+            </IconButton>
+            <InputBase
+              placeholder="검색"
+              inputProps={{ "aria-label": "search" }}
+              style={{ width: "100%" }}
+            />
+            <Divider orientation="vertical" flexItem />
+            <IconButton aria-label="logo">
+              <SearchIcon />
+            </IconButton>
+          </div>
+          <MicModal />
         </div>
-        <MicModal />
-      </div>
+      )}
+
       {/* 우측 */}
       <div style={{ margin: "0px 5px", display: "flex" }}>
         <AddVideoMenu />
         <NotificationMenu />
-        {/* <OpinionDrawer /> */}
         {!user ? <GoogleLoginButton /> : <UserProfileButton />}
       </div>
     </div>
