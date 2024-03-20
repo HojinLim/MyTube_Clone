@@ -60,6 +60,9 @@ export const DetailVideo = () => {
   const handleChange = (event, newValue) => {
     setVolumn(newValue)
   }
+
+  const [hoverVolumn, setHoverVolumn] = React.useState("none")
+
   const playerRef = React.useRef()
 
   const goToThere = (seconds) => {
@@ -152,167 +155,170 @@ export const DetailVideo = () => {
   })
 
   return (
-    <div className="detail_container" style={!isFullscreen ? { paddingTop: "60px" } : {}}>
+    <div className="detail_container">
       <div className="left_container">
         {/* 영상 컨테이너 */}
 
         <div
-          className="left_item_1"
-          style={isFullscreen || isMoviescreen ? { width: "50vw", height: "50vh" } : {}}
+          style={{
+            flexGrow: 1,
+            flexDirection: "column",
+            display: "flex",
+            gap: "10px",
+            justifyContent: "end",
+            position: "relative",
+            alignContent: "end",
+            overflow: "hidden",
+            borderRadius: "20px",
+
+            width: "100%",
+            height: "100%",
+            maxWidth: "1800px",
+            maxHeight: "800px",
+          }}
         >
-          <div
-            style={{
-              flexGrow: 1,
-              flexDirection: "column",
-              display: "flex",
-              gap: "10px",
-              justifyContent: "end",
-              position: "relative",
-              alignContent: "end",
-              overflow: "hidden",
-              borderRadius: "20px",
-
-              width: "100%",
-              height: "100%",
+          <ReactPlayer
+            ref={playerRef}
+            onClick={clickSreen}
+            volume={volumn / 100}
+            onProgress={(progress) => {
+              setPlayTime(progress.playedSeconds)
             }}
-          >
-            <ReactPlayer
-              ref={playerRef}
-              onClick={clickSreen}
-              volume={volumn / 100}
-              onProgress={(progress) => {
-                setPlayTime(progress.playedSeconds)
-              }}
-              url={sources[0]}
-              width="100%"
-              height="100%"
-              playing={startVid}
-              autoPlay={true}
-            />
-            {startVid ? (
-              <PlayCircleIcon
-                sx={{ fontSize: "70px" }}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  animation: "growAndFade 2s forwards",
-                  animationPlayState: "initial",
-                }}
-              />
-            ) : (
-              <PauseCircleIcon
-                sx={{ fontSize: "70px" }}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  animation: "growAndFade 2s forwards",
-                  animationPlayState: "initial",
-                }}
-              />
-            )}
+            url={sources[0]}
+            width="100%"
+            height="100%"
+            playing={startVid}
+            autoPlay={true}
+          />
 
-            {/* 영상 상태바 */}
-            <div
+          {startVid ? (
+            <PlayCircleIcon
+              sx={{ fontSize: "70px" }}
               style={{
                 position: "absolute",
-                bottom: "5px",
-                color: "white",
-                width: "100%",
-                marginBottom: "5px",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                animation: "growAndFade 2s forwards",
+                animationPlayState: "initial",
+              }}
+            />
+          ) : (
+            <PauseCircleIcon
+              sx={{ fontSize: "70px" }}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                animation: "growAndFade 2s forwards",
+                animationPlayState: "initial",
+              }}
+            />
+          )}
+
+          {/* 영상 상태바 */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "5px",
+              color: "white",
+              width: "100%",
+              marginBottom: "5px",
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: "column",
+            }}
+          >
+            <VideoPlaySlider value={timePercent} onChange={handleVideoChange} />
+
+            <div
+              style={{
                 display: "flex",
+                flexDirection: "row",
                 justifyContent: "space-between",
-                flexDirection: "column",
               }}
             >
-              <VideoPlaySlider value={timePercent} onChange={handleVideoChange} />
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div>
-                  <Button
-                    onClick={() => {
-                      setStartVid((prev) => !prev)
-                    }}
-                  >
-                    {!startVid ? (
-                      <PlayArrowIcon fontSize="large" />
-                    ) : (
-                      <PauseIcon fontSize="large" />
-                    )}
-                  </Button>
-                  {/* 볼륨 조절 */}
-                  <Button onClick={muteHandler}>
-                    {volumn === 0 ? (
-                      <Tooltip title="음소거 해제(m)" placement="top">
-                        <VolumeOffIcon fontSize="large" />
-                      </Tooltip>
-                    ) : volumn < 60 ? (
-                      <Tooltip title="음소거(m)" placement="top">
-                        <VolumeDownIcon fontSize="large" />
-                      </Tooltip>
-                    ) : (
-                      <VolumeUpIcon fontSize="large" />
-                    )}
-                  </Button>
-                  <Button>
-                    <SkipNextIcon fontSize="large" />
-                  </Button>
-                  <Slider
-                    className="volunn_slider"
-                    aria-label="Volume"
-                    value={volumn}
-                    onChange={handleChange}
-                    marks={false}
-                    sx={{
-                      width: "80px",
-                      padding: "3px 0px",
-                    }}
-                  />
-                  {/* 영상 길이 , 남은 시간 */}
-                  <Typography variant="caption" gutterBottom style={{ margin: "0px 15px" }}>
-                    {`${playedTime} / ${duration}`}
-                  </Typography>
-                </div>
-
-                {/* 전체 화면, 스크린 화면 조절 */}
-                <div>
-                  {!isFullscreen && (
-                    <Button
-                      onClick={() => {
-                        setIsMoviescreen((prev) => !prev)
-                      }}
-                    >
-                      <Crop75Icon fontSize={isMoviescreen ? "medium" : "large"} />
-                    </Button>
+              <div>
+                <Button
+                  onClick={() => {
+                    setStartVid((prev) => !prev)
+                  }}
+                >
+                  {!startVid ? <PlayArrowIcon fontSize="large" /> : <PauseIcon fontSize="large" />}
+                </Button>
+                <Button>
+                  <SkipNextIcon fontSize="large" />
+                </Button>
+                {/* 볼륨 조절 */}
+                <Button
+                  onClick={muteHandler}
+                  onMouseOut={() => setHoverVolumn("none")}
+                  onMouseOver={() => setHoverVolumn("")}
+                >
+                  {volumn === 0 ? (
+                    <Tooltip title="음소거 해제(m)" placement="top">
+                      <VolumeOffIcon fontSize="large" />
+                    </Tooltip>
+                  ) : volumn < 60 ? (
+                    <Tooltip title="음소거(m)" placement="top">
+                      <VolumeDownIcon fontSize="large" />
+                    </Tooltip>
+                  ) : (
+                    <VolumeUpIcon fontSize="large" />
                   )}
+                </Button>
 
+                <Slider
+                  onMouseOut={() => setHoverVolumn("none")}
+                  onMouseOver={() => setHoverVolumn("")}
+                  className="volunn_slider"
+                  aria-label="Volume"
+                  value={volumn}
+                  onChange={handleChange}
+                  marks={false}
+                  sx={{
+                    width: "80px",
+                    padding: "3px 0px",
+                    display: hoverVolumn,
+                  }}
+                />
+                {/* 영상 길이 , 남은 시간 */}
+                <Typography variant="caption" gutterBottom style={{ margin: "0px 15px" }}>
+                  {`${playedTime} / ${duration}`}
+                </Typography>
+              </div>
+
+              {/* 전체 화면, 스크린 화면 조절 */}
+              <div>
+                {!isFullscreen && (
                   <Button
                     onClick={() => {
-                      if (screenfull.isEnabled) {
-                        screenfull.toggle()
-                      }
+                      setIsMoviescreen((prev) => !prev)
                     }}
                   >
-                    {isFullscreen ? (
-                      <FullscreenExitIcon fontSize="large" />
-                    ) : (
-                      <FullscreenIcon fontSize="large" />
-                    )}
+                    <Crop75Icon fontSize={isMoviescreen ? "medium" : "large"} />
                   </Button>
-                </div>
+                )}
+
+                <Button
+                  onClick={() => {
+                    if (screenfull.isEnabled) {
+                      screenfull.toggle()
+                    }
+                  }}
+                >
+                  {isFullscreen ? (
+                    <FullscreenExitIcon fontSize="large" />
+                  ) : (
+                    <FullscreenIcon fontSize="large" />
+                  )}
+                </Button>
               </div>
             </div>
           </div>
         </div>
+        {/* </div> */}
         {/* 영상 정보 컨테이너 */}
         <div className="left_item_2" style={isFullscreen ? { display: "none" } : {}}>
           <VideoInfoContainer title={title} subtitle={subtitle} />

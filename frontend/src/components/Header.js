@@ -127,7 +127,7 @@ function Header() {
           right: 0,
           top: "4.5rem",
           padding: "0px 25px",
-          margin: "15px 0px",
+          // margin: "15px 0px",
         }}
       >
         {location.pathname === "/" && (
