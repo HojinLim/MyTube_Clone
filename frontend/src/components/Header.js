@@ -20,6 +20,9 @@ import AddVideoMenu from "./Video/AddVideoMenu"
 import NotificationMenu from "./Notification/NotificationMenu"
 import MicModal from "./Search/MicModal"
 import useMediaQuery from "@mui/material/useMediaQuery"
+import { MenuSelector } from "./common/MenuSelector"
+
+import { useLocation } from "react-router-dom"
 function Header() {
   const [user, setUser] = useRecoilState(accountState)
   const matches = useMediaQuery("(min-width:650px)")
@@ -28,7 +31,12 @@ function Header() {
     setUser(JSON.parse(localStorage.getItem("user"), null))
   }, [])
 
+  const location = useLocation()
+
+  useEffect(() => {}, [location])
+
   return (
+    //  헤더 컨테이너
     <div
       id="container"
       style={{
@@ -43,7 +51,6 @@ function Header() {
         left: 0,
         right: 0,
         top: 0,
-        // paddingBottom: "50px",
       }}
     >
       {/* 좌측 */}
@@ -103,8 +110,29 @@ function Header() {
       {/* 우측 */}
       <div style={{ margin: "0px 5px", display: "flex" }}>
         <AddVideoMenu />
+
         <NotificationMenu />
         {!user ? <GoogleLoginButton /> : <UserProfileButton />}
+      </div>
+      {/* 카테고리 헤더 */}
+      <div
+        style={{
+          position: "fixed",
+          zIndex: 2,
+          backgroundColor: "white",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          left: 0,
+          right: 0,
+          top: "4.5rem",
+          padding: "0px 25px",
+          margin: "15px 0px",
+        }}
+      >
+        {location.pathname === "/" && (
+          <MenuSelector categories={["전체", "게임", "음악", "애니메이션", "감상한 동영상"]} />
+        )}
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
 import React from "react"
 
 export const Common = () => {
-  return <div style={{ marginTop: "50px" }}></div>
+  return <div style={{ marginTop: "120px" }}></div>
 }

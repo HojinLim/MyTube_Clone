@@ -7,6 +7,7 @@ import { HistoryPage } from "pages/HistoryPage"
 import { HomePage } from "pages/HomePage"
 import { LaterPage } from "pages/LaterPage"
 import { LikePage } from "pages/LikePage"
+import { ShortsPage } from "pages/ShortsPage"
 import { StudioPage } from "pages/StudioPage"
 import { SubscriptionPage } from "pages/SubscriptionPage"
 import React from "react"
@@ -17,7 +18,6 @@ const Router = () => {
   return (
     <BrowserRouter>
       {!isFull && <Header />}
-      {/* <SideBar /> */}
       <Common />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -27,6 +27,7 @@ const Router = () => {
         <Route path="/subscription" element={<SubscriptionPage />} />
         <Route path="/like" element={<LikePage />} />
         <Route path="/later" element={<LaterPage />} />
+        <Route path="/shorts" element={<ShortsPage />} />
       </Routes>
     </BrowserRouter>
   )

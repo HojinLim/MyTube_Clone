@@ -97,6 +97,9 @@ export default function SideBar() {
       case "내 동영상":
         navigate("/studio")
         break
+      case "Shorts":
+        navigate("/shorts")
+        break
       default:
         break
     }

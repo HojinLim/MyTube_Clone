@@ -25,7 +25,6 @@ export default function VideosContainer() {
       paddingTop: "30px",
       justifyContent: "center", // 수평 가운데 정렬
       alignItems: "center",
-      paddingTop: "90px",
     },
     [theme.breakpoints.up("md")]: {
       width: "100%",
@@ -35,8 +34,6 @@ export default function VideosContainer() {
       display: "grid",
       gridTemplateColumns: "1fr  1fr",
       gridTemplateRows: "1fr 1fr 1fr 1fr",
-      // backgroundColor: "#cfeeee",
-      paddingTop: "90px",
     },
     [theme.breakpoints.up("lg")]: {
       width: "100%",
@@ -45,7 +42,7 @@ export default function VideosContainer() {
       gridTemplateColumns: "1fr 1fr 1fr",
       gridTemplateRows: "1fr 1fr 1fr 1fr",
       // backgroundColor: "#cfeeee",
-      paddingTop: "90px",
+      paddingTop: "20px",
     },
     [theme.breakpoints.up("xl")]: {
       width: "100%",
@@ -53,8 +50,6 @@ export default function VideosContainer() {
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr 1fr",
       gridTemplateRows: "1fr 1fr 1fr 1fr",
-      // backgroundColor: "#cfeeee",
-      paddingTop: "90px",
     },
   }))
 

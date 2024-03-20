@@ -11,7 +11,7 @@ export const HistoryPage = () => {
         marginTop: "150px",
         border: "1px solid black",
         width: "100vw",
-        height: "100vh",
+        height: "100%",
         padding: "10px",
         justifyContent: "flex-start",
         alignItems: "center",
@@ -32,6 +32,16 @@ export const HistoryPage = () => {
 
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
         <ShortsContainer />
+      </div>
+      <div style={{ marginTop: "200px" }}>
+        <Divider style={{ marginBottom: "50px" }} />
+        <div className="history-videos-container">
+          <div className="history-video-container">
+            <VideoItem />
+            <VideoItem />
+            <VideoItem />
+          </div>
+        </div>
       </div>
     </div>
   )

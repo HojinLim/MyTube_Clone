@@ -1,70 +1,98 @@
-import React from "react"
-import { ShortsItem } from "./ShortsItem"
-import Grid from "@mui/material/Grid"
-import { styled } from "@mui/material/styles"
+import React, { useState, useEffect } from "react"
 
 export const ShortsContainer = () => {
-  const StyledGrid = styled("div")(({ theme }) => ({
-    border: "3px solid black",
+  const [currentPosition, setCurrentPosition] = useState(0)
+  const [currentMargin, setCurrentMargin] = useState(0)
+  const [slidesPerPage, setSlidesPerPage] = useState(0)
+  const [slidesCount, setSlidesCount] = useState(0)
+  const [containerWidth, setContainerWidth] = useState(0)
 
-    direction: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    width: "100vw",
-    padding: theme.spacing(0.5),
+  useEffect(() => {
+    const container = document.getElementById("container")
+    const slider = document.getElementById("slider")
+    const slides = document.getElementsByClassName("slide").length
+    const buttons = document.getElementsByClassName("btn")
 
-    flexDirection: "row",
-    // justifyContent: "center",
-    [theme.breakpoints.down("md")]: {
-      width: "80%",
-      margin: "auto",
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gridTemplateRows: "1fr 1fr 1fr 1fr",
-      // backgroundColor: "#cfeeee",
-      paddingTop: "30px",
-      justifyContent: "center", // 수평 가운데 정렬
-      alignItems: "center",
-      paddingTop: "50px",
-    },
-    [theme.breakpoints.up("md")]: {
-      width: "50%",
-      margin: "auto",
-      direction: "row",
-      justifyContent: "flex-start",
-      alignItems: "center",
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr",
-      gridTemplateRows: "1fr 1fr 1fr 1fr",
-      // backgroundColor: "#cfeeee",
-      paddingTop: "50px",
-    },
-    [theme.breakpoints.up("lg")]: {
-      width: "50%",
-      margin: "auto",
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr",
-      gridTemplateRows: "1fr 1fr 1fr 1fr",
-      // backgroundColor: "#cfeeee",
-      // paddingTop: "50px",
-    },
-    [theme.breakpoints.up("xl")]: {
-      width: "50%",
-      margin: "auto",
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr 1fr",
-      gridTemplateRows: "1fr 1fr 1fr 1fr",
-      // backgroundColor: "#cfeeee",
-      paddingTop: "50px",
-    },
-  }))
+    function checkWidth() {
+      setContainerWidth(container.offsetWidth)
+    }
+
+    function setParams(w) {
+      let slidesPerPageValue
+      if (w < 551) {
+        slidesPerPageValue = 1
+      } else if (w < 901) {
+        slidesPerPageValue = 2
+      } else if (w < 1101) {
+        slidesPerPageValue = 3
+      } else {
+        slidesPerPageValue = 4
+      }
+
+      setSlidesPerPage(slidesPerPageValue)
+      setSlidesCount(slides - slidesPerPageValue)
+      if (currentPosition > slidesCount) {
+        setCurrentPosition((prev) => prev - slidesPerPageValue)
+      }
+      setCurrentMargin(-currentPosition * (100 / slidesPerPageValue))
+
+      if (currentPosition > 0) {
+        buttons[0].classList.remove("inactive")
+      }
+      if (currentPosition < slidesCount) {
+        buttons[1].classList.remove("inactive")
+      }
+      if (currentPosition >= slidesCount) {
+        buttons[1].classList.add("inactive")
+      }
+    }
+
+    setParams(containerWidth)
+    window.addEventListener("resize", checkWidth)
+
+    return () => {
+      window.removeEventListener("resize", checkWidth)
+    }
+  }, [currentPosition, slidesCount, containerWidth])
+
+  const slideRight = () => {
+    if (currentPosition !== 0) {
+      setCurrentMargin((prev) => prev + 100 / slidesPerPage)
+      setCurrentPosition((prev) => prev - 1)
+    }
+  }
+
+  const slideLeft = () => {
+    if (currentPosition !== slidesCount) {
+      setCurrentMargin((prev) => prev - 100 / slidesPerPage)
+      setCurrentPosition((prev) => prev + 1)
+    }
+  }
 
   return (
-    <StyledGrid>
-      <ShortsItem />
-      <ShortsItem />
-      <ShortsItem />
-      <ShortsItem />
-    </StyledGrid>
+    <div id="container">
+      <div id="slider-container">
+        <span onClick={slideRight} className="btn"></span>
+        <div id="slider" style={{ marginLeft: `${currentMargin}%` }}>
+          <div className="slide">
+            <span>150x150</span>
+          </div>
+          <div className="slide">
+            <span>150x150</span>
+          </div>
+          <div className="slide">
+            <span>150x150</span>
+          </div>
+          <div className="slide">
+            <span>150x150</span>
+          </div>
+          <div className="slide">
+            <span>150x150</span>
+          </div>
+          {/* Add more slide elements here */}
+        </div>
+        <span onClick={slideLeft} className="btn"></span>
+      </div>
+    </div>
   )
 }

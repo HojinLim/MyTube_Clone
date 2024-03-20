@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import ReactPlayer from "react-player/lazy"
@@ -6,29 +6,33 @@ import Typography from "@mui/material/Typography"
 import { useNavigate } from "react-router-dom"
 import Avatar from "@mui/material/Avatar"
 import { formatTime } from "functions/formatTime"
+import { stringToSeconds } from "functions/stringToSeconds"
+import { secondsToTime } from "functions/secondsToTime"
 
 export const VideoContainer = (data) => {
   const { thumb, title, subtitle, sources, duration } = data.data
   const [hover, setHover] = useState(false)
-  const [timer, setTimer] = useState(0)
+  // const [timer, setTimer] = useState(0)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimer((prevCount) => prevCount + 1)
-    }, 1000)
+  const [playTime, setPlayTime] = useState(0)
+  const [playedTime, setPlayedTime] = useState("0:00")
+  const [startVideo, setStartVideo] = useState(false)
+  console.log(playTime)
 
-    return () => {
-      clearInterval(timer)
-    }
-  }, [])
-  useEffect(() => {}, [timer])
+  useMemo(() => {
+    // setTimePercent((playTime / stringToSeconds(duration)) * 100)
+    setPlayedTime(secondsToTime(Math.trunc(playTime)))
+  }, [playTime])
+
   const mouseHoverOver = () => {
     setHover(true)
+    setStartVideo(true)
   }
   const mouseHoverOut = () => {
     setHover(false)
-    setTimer(0)
+    setPlayTime(0)
+    setStartVideo(false)
   }
   const moveDetailPage = () => {
     navigate(`/watch/${data.data.id}`)
@@ -44,7 +48,7 @@ export const VideoContainer = (data) => {
         alignContent: "center",
         maxWidth: "500px",
         width: "500px",
-        width: { xl: "420px" },
+        width: { xl: "380px" },
         margin: "auto",
         padding: "auto",
       }}
@@ -73,9 +77,12 @@ export const VideoContainer = (data) => {
               url={sources[0]}
               width="100%"
               height="100%"
-              playing={true}
+              playing={startVideo}
               autoPlay={true}
               style={{ borderRadius: "20px" }}
+              onProgress={(progress) => {
+                setPlayTime(progress.playedSeconds)
+              }}
             />
           ) : (
             <img
@@ -100,7 +107,7 @@ export const VideoContainer = (data) => {
           variant="body2"
           gutterBottom
         >
-          {hover ? `${formatTime(timer)} / ${duration ?? "00:00"}` : `${duration ?? "00:00"}`}
+          {hover ? `${playedTime} / ${duration}` : `${duration ?? "00:00"}`}
         </Typography>
       </Box>
       {/* 프로필, 제목, 조회수 */}
