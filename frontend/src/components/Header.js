@@ -47,10 +47,11 @@ function Header() {
         zIndex: 3,
         backgroundColor: "white",
         width: "100%",
-        height: "10vh",
+        height: "46px",
         left: 0,
         right: 0,
         top: 0,
+        padding: "5px 0px",
       }}
     >
       {/* 좌측 */}
@@ -125,7 +126,7 @@ function Header() {
           alignItems: "center",
           left: 0,
           right: 0,
-          top: "4.5rem",
+          top: "3.5rem",
           padding: "0px 25px",
           // margin: "15px 0px",
         }}

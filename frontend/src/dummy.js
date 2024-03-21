@@ -117,6 +117,7 @@ export const dummyData = [
     thumb:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg",
     title: "Tears of Steel",
+    duration: "12:14",
   },
   {
     id: 11,
@@ -129,6 +130,7 @@ export const dummyData = [
     thumb:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/VolkswagenGTIReview.jpg",
     title: "Volkswagen GTI Review",
+    duration: "9:53",
   },
   {
     id: 12,
@@ -141,6 +143,7 @@ export const dummyData = [
     thumb:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/WeAreGoingOnBullrun.jpg",
     title: "We Are Going On Bullrun",
+    duration: "0:47",
   },
   {
     id: 13,
@@ -153,5 +156,6 @@ export const dummyData = [
     thumb:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/WhatCarCanYouGetForAGrand.jpg",
     title: "What care can you get for a grand?",
+    duration: "9:27",
   },
 ]

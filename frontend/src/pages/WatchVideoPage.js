@@ -19,7 +19,6 @@ import FullscreenExitIcon from "@mui/icons-material/FullscreenExit"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import SkipNextIcon from "@mui/icons-material/SkipNext"
 import PauseIcon from "@mui/icons-material/Pause"
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined"
 
 import screenfull from "screenfull"
 import { useRecoilState } from "recoil"
@@ -36,12 +35,15 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp"
 import Tooltip from "@mui/material/Tooltip"
 import { secondsToTime } from "functions/secondsToTime"
 import useMediaQuery from "@mui/material/useMediaQuery"
-import { VideoInfoContainer } from "components/DetailVideo/VideoInfoContainer"
-export const DetailVideo = () => {
+import { VideoInfoContainer } from "components/Watch/VideoInfoContainer"
+import { MenuSelector } from "components/common/MenuSelector"
+import { NextVideoContainer } from "components/Watch/NextVideoContainer"
+
+export const WatchVideoPage = () => {
   const params = useParams()
   const [startVid, setStartVid] = useState("true")
 
-  const matches = useMediaQuery("(min-width:1024px)")
+  const matches = useMediaQuery("(min-width:1440px)")
 
   // Time
   const [playTime, setPlayTime] = useState(0)
@@ -99,7 +101,13 @@ export const DetailVideo = () => {
   }, [volumn])
 
   const videoId = params.id
+
+  // 현재 영상
   const video = dummyData.find((video) => video.id + "" === videoId)
+
+  // 현재 영상을 제외한 영상들
+  const restVideos = dummyData.filter((video) => video.id + "" !== videoId)
+
   const { thumb, title, subtitle, sources, duration } = video
 
   useMemo(() => {
@@ -155,27 +163,18 @@ export const DetailVideo = () => {
   })
 
   return (
-    <div className="detail_container">
+    <div className="detail_page_container">
       <div className="left_container">
         {/* 영상 컨테이너 */}
-
         <div
-          style={{
-            flexGrow: 1,
-            flexDirection: "column",
-            display: "flex",
-            gap: "10px",
-            justifyContent: "end",
-            position: "relative",
-            alignContent: "end",
-            overflow: "hidden",
-            borderRadius: "20px",
-
-            width: "100%",
-            height: "100%",
-            maxWidth: "1800px",
-            maxHeight: "800px",
-          }}
+          className="screen-container"
+          style={
+            isFullscreen
+              ? { height: "100vh" }
+              : isMoviescreen
+              ? { maxHeight: "647px" }
+              : { borderRadius: "20px" }
+          }
         >
           <ReactPlayer
             ref={playerRef}
@@ -185,8 +184,8 @@ export const DetailVideo = () => {
               setPlayTime(progress.playedSeconds)
             }}
             url={sources[0]}
-            width="100%"
-            height="100%"
+            width={matches && isMoviescreen && "85%"}
+            height={"100%"}
             playing={startVid}
             autoPlay={true}
           />
@@ -292,6 +291,7 @@ export const DetailVideo = () => {
               {/* 전체 화면, 스크린 화면 조절 */}
               <div>
                 {!isFullscreen && (
+                  // 무비스크린 버튼
                   <Button
                     onClick={() => {
                       setIsMoviescreen((prev) => !prev)
@@ -300,9 +300,10 @@ export const DetailVideo = () => {
                     <Crop75Icon fontSize={isMoviescreen ? "medium" : "large"} />
                   </Button>
                 )}
-
+                {/* 전체 스크린 버튼 */}
                 <Button
                   onClick={() => {
+                    setIsMoviescreen(false)
                     if (screenfull.isEnabled) {
                       screenfull.toggle()
                     }
@@ -318,40 +319,53 @@ export const DetailVideo = () => {
             </div>
           </div>
         </div>
-        {/* </div> */}
-        {/* 영상 정보 컨테이너 */}
-        <div className="left_item_2" style={isFullscreen ? { display: "none" } : {}}>
-          <VideoInfoContainer title={title} subtitle={subtitle} />
-        </div>
 
-        <div className={"videos_bottom_container"}>
-          <div>fff</div>
-          <div>fff</div>
-          <div>fff</div>
-          <div>fff</div>
-          <div>fff</div>
-          <div>fff</div>
-          <div>fff</div>
-          <div>fff</div>
-        </div>
+        <div style={{ width: "100%", height: "100%", display: "flex" }}>
+          {/* part1 */}
+          <div className="screen_bottom_left_container">
+            {/* 영상 정보 컨테이너 */}
 
-        {/* 댓글 컨테이너 */}
-        <div className="left_item_3" style={isFullscreen ? { display: "none" } : {}}>
-          <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
-          <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
-          <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
-          <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
-          {/* <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} /> */}
+            <div className="screen_info_container" style={isFullscreen ? { display: "none" } : {}}>
+              <VideoInfoContainer title={title} subtitle={subtitle} />
+            </div>
+
+            <div className={"videos_bottom_container"}>
+              {restVideos.map((video, key) => (
+                <NextVideoContainer key={key} data={video} />
+              ))}
+            </div>
+
+            {/* 댓글 컨테이너 */}
+            <div
+              className="screen_comment_container"
+              style={isFullscreen ? { display: "none" } : {}}
+            >
+              <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
+              <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
+              <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
+              <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
+            </div>
+          </div>
+          {/* part2 */}
+          {isMoviescreen && (
+            <div className="videos_side_container">
+              <MenuSelector categories={["모두", "blarblar", "blarbla"]} />
+              {restVideos.map((video, key) => (
+                <NextVideoContainer key={key} data={video} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
-      <div className="videos_side_container">
-        <div>fff</div>
-        <div>fff</div>
-        <div>fff</div>
-        <div>fff</div>
-        <div>fff</div>
-      </div>
-      {/* 다른 영상들 컨테이너 */}
+      {/* 우측 사이드 부분 */}
+      {!isMoviescreen && !isFullscreen && (
+        <div className="videos_side_container">
+          {/* 다음 영상 틀 */}
+          {restVideos.map((video, key) => (
+            <NextVideoContainer key={key} data={video} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

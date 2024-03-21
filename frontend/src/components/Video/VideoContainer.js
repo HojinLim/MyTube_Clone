@@ -21,7 +21,6 @@ export const VideoContainer = (data) => {
   console.log(playTime)
 
   useMemo(() => {
-    // setTimePercent((playTime / stringToSeconds(duration)) * 100)
     setPlayedTime(secondsToTime(Math.trunc(playTime)))
   }, [playTime])
 
