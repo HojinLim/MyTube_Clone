@@ -1,6 +1,6 @@
 import { Common } from "Common"
 import { fullScreenState } from "atom/fullScreenState"
-import Header from "components/Header"
+import Header from "components/common/Header"
 import SideBar from "components/SideBar"
 import { WatchVideoPage } from "pages/WatchVideoPage"
 import { HistoryPage } from "pages/HistoryPage"
@@ -14,6 +14,8 @@ import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { useRecoilValue } from "recoil"
 import { TestPage } from "pages/TestPage"
+import { NotFoundPage } from "pages/NotFoundPage"
+
 const Router = () => {
   const isFull = useRecoilValue(fullScreenState)
   return (
@@ -30,6 +32,7 @@ const Router = () => {
         <Route path="/later" element={<LaterPage />} />
         <Route path="/shorts" element={<ShortsPage />} />
         <Route path="/test" element={<TestPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )

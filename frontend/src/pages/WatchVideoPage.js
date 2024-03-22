@@ -172,7 +172,7 @@ export const WatchVideoPage = () => {
             isFullscreen
               ? { height: "100vh" }
               : isMoviescreen
-              ? { maxHeight: "647px" }
+              ? { maxHeight: "80vh", backgroundColor: "#111111" }
               : { borderRadius: "20px" }
           }
         >

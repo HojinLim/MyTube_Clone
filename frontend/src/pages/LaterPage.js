@@ -3,25 +3,26 @@ import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import person from "assets/images/person.png"
+import IconButton from "@mui/material/IconButton"
 
 // Icons
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import ShuffleIcon from "@mui/icons-material/Shuffle"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
+
 import { VideoItem } from "components/later/VideoItem"
 import { MenuSelector } from "components/common/MenuSelector"
 export const LaterPage = () => {
   return (
-    <div style={{ marginTop: "150px" }}>
+    <div>
       <div className="later_outer">
         <div className="later_inner_outer">
           <Box
             component="section"
             sx={{
               p: 2,
-              border: "1px dashed grey",
-              width: "100vw",
-              height: "100vh",
-              borderRadius: "20px",
+              width: "100%",
+              height: "100%",
               display: "flex",
               justifyContent: "center",
             }}
@@ -30,10 +31,10 @@ export const LaterPage = () => {
               src={person}
               style={{
                 backgroundColor: "wheat",
-                width: "60vw",
-                maxWidth: "400px",
-                minHeight: "150px",
-                height: "20vh",
+                width: "100%",
+                maxWidth: "336px",
+                maxHeight: "200px",
+
                 borderRadius: "20px",
               }}
             />
@@ -42,38 +43,69 @@ export const LaterPage = () => {
             component="section"
             sx={{
               p: 2,
-              border: "1px dashed grey",
               width: "100%",
               height: "100%",
               borderRadius: "20px",
+              display: "flex",
+              flexDirection: "column",
+              border: "1px solid black",
+
+              overflow: "hidden",
             }}
           >
-            <Typography color={"white"} variant="h6" fontWeight={"600"}>
+            <Typography color={"white"} variant="h6" fontWeight={"700"} marginBottom={"15px"}>
               나중에 볼 동영상
             </Typography>
-            <Typography color={"white"}>주인장</Typography>
-            <Box display={"flex"} flexDirection={"column"}>
-              <div style={{ display: "flex" }}>
-                <Typography color={"gray"} marginRight={"5px"} variant="caption">
-                  동영상 83개
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                  maxHeight: "40px",
+
+                  overflow: "auto",
+                }}
+              >
+                <Typography color={"white"} variant="body2">
+                  주인장
                 </Typography>
-                <Typography color={"gray"} variant="caption">
-                  조회수 없음
-                </Typography>
-                <Typography color={"gray"} variant="caption">
-                  2일 전에 업데이트됨
-                </Typography>
+                <Box display={"flex"} flexDirection={"column"}>
+                  <div style={{ display: "flex", textOverflow: "ellipsis", overflow: "auto" }}>
+                    <Typography color={"lightgray"} variant="caption">
+                      동영상 83개
+                    </Typography>
+                    <Typography color={"lightgray"} margin={"0px 5px"} variant="caption">
+                      조회수 없음
+                    </Typography>
+                    <Typography color={"lightgray"} variant="caption" textOverflow={"ellipsis"}>
+                      2일 전에 업데이트됨
+                    </Typography>
+                  </div>
+                </Box>
               </div>
-            </Box>
+              <IconButton
+                style={{
+                  backgroundColor: "lightgray",
+                  opacity: 0.75,
+                  maxWidth: "30px",
+                  maxHeight: "30px",
+                  marginRight: "10px",
+                }}
+              >
+                <MoreVertIcon style={{ color: "white" }} />
+              </IconButton>
+            </div>
           </Box>
         </div>
 
         {/* 모두재생, 셔플 */}
         <Box
+          className="later-button-container"
           component="section"
           sx={{
             p: 2,
-            border: "1px dashed grey",
+
             width: "100%",
             height: "100%",
             borderRadius: "20px",
@@ -83,11 +115,13 @@ export const LaterPage = () => {
         >
           <Button
             style={{
-              height: "80%",
-              width: "80%",
+              height: "100%",
+              width: "100%",
               borderRadius: "30px",
               margin: "auto 15px",
               backgroundColor: "white",
+              maxWidth: "450px",
+              maxHeight: "40px",
             }}
             variant="contained"
             color="primary"
@@ -97,11 +131,13 @@ export const LaterPage = () => {
           </Button>
           <Button
             style={{
-              height: "80%",
-              width: "80%",
+              height: "100%",
+              width: "100%",
               borderRadius: "30px",
               margin: "auto 15px",
               color: "white",
+              maxWidth: "450px",
+              maxHeight: "40px",
             }}
             variant="contained"
             color="primary"

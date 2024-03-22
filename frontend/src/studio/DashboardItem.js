@@ -9,8 +9,8 @@ import { openUploadState } from "atom/openUploadState"
 export const DashboardItem = () => {
   const setOpen = useSetRecoilState(openUploadState)
   return (
-    <>
-      <Typography variant="h5" fontWeight={"700"} style={{ margin: "15px" }}>
+    <div style={{ backgroundColor: "#eee", flex: "1" }}>
+      <Typography variant="h5" fontWeight={"700"}>
         채널 대시보드
       </Typography>
       <Box
@@ -54,6 +54,6 @@ export const DashboardItem = () => {
           </Button>
         </Box>
       </Box>
-    </>
+    </div>
   )
 }

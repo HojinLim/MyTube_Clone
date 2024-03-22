@@ -17,11 +17,7 @@ export const VideoInfoContainer = ({ title, subtitle }) => {
   const [thumbUp, setThumbup] = useState(null)
   const [thumbDown, setThumbDown] = useState(null)
   const [likeCount, setLikeCount] = useState(0)
-  const ClickedStyle = {
-    backgroundColor: "black",
-    color: "white",
-    margin: "5px",
-  }
+
   const [subscript, setSubscript] = useState(false)
 
   const thumbUpHandler = () => {
@@ -76,9 +72,10 @@ export const VideoInfoContainer = ({ title, subtitle }) => {
             onClick={() => setSubscript((prev) => !prev)}
             variant="contained"
             sx={{
-              backgroundColor: "lightgray",
+              backgroundColor: "black",
               borderRadius: "20px",
               maxHeight: "40px",
+              color: "white",
             }}
           >
             {subscript && <NotificationsNoneOutlinedIcon />}
@@ -88,7 +85,6 @@ export const VideoInfoContainer = ({ title, subtitle }) => {
           <Stack
             direction="row"
             spacing={1}
-            border={"1px solid black"}
             borderRadius={"20px"}
             padding={"0px 15px"}
             backgroundColor={"lightgray"}
@@ -115,7 +111,7 @@ export const VideoInfoContainer = ({ title, subtitle }) => {
           style={{
             width: "100%",
             height: "100%",
-            backgroundColor: "gray",
+            backgroundColor: "#eee",
             flexDirection: "column",
             display: "flex",
             borderRadius: "10px",

@@ -8,7 +8,6 @@ export const HistoryPage = () => {
   return (
     <div
       style={{
-        marginTop: "150px",
         border: "1px solid black",
         width: "100vw",
         height: "100%",

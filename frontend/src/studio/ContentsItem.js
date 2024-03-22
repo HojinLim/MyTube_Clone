@@ -29,7 +29,7 @@ export const ContentsItem = () => {
 
   const setOpen = useSetRecoilState(openUploadState)
   return (
-    <>
+    <div>
       <Typography variant="h5" fontWeight={"700"} style={{ margin: "15px" }}>
         채널 콘텐츠
       </Typography>
@@ -37,6 +37,6 @@ export const ContentsItem = () => {
 
       <ContentsTable />
       {/* <NoContents /> */}
-    </>
+    </div>
   )
 }

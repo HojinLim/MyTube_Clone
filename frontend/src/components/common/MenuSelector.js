@@ -18,6 +18,7 @@ export const MenuSelector = ({ categories }) => {
         {categories.map((category, key) => (
           <Tooltip key={key} title={category} placement="top-start">
             <Button
+              size="small"
               onClick={() => setSelectedButton(category)}
               style={
                 selectedButton === category

@@ -21,21 +21,11 @@ export const StudioPage = () => {
   }
 
   return (
-    <div style={{ marginTop: "100px", display: "flex" }}>
-      <UploadModal />
+    <div style={{ display: "flex", position: "relative" }}>
       <Sidebar />
-      {/* <Dash /> */}
+      <UploadModal />
 
-      <div
-        style={{
-          width: "100%",
-          height: "100vh",
-          marginLeft: "140px",
-          backgroundColor: "#eee",
-        }}
-      >
-        {studioState === "dashboard" ? <DashboardItem /> : <ContentsItem />}
-      </div>
+      {studioState === "dashboard" ? <DashboardItem /> : <ContentsItem />}
     </div>
   )
 }

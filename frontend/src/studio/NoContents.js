@@ -5,8 +5,16 @@ import { Button } from "@mui/material"
 
 export const NoContents = () => {
   return (
-    <>
-      <img src={person} width={"200px"} style={{ alignSelf: "center" }} />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignSelf: "center",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <img src={person} width={"200px"} style={{}} />
       <Typography variant="body1" style={{ textAlign: "center" }}>
         콘텐츠가 없습니다.
       </Typography>
@@ -15,13 +23,13 @@ export const NoContents = () => {
         style={{
           backgroundColor: "#026be3",
           color: "white",
-          width: "15%",
+          width: "150px",
           margin: "15px 0px",
           alignSelf: "center",
         }}
       >
         동영상 업로드
       </Button>
-    </>
+    </div>
   )
 }

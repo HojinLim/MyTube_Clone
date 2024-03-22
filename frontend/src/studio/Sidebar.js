@@ -33,7 +33,7 @@ export const Sidebar = () => {
   }
 
   return (
-    <div className="menu">
+    <nav className="menu">
       <div className="avatar_container">
         <IconButton>
           <Avatar sx={{ width: 130, height: 130 }} />
@@ -142,7 +142,7 @@ export const Sidebar = () => {
         </MenuList>
       </div>
       <div className="menu-divider"></div>
-    </div>
+    </nav>
   )
 }
 export default Sidebar

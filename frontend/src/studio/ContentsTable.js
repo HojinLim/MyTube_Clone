@@ -299,11 +299,11 @@ export default function ContentsTable() {
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <ContentsTableToolbar numSelected={selected.length} />
-        <Tooltip title="Delete">
+        {/* <Tooltip title="Delete">
           <IconButton onClick={() => deleteHandler(selected)}>
             <DeleteIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={"medium"}>
             <ContentsTableHead
