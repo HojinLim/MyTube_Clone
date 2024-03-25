@@ -4,6 +4,7 @@ import BoltIcon from "@mui/icons-material/Bolt"
 import { ShortsContainer } from "components/history.js/ShortsContainer"
 import Divider from "@mui/material/Divider"
 import { VideoItem } from "components/later/VideoItem"
+import { dummyData } from "dummy"
 export const HistoryPage = () => {
   return (
     <div
@@ -36,9 +37,9 @@ export const HistoryPage = () => {
         <Divider style={{ marginBottom: "50px" }} />
         <div className="history-videos-container">
           <div className="history-video-container">
-            <VideoItem />
-            <VideoItem />
-            <VideoItem />
+            <VideoItem datas={dummyData[0]} />
+            <VideoItem datas={dummyData[1]} />
+            <VideoItem datas={dummyData[2]} />
           </div>
         </div>
       </div>

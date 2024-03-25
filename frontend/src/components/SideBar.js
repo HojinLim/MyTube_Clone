@@ -74,6 +74,7 @@ export default function SideBar() {
 
     setState({ ...state, [anchor]: open })
   }
+
   const movePage = (name) => {
     switch (name) {
       case "나":
@@ -99,6 +100,9 @@ export default function SideBar() {
         break
       case "Shorts":
         navigate("/shorts")
+        break
+      case name:
+        navigate(`/${name}`)
         break
       default:
         break
@@ -179,7 +183,7 @@ export default function SideBar() {
             <List>
               {["침착맨", "슈카월드"].map((text, index) => (
                 <ListItem key={text} disablePadding>
-                  <ListItemButton>
+                  <ListItemButton onClick={() => movePage(text)}>
                     <ListItemIcon>
                       {index === 0 && <Avatar src={youtuber1} />}
                       {index === 1 && <Avatar src={youtuber2} />}

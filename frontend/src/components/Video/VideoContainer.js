@@ -18,7 +18,6 @@ export const VideoContainer = (data) => {
   const [playTime, setPlayTime] = useState(0)
   const [playedTime, setPlayedTime] = useState("0:00")
   const [startVideo, setStartVideo] = useState(false)
-  console.log(playTime)
 
   useMemo(() => {
     setPlayedTime(secondsToTime(Math.trunc(playTime)))

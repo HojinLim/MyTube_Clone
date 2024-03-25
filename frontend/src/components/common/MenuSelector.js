@@ -9,7 +9,7 @@ export const MenuSelector = ({ categories }) => {
   const ClickedStyle = {
     backgroundColor: "black",
     color: "white",
-    margin: "5px",
+    margin: "3px",
   }
 
   return (
@@ -23,7 +23,7 @@ export const MenuSelector = ({ categories }) => {
               style={
                 selectedButton === category
                   ? ClickedStyle
-                  : { backgroundColor: "lightgray", color: "black", margin: "5px" }
+                  : { backgroundColor: "lightgray", color: "black", margin: "3px" }
               }
             >
               {category}

@@ -30,8 +30,6 @@ export default function AddVideoMenu() {
     navigate("/studio")
   }
 
-  const commonStyle = { margin: "3px", gap: "8px" }
-
   return (
     <div>
       <Tooltip title="만들기">
@@ -66,15 +64,15 @@ export default function AddVideoMenu() {
           horizontal: "center",
         }}
       >
-        <MenuItem style={commonStyle} onClick={handleUpload}>
+        <MenuItem onClick={handleUpload}>
           <SlideshowIcon />
           동영상 업로드
         </MenuItem>
-        <MenuItem style={commonStyle} onClick={handleClose}>
+        <MenuItem onClick={handleClose}>
           <SensorsIcon />
           라이브 스트리밍 시작
         </MenuItem>
-        <MenuItem style={commonStyle} onClick={handleClose}>
+        <MenuItem onClick={handleClose}>
           <DriveFileRenameOutlineIcon />
           게시물 작성
         </MenuItem>

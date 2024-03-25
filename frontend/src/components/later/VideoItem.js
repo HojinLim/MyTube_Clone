@@ -2,13 +2,25 @@ import React from "react"
 import person from "assets/images/person.png"
 import Typography from "@mui/material/Typography"
 import IconButton from "@mui/material/IconButton"
-
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
-export const VideoItem = () => {
+import Divider from "@mui/material/Divider"
+export const VideoItem = ({ datas }) => {
+  const { id, thumb, title, subtitle, sources, duration } = datas
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const open = Boolean(anchorEl)
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
   return (
     <div className="later_video_container">
       <Typography variant="body1" style={{ margin: "15px" }}>
-        1
+        {id}
       </Typography>
       <div
         style={{
@@ -22,11 +34,15 @@ export const VideoItem = () => {
         }}
       >
         <img
-          src={person}
+          src={thumb}
           style={{
             backgroundColor: "wheat",
+            margin: "auto",
+            display: "block",
+            width: "100%",
           }}
         />
+
         <div
           style={{
             position: "absolute",
@@ -38,7 +54,7 @@ export const VideoItem = () => {
             margin: "5px",
           }}
         >
-          00:00
+          {duration}
         </div>
       </div>
 
@@ -53,9 +69,9 @@ export const VideoItem = () => {
           flex: 1,
         }}
       >
-        <Typography variant="body1">제목제목제목제목제목제목제목제목제목제목제목제목</Typography>
+        <Typography variant="body1">{title}</Typography>
         <div style={{ display: "flex", flexDirection: "row", marginTop: "15px" }}>
-          <Typography variant="caption">주인장 </Typography>
+          <Typography variant="caption">{subtitle}</Typography>
           <Typography variant="caption"> • </Typography>
           <Typography variant="caption">조회수 10회</Typography>
           <Typography variant="caption"> • </Typography>
@@ -63,9 +79,36 @@ export const VideoItem = () => {
         </div>
       </div>
       <div className="dot-menu-button">
-        <IconButton>
+        <IconButton onClick={handleClick}>
           <MoreVertIcon />
         </IconButton>
+
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+          <Divider />
+          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+        </Menu>
       </div>
     </div>
   )

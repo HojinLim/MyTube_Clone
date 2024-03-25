@@ -79,7 +79,7 @@ export const VideoInfoContainer = ({ title, subtitle }) => {
             }}
           >
             {subscript && <NotificationsNoneOutlinedIcon />}
-            {setSubscript ? "구독" : "구독중"}
+            {subscript ? "구독" : "구독중"}
           </Button>
 
           <Stack
