@@ -4,6 +4,10 @@ import { HomePage } from "pages/HomePage"
 import React from "react"
 import "./styles.css"
 import Router from "router"
+
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
+import { createHttpLink } from "apollo-link-http"
+
 // 새로운 테마 생성
 
 const theme = createTheme({
@@ -32,15 +36,37 @@ const theme = createTheme({
     ].join(","),
   },
 })
+
+const client = new ApolloClient({
+  link: createHttpLink({ uri: process.env.REACT_APP_BACKEND_URL }),
+  cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: "no-cache",
+    },
+    query: {
+      fetchPolicy: "no-cache",
+    },
+    mutate: {
+      fetchPolicy: "no-cache",
+    },
+  },
+})
+
 const App = () => {
-  // Create a client
+  // createUser("testest", "test@test.com", "testetstestes")
+  // useMutation(createUser, {
+  //   variables: { username: "testest", email: "test@test.com", profileImage: "testetstestes" },
+  // })
 
   return (
-    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
-      <ThemeProvider theme={theme}>
-        <Router />
-      </ThemeProvider>
-    </GoogleOAuthProvider>
+    <ApolloProvider client={client}>
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
+        <ThemeProvider theme={theme}>
+          <Router />
+        </ThemeProvider>
+      </GoogleOAuthProvider>
+    </ApolloProvider>
   )
 }
 export default App

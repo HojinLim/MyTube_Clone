@@ -1253,6 +1253,9 @@
           },
           "try": {
             "type": "integer"
+          },
+          "profileImage": {
+            "type": "string"
           }
         }
       },
@@ -1293,6 +1296,9 @@
           },
           "try": {
             "type": "integer"
+          },
+          "profileImage": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"

@@ -4,6 +4,8 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
+import ContentsTable from "./ContentsTable"
+import CustomMenu from "components/common/CustomMenu"
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props
@@ -61,10 +63,16 @@ export default function ContentsTab() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Item One
+        <ContentsTable />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Item Two
+        <CustomMenu
+          buttonText={"test"}
+          menuItems={[
+            { text: "test", onclick: () => {} },
+            { text: "test2", onclick: () => {} },
+          ]}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         Item Three

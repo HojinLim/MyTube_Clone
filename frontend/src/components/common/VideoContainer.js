@@ -14,12 +14,16 @@ export const VideoContainer = ({ data, hasCreator }) => {
       <div>
         {/* 비디오 파트*/}
         <div
+          onClick={() => {
+            navigate(`/watch/${id}`)
+          }}
+          className="video-container"
           style={{
             width: "100%",
             overflow: "hidden",
             borderRadius: "15px",
             maxWidth: "320px",
-            maxHeight: "200px",
+            maxHeight: "300px",
           }}
           onMouseOver={() => setHover(true)}
           onMouseOut={() => {
@@ -29,6 +33,7 @@ export const VideoContainer = ({ data, hasCreator }) => {
         >
           {hover ? (
             <ReactPlayer
+              style={{ justifySelf: "center", paddingTop: "20px" }}
               url={sources[0]}
               playing={hover}
               width="100%"

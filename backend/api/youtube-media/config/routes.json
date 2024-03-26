@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/youtube-medias",
+      "handler": "youtube-media.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/youtube-medias/count",
+      "handler": "youtube-media.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/youtube-medias/:id",
+      "handler": "youtube-media.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/youtube-medias",
+      "handler": "youtube-media.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/youtube-medias/:id",
+      "handler": "youtube-media.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/youtube-medias/:id",
+      "handler": "youtube-media.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

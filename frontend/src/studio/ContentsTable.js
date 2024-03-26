@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { alpha } from "@mui/material/styles"
 import Box from "@mui/material/Box"
@@ -21,11 +21,10 @@ import FilterListIcon from "@mui/icons-material/FilterList"
 import { visuallyHidden } from "@mui/utils"
 import person from "assets/images/person.png"
 import { Button } from "@mui/material"
-
-// Icons
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined"
 import PublicIcon from "@mui/icons-material/Public"
+
 function createData(id, name, date, isPublic, views, comments, likes) {
   return {
     id,
@@ -40,18 +39,10 @@ function createData(id, name, date, isPublic, views, comments, likes) {
 
 const rows_data = [
   createData(1, "제목1", "2024.03.02", "공개", 67, 4.3, 3),
-  createData(2, "제목2", 452, "비공개", 51, 4.9, 5),
-  createData(3, "제목3", 262, "비공개", 24, 6.0, 3),
-  createData(4, "제목4", 159, "공개", 24, 4.0, 7),
-  createData(5, "제목5", 356, "비공개", 49, 3.9, 9),
-  //   createData(6, "Honeycomb", 408, 3.2, 87, 6.5),
-  //   createData(7, "Ice cream sandwich", 237, 9.0, 37, 4.3),
-  //   createData(8, "Jelly Bean", 375, 0.0, 94, 0.0),
-  //   createData(9, "KitKat", 518, 26.0, 65, 7.0),
-  //   createData(10, "Lollipop", 392, 0.2, 98, 0.0),
-  //   createData(11, "Marshmallow", 318, 0, 81, 2.0),
-  //   createData(12, "Nougat", 360, 19.0, 9, 37.0),
-  //   createData(13, "Oreo", 437, 18.0, 63, 4.0),
+  createData(2, "제목2", "2024.03.02", "비공개", 51, 4.9, 5),
+  createData(3, "제목3", "2024.03.02", "비공개", 24, 6.0, 3),
+  createData(4, "제목4", "2024.03.02", "공개", 24, 4.0, 7),
+  createData(5, "제목5", "2024.03.02", "비공개", 49, 3.9, 9),
 ]
 
 function descendingComparator(a, b, orderBy) {
@@ -70,60 +61,23 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy)
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index])
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0])
-    if (order !== 0) {
-      return order
-    }
+    if (order !== 0) return order
     return a[1] - b[1]
   })
   return stabilizedThis.map((el) => el[0])
 }
 
 const headCells = [
-  {
-    id: "title",
-    numeric: false,
-    disablePadding: true,
-    label: "동영상",
-  },
-
-  {
-    id: "open",
-    numeric: false,
-    disablePadding: false,
-    label: "공개 상태",
-  },
-  {
-    id: "date",
-    numeric: true,
-    disablePadding: false,
-    label: "날짜",
-  },
-  {
-    id: "views",
-    numeric: true,
-    disablePadding: false,
-    label: "조회수",
-  },
-  {
-    id: "comments",
-    numeric: true,
-    disablePadding: false,
-    label: "댓글",
-  },
-  {
-    id: "likes",
-    numeric: true,
-    disablePadding: false,
-    label: "좋아요",
-  },
+  { id: "title", numeric: false, disablePadding: true, label: "동영상" },
+  { id: "open", numeric: false, disablePadding: false, label: "공개 상태" },
+  { id: "date", numeric: true, disablePadding: false, label: "날짜" },
+  { id: "views", numeric: true, disablePadding: false, label: "조회수" },
+  { id: "comments", numeric: true, disablePadding: false, label: "댓글" },
+  { id: "likes", numeric: true, disablePadding: false, label: "좋아요" },
 ]
 
 function ContentsTableHead(props) {
@@ -182,7 +136,7 @@ ContentsTableHead.propTypes = {
 }
 
 function ContentsTableToolbar(props) {
-  const { numSelected } = props
+  const { numSelected, onDelete } = props
 
   return (
     <Toolbar
@@ -205,7 +159,7 @@ function ContentsTableToolbar(props) {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton onClick={() => deleteHandler(numSelected)}>
+          <IconButton onClick={onDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -222,17 +176,16 @@ function ContentsTableToolbar(props) {
 
 ContentsTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  onDelete: PropTypes.func.isRequired,
 }
-
 export default function ContentsTable() {
-  const [order, setOrder] = React.useState("asc")
-  const [orderBy, setOrderBy] = React.useState("calories")
-  const [selected, setSelected] = React.useState([])
-  const [page, setPage] = React.useState(0)
+  const [order, setOrder] = useState("asc")
+  const [orderBy, setOrderBy] = useState("calories")
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-
-  const [rows, setRows] = React.useState(rows_data)
+  const [rows, setRows] = useState(rows_data)
+  const [selected, setSelected] = useState([])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc"
@@ -279,7 +232,6 @@ export default function ContentsTable() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   const visibleRows = React.useMemo(
@@ -290,20 +242,27 @@ export default function ContentsTable() {
       ),
     [order, orderBy, page, rowsPerPage]
   )
-  const deleteHandler = (selected) => {
+
+  const deleteHandler = () => {
     setRows(rows.filter((row) => !selected.includes(row.id)))
-    // console.log(rowss)
+    setSelected([])
+    console.log(rows)
+  }
+
+  const togglePublicStatus = (id) => {
+    const updatedRows = rows.map((row) => {
+      if (row.id === id) {
+        return { ...row, isPublic: row.isPublic === "공개" ? "비공개" : "공개" }
+      }
+      return row
+    })
+    setRows(updatedRows)
   }
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <ContentsTableToolbar numSelected={selected.length} />
-        {/* <Tooltip title="Delete">
-          <IconButton onClick={() => deleteHandler(selected)}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip> */}
+        <ContentsTableToolbar numSelected={selected.length} onDelete={deleteHandler} />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={"medium"}>
             <ContentsTableHead
@@ -316,7 +275,7 @@ export default function ContentsTable() {
             />
 
             <TableBody>
-              {visibleRows.map((row, index) => {
+              {rows.map((row, index) => {
                 const isItemSelected = isSelected(row.id)
                 const labelId = `enhanced-table-checkbox-${index}`
 

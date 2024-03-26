@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "youtube_medias",
+  "info": {
+    "name": "youtube-media",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "contents": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "createdBy": {
+      "type": "email"
+    }
+  }
+}

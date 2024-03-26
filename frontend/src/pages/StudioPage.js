@@ -21,7 +21,7 @@ export const StudioPage = () => {
   }
 
   return (
-    <div style={{ display: "flex", position: "relative" }}>
+    <div style={{ display: "flex", position: "relative", width: "100%" }}>
       <Sidebar />
       <UploadModal />
 

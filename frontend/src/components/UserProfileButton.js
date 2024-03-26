@@ -13,14 +13,17 @@ import Tooltip from "@mui/material/Tooltip"
 import Settings from "@mui/icons-material/Settings"
 import Logout from "@mui/icons-material/Logout"
 import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined"
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline"
 
 import { accountState } from "atom/accountState"
 import { useRecoilState } from "recoil"
 
 import { Link } from "react-router-dom"
 import OpinionDrawer from "./opinion/OpinionDrawer"
+import { useNavigate } from "react-router-dom"
 
 export const UserProfileButton = () => {
+  const navi = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null)
 
   const [user, setUser] = useRecoilState(accountState)
@@ -103,7 +106,11 @@ export const UserProfileButton = () => {
           <MenuItem onClick={handleClose}>
             <Avatar /> 닉네임
           </MenuItem>
-          <Link to="/studio">내 채널보기</Link>
+          <MenuItem>
+            <Link className="channel-link" to="/studio">
+              내 채널보기
+            </Link>
+          </MenuItem>
         </div>
         <Divider />
 
@@ -113,6 +120,18 @@ export const UserProfileButton = () => {
           </ListItemIcon>
           로그아웃
         </MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={() => {
+            navi("/studio")
+          }}
+        >
+          <ListItemIcon>
+            <PlayCircleOutlineIcon fontSize="small" />
+          </ListItemIcon>
+          YouTube스튜디오
+        </MenuItem>
+        <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />

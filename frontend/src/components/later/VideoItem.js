@@ -58,19 +58,22 @@ export const VideoItem = ({ datas }) => {
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          marginLeft: "10px",
-          alignSelf: "flex-start",
-          marginTop: "10px",
-          flex: 1,
-        }}
-      >
-        <Typography variant="body1">{title}</Typography>
-        <div style={{ display: "flex", flexDirection: "row", marginTop: "15px" }}>
+      <div className="video-item-inform-container">
+        <Typography
+          variant="body1"
+          style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+        >
+          {title}
+        </Typography>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            marginTop: "15px",
+            height: "18px",
+            overflow: "hidden",
+          }}
+        >
           <Typography variant="caption">{subtitle}</Typography>
           <Typography variant="caption"> • </Typography>
           <Typography variant="caption">조회수 10회</Typography>
@@ -100,14 +103,14 @@ export const VideoItem = ({ datas }) => {
             horizontal: "center",
           }}
         >
-          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
-          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
-          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
-          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
-          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+          <MenuItem onClick={handleClose}>현재 재생목록에 추가</MenuItem>
+          <MenuItem onClick={handleClose}>재생목록에 저장</MenuItem>
+          <MenuItem onClick={handleClose}>나중에 볼 동영상에서 삭제</MenuItem>
+          <MenuItem onClick={handleClose}>오프라인 저장</MenuItem>
+          <MenuItem onClick={handleClose}>공유</MenuItem>
           <Divider />
-          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
-          <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
+          <MenuItem onClick={handleClose}>맨 위로 이동</MenuItem>
+          <MenuItem onClick={handleClose}>맨 아래로 이동</MenuItem>
         </Menu>
       </div>
     </div>

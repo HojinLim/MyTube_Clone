@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import UserIcon from "@mui/icons-material/AccountCircleOutlined"
 import { IconButton, Typography } from "@mui/material"
 import { styled, alpha } from "@mui/material/styles"
@@ -7,6 +7,8 @@ import axios from "axios"
 import { useRecoilState } from "recoil"
 import { accountState } from "atom/accountState"
 import { changeState } from "atom/accountState"
+import { useMutation } from "@apollo/client"
+import { CREATE_USER } from "apollo/mutation"
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(1),
   "&:hover": {
@@ -25,8 +27,10 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 export const GoogleLoginButton = () => {
   const [user, setUser] = useRecoilState(accountState)
+  const [createUser, { data, loading, error }] = useMutation(CREATE_USER)
 
   const googleLogin = useGoogleLogin({
+    // 로그인 성공
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse)
       window.localStorage.setItem("token", tokenResponse.access_token)
@@ -36,6 +40,14 @@ export const GoogleLoginButton = () => {
         })
         .then((res) => {
           console.log(res.data)
+          const { name, email, picture } = res.data
+          console.log(name)
+          console.log(email)
+          console.log(picture)
+          createUser({
+            variables: { username: name, email: email, password: "1234", profileImage: picture },
+          }).then((res2) => console.log(res2))
+
           return res.data
         })
 
@@ -49,11 +61,9 @@ export const GoogleLoginButton = () => {
 
       localStorage.setItem("user", JSON.stringify(user))
       setUser(user)
-      // window.location.reload()
 
-      console.log(user)
+      // console.log(user)
     },
-    // flow: 'implicit', // implicit is the default
   })
   return (
     <StyledIconButton aria-label="login" onClick={() => googleLogin()}>
