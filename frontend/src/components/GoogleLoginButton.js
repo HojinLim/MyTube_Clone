@@ -9,6 +9,10 @@ import { accountState } from "atom/accountState"
 import { changeState } from "atom/accountState"
 import { useMutation } from "@apollo/client"
 import { CREATE_USER } from "apollo/mutation"
+import { LOGIN_USER } from "apollo/mutation"
+import { REGISTER_USER } from "apollo/mutation"
+import { STRAPI_TOKEN } from "Constants/value"
+
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(1),
   "&:hover": {
@@ -28,41 +32,71 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 export const GoogleLoginButton = () => {
   const [user, setUser] = useRecoilState(accountState)
   const [createUser, { data, loading, error }] = useMutation(CREATE_USER)
+  const [loginUser, { loginData, loginLoading, loginError }] = useMutation(LOGIN_USER)
+  const [registerUser, { registerData, registerLoading, registerError }] =
+    useMutation(REGISTER_USER)
 
   const googleLogin = useGoogleLogin({
     // 로그인 성공
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse)
-      window.localStorage.setItem("token", tokenResponse.access_token)
-      const userInfo = await axios
-        .get("https://www.googleapis.com/oauth2/v3/userinfo", {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        })
-        .then((res) => {
-          console.log(res.data)
-          const { name, email, picture } = res.data
-          console.log(name)
-          console.log(email)
-          console.log(picture)
-          createUser({
-            variables: { username: name, email: email, password: "1234", profileImage: picture },
-          }).then((res2) => console.log(res2))
+      window.localStorage.setItem("google-token", tokenResponse.access_token)
+      try {
+        const userInfo = await axios
+          .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+            headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+          })
+          .then((res) => {
+            // 구글 로그인 성공
+            console.log(res.data)
+            const { name, email, picture, sub, locale } = res.data
 
-          return res.data
-        })
+            let user = null
+            if (!picture) {
+              user = { email, picture: null }
+            } else {
+              user = { email, picture }
+            }
 
-      const { email, pitcure } = userInfo
-      let user = null
-      if (!pitcure) {
-        user = { email, pitcure: null }
-      } else {
-        user = { email, pitcure }
+            localStorage.setItem("user", JSON.stringify(user))
+            setUser(user)
+
+            loginUser({ variables: { identifier: email, password: sub } })
+              .then((res2) => {
+                console.log(res2, "스트라피 data")
+                console.log("str_JWT:", res2.data.login.jwt)
+                localStorage.setItem(STRAPI_TOKEN, res2.data.login.jwt)
+              })
+              .catch((error) => {
+                // 유저가 없는거임 -> 회원가입
+                registerUser({
+                  variables: {
+                    username: name,
+                    email: email,
+                    password: sub,
+                    locale: locale,
+                    profileImage: picture,
+                  },
+                })
+                  .then((data) => {
+                    console.log(data)
+                    console.log("jwt:", data.data.register.jwt)
+                    localStorage.setItem(STRAPI_TOKEN, data.data.register.jwt)
+                  })
+                  .catch((error) => console.log(error))
+
+                console.error("로그인 중 에러 발생:", error)
+              })
+
+            return res.data
+          })
+      } catch (error) {
+        console.error("사용자 정보 가져오는 중 에러 발생:", error)
       }
-
-      localStorage.setItem("user", JSON.stringify(user))
-      setUser(user)
-
-      // console.log(user)
+    },
+    // 에러 발생
+    onFailure: (error) => {
+      console.error("구글 로그인 중 에러 발생:", error)
     },
   })
   return (

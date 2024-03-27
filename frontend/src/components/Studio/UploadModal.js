@@ -20,6 +20,10 @@ import { openUploadState } from "atom/openUploadState"
 import { flex_space_between } from "styles/globalStyle"
 import { flex_column } from "styles/globalStyle"
 import { createUser } from "apollo/mutation"
+import { STRAPI_TOKEN } from "Constants/value"
+import axios from "axios"
+import { useMutation } from "@apollo/client"
+import { UPLOAD_VIDEO } from "apollo/mutation"
 
 const style = {
   position: "absolute",
@@ -35,10 +39,12 @@ const style = {
 }
 
 export default function UploadModal() {
+  const [uploadVideo, { uploadData, uploadLoading, uploadError }] = useMutation(UPLOAD_VIDEO)
   const [uploaded, setUploaded] = React.useState(false)
   const [modalTitle, setModalTitle] = React.useState("동영상 업로드")
   const [uploadedFile, setUploadedFile] = React.useState(null)
   const [open, setOpen] = useRecoilState(openUploadState)
+  const [isPublic, setIsPublic] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const fileUploadHandler = () => {
@@ -58,6 +64,46 @@ export default function UploadModal() {
     } else {
       alert("잘못된 데이터 형식입니다!!!!")
     }
+  }
+
+  function upload() {
+    console.log(uploadedFile)
+    return new Promise((resolve, reject) => {
+      var formData = new FormData()
+      formData.append("files", uploadedFile)
+      // let config = {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //     Authorization: "Bearer " + localStorage.getItem(STRAPI_TOKEN),
+      //   },
+      // }
+      axios
+        .post(process.env.REACT_APP_BACKEND_URL_UPLOAD + "/upload", formData)
+        .then((data) => {
+          console.log(data)
+          uploadVideoToStrapi(data)
+          resolve(data)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  }
+  function uploadVideoToStrapi({ data }) {
+    const { name, id } = data[0]
+    uploadVideo({
+      variables: {
+        title: name,
+        description: "This is Test",
+        createdBy: "hojinim@gmail.com",
+        contents: id,
+        isPublic: isPublic,
+      },
+    })
+      .then((res) => console.log(res))
+      .catch((res) => {
+        console.log(res)
+      })
   }
 
   return (
@@ -138,15 +184,17 @@ export default function UploadModal() {
                 <div>이름: {uploadedFile.name}</div>
                 <div>타입: {uploadedFile.type}</div>
 
-                <FormControl>
+                <FormControl component="fieldset">
                   <FormLabel id="demo-row-radio-buttons-group-label">공개여부</FormLabel>
                   <RadioGroup
+                    value={isPublic}
+                    onChange={(e) => setIsPublic(e.target.value === "true" ? true : false)}
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
                   >
-                    <FormControlLabel value="공개" control={<Radio />} label="공개" />
-                    <FormControlLabel value="비공개" control={<Radio />} label="비공개" />
+                    <FormControlLabel value="true" control={<Radio />} label="공개" />
+                    <FormControlLabel value="false" control={<Radio />} label="비공개" />
                   </RadioGroup>
                 </FormControl>
 
@@ -163,6 +211,7 @@ export default function UploadModal() {
                       width: "100px",
                       alignSelf: "center",
                     }}
+                    onClick={() => upload()}
                   >
                     업로드
                   </Button>

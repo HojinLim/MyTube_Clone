@@ -30,6 +30,10 @@
     },
     "createdBy": {
       "type": "email"
+    },
+    "isPublic": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

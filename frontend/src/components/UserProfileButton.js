@@ -21,6 +21,7 @@ import { useRecoilState } from "recoil"
 import { Link } from "react-router-dom"
 import OpinionDrawer from "./opinion/OpinionDrawer"
 import { useNavigate } from "react-router-dom"
+import { STRAPI_TOKEN } from "Constants/value"
 
 export const UserProfileButton = () => {
   const navi = useNavigate()
@@ -39,6 +40,7 @@ export const UserProfileButton = () => {
   const handleLogout = () => {
     setAnchorEl(null)
     localStorage.removeItem("user")
+    localStorage.removeItem(STRAPI_TOKEN)
     setUser(null)
     window.location.reload()
     alert("로그아웃 되었습니다.")

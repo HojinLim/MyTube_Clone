@@ -611,6 +611,10 @@
           "createdBy": {
             "type": "string"
           },
+          "isPublic": {
+            "type": "boolean",
+            "default": false
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -626,6 +630,10 @@
           },
           "createdBy": {
             "type": "string"
+          },
+          "isPublic": {
+            "type": "boolean",
+            "default": false
           },
           "published_at": {
             "type": "datetime"

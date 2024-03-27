@@ -46,14 +46,116 @@ export const CREATE_USER = gql`
     }
   }
 `
-// export const createUser = gql`
-//   mutation createUser($username: String!, $email: String!, $password: String!) {
-//     createUser(input: { data: { username: $username, password: $password, email: $email } }) {
-//       user {
-//         id
-//         username
-//         created_at
+
+export const REGISTER_USER = gql`
+  mutation registerUser(
+    $username: String!
+    $password: String!
+    $email: String!
+    $locale: String!
+    $profileImage: String
+  ) {
+    register(
+      input: {
+        username: $username
+        password: $password
+        email: $email
+        locale: $locale
+        profileImage: $profileImage
+      }
+    ) {
+      jwt
+      user {
+        id
+        username
+        profileImage
+        created_at
+      }
+    }
+  }
+`
+
+export const LOGIN_USER = gql`
+  mutation loginUser($identifier: String!, $password: String!) {
+    login(input: { identifier: $identifier, password: $password }) {
+      jwt
+      user {
+        id
+        username
+        profileImage
+        created_at
+      }
+    }
+  }
+`
+export const UPLOAD_VIDEO = gql`
+  mutation uploadVideo(
+    $title: String!
+    $description: String!
+    $createdBy: String!
+    $contents: ID!
+    $isPublic: Boolean!
+  ) {
+    createYoutubeMedia(
+      input: {
+        data: {
+          title: $title
+          description: $description
+          createdBy: $createdBy
+          contents: $contents
+          isPublic: $isPublic
+        }
+      }
+    ) {
+      youtubeMedia {
+        id
+        title
+        contents {
+          name
+          url
+          id
+        }
+        description
+        createdBy
+        isPublic
+      }
+    }
+  }
+`
+// export const UPLOAD_VIDEO = gql`
+//   mutation uploadVideo(
+//     $title: String!
+//     $description: String!
+//     $createdBy: String!
+//     $contents: String!
+//   ) {
+//     createYoutubeMedia(
+//       input: {
+//         title: $title
+//         description: $description
+//         createdBy: $createdBy
+//         contents: $contents
 //       }
+//     ) {
+//       id
+//       title
+//       description
+//       createdBy
 //     }
 //   }
 // `
+
+// createYoutubeMedia(input:{data:{title:"test",description:"test is good",createdBy:"gg@abc.com",contents:"3"}}){
+//   youtubeMedia{
+//     id
+//     title
+//     contents{
+//       name
+//       url
+//       id
+//     }
+//     description
+//     createdBy
+//   }
+// }
+// }

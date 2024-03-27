@@ -59,6 +59,9 @@
     },
     "profileImage": {
       "type": "text"
+    },
+    "locale": {
+      "type": "string"
     }
   }
 }
