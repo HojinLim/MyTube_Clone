@@ -1,17 +1,12 @@
 import * as React from "react"
 import Box from "@mui/material/Box"
-import { Button, IconButton } from "@mui/material"
+import { IconButton } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import Modal from "@mui/material/Modal"
 import Divider from "@mui/material/Divider"
-import Radio from "@mui/material/Radio"
-import RadioGroup from "@mui/material/RadioGroup"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import FormControl from "@mui/material/FormControl"
-import FormLabel from "@mui/material/FormLabel"
+
 // Icon
 import CloseIcon from "@mui/icons-material/Close"
-import UploadIcon from "@mui/icons-material/Upload"
 
 // global state
 import { useRecoilState } from "recoil"
@@ -19,11 +14,13 @@ import { useRecoilState } from "recoil"
 import { openUploadState } from "atom/openUploadState"
 import { flex_space_between } from "styles/globalStyle"
 import { flex_column } from "styles/globalStyle"
-import { createUser } from "apollo/mutation"
-import { STRAPI_TOKEN } from "Constants/value"
+
 import axios from "axios"
-import { useMutation } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { UPLOAD_VIDEO } from "apollo/mutation"
+
+import { BeforeUploadContainer } from "./BeforeUploadContainer"
+import { AfterUploadContainer } from "./AfterUploadContainer"
 
 const style = {
   position: "absolute",
@@ -40,20 +37,28 @@ const style = {
 
 export default function UploadModal() {
   const [uploadVideo, { uploadData, uploadLoading, uploadError }] = useMutation(UPLOAD_VIDEO)
+
   const [uploaded, setUploaded] = React.useState(false)
   const [modalTitle, setModalTitle] = React.useState("동영상 업로드")
   const [uploadedFile, setUploadedFile] = React.useState(null)
+  const [uploadThumbImage, setUploadThumbImage] = React.useState(null)
+  const [uploadedThumb, setUploadedThumb] = React.useState(null)
   const [open, setOpen] = useRecoilState(openUploadState)
   const [isPublic, setIsPublic] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  const fileUploadHandler = () => {
-    imageInput.current.click()
+
+  // 제목 입력
+  const [inputText, setInputText] = React.useState()
+  const handleTextChange = (newText) => {
+    setInputText(newText) // 자식 컴포넌트에서 전달된 텍스트 값을 받음
   }
-
-  // useRef를 이용해 input태그에 접근
-  const imageInput = React.useRef()
-
+  const [inputContents, setInputContents] = React.useState()
+  const handleContentsChange = (newText) => {
+    setInputContents(newText) // 자식 컴포넌트에서 전달된 텍스트 값을 받음
+  }
+  // console.log(uploadedThumb)
+  // console.log(inputContents)
   const handleChange = (e) => {
     const data = e.target.files[0]
     console.log(data)
@@ -65,18 +70,40 @@ export default function UploadModal() {
       alert("잘못된 데이터 형식입니다!!!!")
     }
   }
+  const handleIsChangeHandler = (e) => {
+    setIsPublic(e.target.value === "true" ? true : false)
+  }
+
+  const handleThumbChange = (e) => {
+    const data = e.target.files[0]
+
+    if (data) {
+      // strapi 사진 올리기용
+      setUploadThumbImage(data)
+
+      //base64 넣기(img에 넣을 미리보기용)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setUploadedThumb(reader.result)
+      }
+      reader.readAsDataURL(data)
+    }
+  }
 
   function upload() {
     console.log(uploadedFile)
     return new Promise((resolve, reject) => {
+      if (!uploadThumbImage) {
+        alert("썸네일이 비어있습니다!!")
+        return
+      } else if (!inputText) {
+        alert("제목이 비어있습니다!!")
+        return
+      }
       var formData = new FormData()
       formData.append("files", uploadedFile)
-      // let config = {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //     Authorization: "Bearer " + localStorage.getItem(STRAPI_TOKEN),
-      //   },
-      // }
+      formData.append("files", uploadThumbImage)
+
       axios
         .post(process.env.REACT_APP_BACKEND_URL_UPLOAD + "/upload", formData)
         .then((data) => {
@@ -89,20 +116,35 @@ export default function UploadModal() {
         })
     })
   }
+  // strapi 올라갈 데이터
+
   function uploadVideoToStrapi({ data }) {
-    const { name, id } = data[0]
+    console.log(data)
+    // 0- 동영상 1- 썸네일
+    const { name, id: videoID } = data[0]
+    const { id: thumbID } = data[1]
     uploadVideo({
       variables: {
         title: name,
-        description: "This is Test",
+        description: inputText,
         createdBy: "hojinim@gmail.com",
-        contents: id,
+        contents: videoID,
+        thumbnail: thumbID,
         isPublic: isPublic,
       },
     })
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log("uploaded in strapi", res)
+        alert("업로드 성공!")
+      })
       .catch((res) => {
         console.log(res)
+      })
+      .finally((res) => {
+        setUploaded(false)
+        handleClose()
+        setUploadedFile(null)
+        setUploadThumbImage(null)
       })
   }
 
@@ -124,99 +166,23 @@ export default function UploadModal() {
             </IconButton>
           </div>
           <Divider />
+
           <div style={flex_column}>
             {!uploaded ? (
-              <>
-                <div style={{ ...flex_column, marginTop: "200px" }}>
-                  <IconButton
-                    sx={{
-                      width: "70px",
-                      height: "70px",
-                      backgroundColor: "lightgray",
-                      alignSelf: "center",
-                    }}
-                  >
-                    <UploadIcon sx={{ width: "60px", height: "60px" }} />
-                  </IconButton>
-                  <Typography id="modal-modal-description" fontSize={"20px"} sx={{ mt: 1 }}>
-                    동영상 파일을 드래그 앤 드롭하여 업로드
-                  </Typography>
-                  <Typography
-                    id="modal-modal-description"
-                    sx={{ mt: 1, color: "gray" }}
-                    variant="caption"
-                  >
-                    동영상을 게시하기 전에는 비공개로 설정됩니다.
-                  </Typography>
-                  <Button
-                    onClick={fileUploadHandler}
-                    variant="contained"
-                    sx={{
-                      mt: 2,
-                      background: "#146ffa",
-                      color: "white",
-                      width: "100px",
-                      alignSelf: "center",
-                    }}
-                  >
-                    파일 선택
-                  </Button>
-                  {/* 파일 업로드 태그 */}
-                  <input
-                    ref={imageInput}
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={handleChange}
-                  />
-                </div>
-                <Typography
-                  id="modal-modal-description"
-                  sx={{ mt: 1, position: "absolute", bottom: "15px", margin: "15px" }}
-                >
-                  YouTube에 동영상을 제출하면 YouTube 서비스 약관 및 커뮤니티 가이드에 동의하게
-                  됩니다. 불법촬영물 게재시 삭제 조치되고 관련 법에 따라 처벌 받을 수 있습니다.
-                  타인의 저작권 또는 개인 정보 보호 권리를 침해해서는 안 됩니다. 자세히 알아보기
-                </Typography>
-              </>
+              <BeforeUploadContainer handleChange={handleChange} />
             ) : (
-              <>
-                <div>크기: {uploadedFile.size}</div>
-                <div>이름: {uploadedFile.name}</div>
-                <div>타입: {uploadedFile.type}</div>
-
-                <FormControl component="fieldset">
-                  <FormLabel id="demo-row-radio-buttons-group-label">공개여부</FormLabel>
-                  <RadioGroup
-                    value={isPublic}
-                    onChange={(e) => setIsPublic(e.target.value === "true" ? true : false)}
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <FormControlLabel value="true" control={<Radio />} label="공개" />
-                    <FormControlLabel value="false" control={<Radio />} label="비공개" />
-                  </RadioGroup>
-                </FormControl>
-
-                <div style={{ position: "absolute", bottom: 0, width: "100%" }}>
-                  <Divider />
-
-                  <Button
-                    style={{ ...flex_column }}
-                    variant="contained"
-                    sx={{
-                      mt: 2,
-                      background: "#146ffa",
-                      color: "white",
-                      width: "100px",
-                      alignSelf: "center",
-                    }}
-                    onClick={() => upload()}
-                  >
-                    업로드
-                  </Button>
-                </div>
-              </>
+              <AfterUploadContainer
+                uploadedFile={uploadedFile}
+                handleIsChangeHandler={handleIsChangeHandler}
+                handleThumbChange={handleThumbChange}
+                handleTextChange={handleTextChange}
+                handleContentsChange={handleContentsChange}
+                upload={upload}
+                uploadedThumb={uploadedThumb}
+                isPublic={isPublic}
+                inputText={inputText}
+                inputContents={inputContents}
+              />
             )}
           </div>
         </Box>

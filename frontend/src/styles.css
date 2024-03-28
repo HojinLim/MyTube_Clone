@@ -610,3 +610,18 @@ line-height: 1;
   margin: 15px;
   display: block;
 }
+
+/* 썸네일 */
+.thum-container{
+  width: 120px;
+  height: 80px;
+  border: 1px dotted rgba(0, 0, 0, 0.282);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thum-container:hover{
+  cursor: pointer;
+  border: 1px dotted black
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { alpha } from "@mui/material/styles"
 import Box from "@mui/material/Box"
@@ -24,11 +24,15 @@ import { Button } from "@mui/material"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined"
 import PublicIcon from "@mui/icons-material/Public"
+import { useQuery } from "@apollo/client"
+import { GET_ALL_VIDEOS } from "apollo/query"
+import { formatDate } from "functions/formatDate"
 
-function createData(id, name, date, isPublic, views, comments, likes) {
+function createData(id, name, thumbnail, date, isPublic, views, comments, likes) {
   return {
     id,
     name,
+    thumbnail,
     date,
     isPublic,
     views,
@@ -36,14 +40,15 @@ function createData(id, name, date, isPublic, views, comments, likes) {
     likes,
   }
 }
-
-const rows_data = [
-  createData(1, "제목1", "2024.03.02", "공개", 67, 4.3, 3),
-  createData(2, "제목2", "2024.03.02", "비공개", 51, 4.9, 5),
-  createData(3, "제목3", "2024.03.02", "비공개", 24, 6.0, 3),
-  createData(4, "제목4", "2024.03.02", "공개", 24, 4.0, 7),
-  createData(5, "제목5", "2024.03.02", "비공개", 49, 3.9, 9),
-]
+// const dummyThumb =
+//   "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
+// const rows_data = [
+//   createData(1, "제목1", dummyThumb, "2024.03.02", "공개", 67, 4.3, 3),
+//   createData(2, "제목2", dummyThumb, "2024.03.02", "비공개", 51, 4.9, 5),
+//   createData(3, "제목3", dummyThumb, "2024.03.02", "비공개", 24, 6.0, 3),
+//   createData(4, "제목4", dummyThumb, "2024.03.02", "공개", 24, 4.0, 7),
+//   createData(5, "제목5", dummyThumb, "2024.03.02", "비공개", 49, 3.9, 9),
+// ]
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -72,12 +77,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: "title", numeric: false, disablePadding: true, label: "동영상" },
-  { id: "open", numeric: false, disablePadding: false, label: "공개 상태" },
-  { id: "date", numeric: true, disablePadding: false, label: "날짜" },
-  { id: "views", numeric: true, disablePadding: false, label: "조회수" },
-  { id: "comments", numeric: true, disablePadding: false, label: "댓글" },
-  { id: "likes", numeric: true, disablePadding: false, label: "좋아요" },
+  { id: "title", isPublic: false, disablePadding: true, label: "동영상" },
+  { id: "open", isPublic: false, disablePadding: false, label: "공개 상태" },
+  { id: "date", isPublic: true, disablePadding: false, label: "날짜" },
+  { id: "views", isPublic: true, disablePadding: false, label: "조회수" },
+  { id: "comments", isPublic: true, disablePadding: false, label: "댓글" },
+  { id: "likes", isPublic: true, disablePadding: false, label: "좋아요" },
 ]
 
 function ContentsTableHead(props) {
@@ -103,11 +108,17 @@ function ContentsTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.isPublic ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
+              style={{
+                maxHeight: "15px",
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+              }}
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
@@ -179,13 +190,38 @@ ContentsTableToolbar.propTypes = {
   onDelete: PropTypes.func.isRequired,
 }
 export default function ContentsTable() {
+  // 영상 모두 가져오기
+  const { loading, error, data } = useQuery(GET_ALL_VIDEOS)
+  const [rows, setRows] = useState([])
+
   const [order, setOrder] = useState("asc")
   const [orderBy, setOrderBy] = useState("calories")
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  const [rows, setRows] = useState(rows_data)
   const [selected, setSelected] = useState([])
+
+  useEffect(() => {
+    if (!loading && !error) {
+      const updatedRows = data.youtubeMedias.map((arr, idx) => {
+        const { title, description, isPublic, created_at, thumbnail, contents } = arr
+
+        // 영상링크
+        // contents.url
+        return createData(
+          idx,
+          title,
+          process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail.url,
+          created_at,
+          isPublic,
+          0,
+          0,
+          0
+        )
+      })
+      setRows(updatedRows)
+    }
+  }, [loading, error, data])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc"
@@ -261,6 +297,7 @@ export default function ContentsTable() {
 
   return (
     <Box sx={{ width: "100%" }}>
+      {/* <button onClick={() => console.log(data)}>d</button> */}
       <Paper sx={{ width: "100%", mb: 2 }}>
         <ContentsTableToolbar numSelected={selected.length} onDelete={deleteHandler} />
         <TableContainer>
@@ -299,17 +336,24 @@ export default function ContentsTable() {
                         }}
                       />
                     </TableCell>
+                    {/* 썸네일 */}
                     <TableCell component="th" id={labelId} scope="row" padding="none">
-                      <img
-                        width={"150px"}
-                        height={"100px"}
-                        src={person}
-                        style={{ border: "1px solid black" }}
-                      />
-                      {row.name}
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <img
+                          width={"150px"}
+                          height={"100px"}
+                          src={row.thumbnail}
+                          style={{
+                            border: "1px solid black",
+                            marginRight: "8px",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <div>{row.name}</div>
+                      </div>
                     </TableCell>
-
-                    <TableCell align="left">
+                    {/* 공개 여부 */}
+                    <TableCell align="left" style={{ minWidth: "100px" }}>
                       {row.isPublic === "공개" ? <PublicIcon /> : <HttpsOutlinedIcon />}
                       {row.isPublic}
                       <Button
@@ -321,7 +365,9 @@ export default function ContentsTable() {
                         <ArrowDropDownIcon />
                       </Button>
                     </TableCell>
-                    <TableCell align="right">{row.date}</TableCell>
+                    <TableCell align="right" style={{ minWidth: "200px" }}>
+                      {formatDate(row.date)}
+                    </TableCell>
                     <TableCell align="right">{row.views}</TableCell>
                     <TableCell align="right">{row.comments}</TableCell>
                     <TableCell align="right">{row.likes}</TableCell>

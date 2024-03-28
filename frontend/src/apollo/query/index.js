@@ -18,11 +18,21 @@ export const FIND_USER_BY_EMAIL = gql`
     }
   }
 `
-// export const findUser = gql`
-//   query findUser($email: String) {
-//     findUser(where: { email_ne: $email }) {
-//       id
-//       test1
-//     }
-//   }
-// `
+export const GET_ALL_VIDEOS = gql`
+  query AllYoutubeMedia {
+    youtubeMedias {
+      id
+      description
+      title
+      isPublic
+      createdBy
+      created_at
+      contents {
+        url
+      }
+      thumbnail {
+        url
+      }
+    }
+  }
+`

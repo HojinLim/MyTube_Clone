@@ -94,6 +94,7 @@ export const UPLOAD_VIDEO = gql`
     $description: String!
     $createdBy: String!
     $contents: ID!
+    $thumbnail: ID!
     $isPublic: Boolean!
   ) {
     createYoutubeMedia(
@@ -103,6 +104,7 @@ export const UPLOAD_VIDEO = gql`
           description: $description
           createdBy: $createdBy
           contents: $contents
+          thumbnail: $thumbnail
           isPublic: $isPublic
         }
       }
