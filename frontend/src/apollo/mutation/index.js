@@ -96,6 +96,7 @@ export const UPLOAD_VIDEO = gql`
     $contents: ID!
     $thumbnail: ID!
     $isPublic: Boolean!
+    $duration: String!
   ) {
     createYoutubeMedia(
       input: {
@@ -106,6 +107,7 @@ export const UPLOAD_VIDEO = gql`
           contents: $contents
           thumbnail: $thumbnail
           isPublic: $isPublic
+          duration: $duration
         }
       }
     ) {
@@ -120,44 +122,19 @@ export const UPLOAD_VIDEO = gql`
         description
         createdBy
         isPublic
+        duration
       }
     }
   }
 `
-// export const UPLOAD_VIDEO = gql`
-//   mutation uploadVideo(
-//     $title: String!
-//     $description: String!
-//     $createdBy: String!
-//     $contents: String!
-//   ) {
-//     createYoutubeMedia(
-//       input: {
-//         title: $title
-//         description: $description
-//         createdBy: $createdBy
-//         contents: $contents
-//       }
-//     ) {
-//       id
-//       title
-//       description
-//       createdBy
-//     }
-//   }
-// `
 
-// createYoutubeMedia(input:{data:{title:"test",description:"test is good",createdBy:"gg@abc.com",contents:"3"}}){
-//   youtubeMedia{
-//     id
-//     title
-//     contents{
-//       name
-//       url
-//       id
-//     }
-//     description
-//     createdBy
-//   }
-// }
-// }
+export const DELETE_VIDEO = gql`
+  mutation DELETE_VIDEO($id: ID!) {
+    deleteYoutubeMedia(input: { where: { id: $id } }) {
+      youtubeMedia {
+        id
+        title
+      }
+    }
+  }
+`

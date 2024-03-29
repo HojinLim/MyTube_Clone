@@ -21,6 +21,7 @@ import { UPLOAD_VIDEO } from "apollo/mutation"
 
 import { BeforeUploadContainer } from "./BeforeUploadContainer"
 import { AfterUploadContainer } from "./AfterUploadContainer"
+import { USER_INFO } from "Constants/value"
 
 const style = {
   position: "absolute",
@@ -57,8 +58,7 @@ export default function UploadModal() {
   const handleContentsChange = (newText) => {
     setInputContents(newText) // 자식 컴포넌트에서 전달된 텍스트 값을 받음
   }
-  // console.log(uploadedThumb)
-  // console.log(inputContents)
+
   const handleChange = (e) => {
     const data = e.target.files[0]
     console.log(data)
@@ -119,32 +119,35 @@ export default function UploadModal() {
   // strapi 올라갈 데이터
 
   function uploadVideoToStrapi({ data }) {
+    const user = JSON.parse(localStorage.getItem(USER_INFO))
     console.log(data)
     // 0- 동영상 1- 썸네일
     const { name, id: videoID } = data[0]
     const { id: thumbID } = data[1]
     uploadVideo({
       variables: {
-        title: name,
+        title: inputText,
         description: inputText,
-        createdBy: "hojinim@gmail.com",
+        createdBy: user.name,
         contents: videoID,
         thumbnail: thumbID,
         isPublic: isPublic,
+        duration: "1:30",
       },
     })
       .then((res) => {
         console.log("uploaded in strapi", res)
         alert("업로드 성공!")
+        location.href = location.href
       })
       .catch((res) => {
         console.log(res)
       })
       .finally((res) => {
-        setUploaded(false)
-        handleClose()
-        setUploadedFile(null)
-        setUploadThumbImage(null)
+        // setUploaded(false)
+        // handleClose()
+        // setUploadedFile(null)
+        // setUploadThumbImage(null)
       })
   }
 

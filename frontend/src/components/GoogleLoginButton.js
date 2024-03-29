@@ -12,6 +12,7 @@ import { CREATE_USER } from "apollo/mutation"
 import { LOGIN_USER } from "apollo/mutation"
 import { REGISTER_USER } from "apollo/mutation"
 import { STRAPI_TOKEN } from "Constants/value"
+import { USER_INFO } from "Constants/value"
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(1),
@@ -55,10 +56,10 @@ export const GoogleLoginButton = () => {
             if (!picture) {
               user = { email, picture: null }
             } else {
-              user = { email, picture }
+              user = { email, picture, name }
             }
 
-            localStorage.setItem("user", JSON.stringify(user))
+            localStorage.setItem(USER_INFO, JSON.stringify(user))
             setUser(user)
 
             loginUser({ variables: { identifier: email, password: sub } })
@@ -66,6 +67,7 @@ export const GoogleLoginButton = () => {
                 console.log(res2, "스트라피 data")
                 console.log("str_JWT:", res2.data.login.jwt)
                 localStorage.setItem(STRAPI_TOKEN, res2.data.login.jwt)
+                localStorage.setItem(user - Info)
               })
               .catch((error) => {
                 // 유저가 없는거임 -> 회원가입

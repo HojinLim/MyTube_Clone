@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography"
 import { useNavigate } from "react-router-dom"
 
 export const NextVideoContainer = ({ data }) => {
-  const { id, thumb, title, subtitle, sources, duration } = data
+  const { id, thumbnail, title, createdBy, contents, duration } = data
   const [hover, setHover] = React.useState(false)
   const [playTime, setPlayTime] = useState(0)
   const navigate = useNavigate()
@@ -32,7 +32,7 @@ export const NextVideoContainer = ({ data }) => {
       >
         {hover ? (
           <ReactPlayer
-            url={sources[0]}
+            url={process.env.REACT_APP_BACKEND_URL_UPLOAD + contents.url}
             playing={hover}
             width="100%"
             height="100%"
@@ -42,7 +42,11 @@ export const NextVideoContainer = ({ data }) => {
             }}
           />
         ) : (
-          <img src={thumb} alt="thumbnail" style={{ width: "100%", height: "100%" }} />
+          <img
+            src={process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail.url}
+            alt="thumbnail"
+            style={{ width: "100%", height: "100%" }}
+          />
         )}
       </div>
 
@@ -59,7 +63,7 @@ export const NextVideoContainer = ({ data }) => {
           {title}
         </Typography>
 
-        <div>{subtitle}</div>
+        <div>{createdBy}</div>
         <div style={{ display: "flex" }}>
           <Typography variant="body2" gutterBottom color={"gray"}>
             조회수 10회

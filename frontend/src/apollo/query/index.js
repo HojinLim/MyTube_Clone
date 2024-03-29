@@ -27,10 +27,27 @@ export const GET_ALL_VIDEOS = gql`
       isPublic
       createdBy
       created_at
+      duration
       contents {
         url
       }
       thumbnail {
+        url
+      }
+    }
+  }
+`
+export const GET_VIDEO_BY_ID = gql`
+  query YoutubeMediaById($id: ID!) {
+    youtubeMedia(id: $id) {
+      id
+      description
+      title
+      isPublic
+      thumbnail {
+        url
+      }
+      contents {
         url
       }
     }

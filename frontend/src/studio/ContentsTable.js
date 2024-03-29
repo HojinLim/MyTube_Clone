@@ -24,9 +24,10 @@ import { Button } from "@mui/material"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined"
 import PublicIcon from "@mui/icons-material/Public"
-import { useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"
 import { formatDate } from "functions/formatDate"
+import { DELETE_VIDEO } from "apollo/mutation"
 
 function createData(id, name, thumbnail, date, isPublic, views, comments, likes) {
   return {
@@ -192,6 +193,11 @@ ContentsTableToolbar.propTypes = {
 export default function ContentsTable() {
   // 영상 모두 가져오기
   const { loading, error, data } = useQuery(GET_ALL_VIDEOS)
+
+  // 영상 제거
+  const [deleteVideo, { loading: deleteLoading, error: deleteError, data: deleteData }] =
+    useMutation(DELETE_VIDEO)
+
   const [rows, setRows] = useState([])
 
   const [order, setOrder] = useState("asc")
@@ -204,12 +210,12 @@ export default function ContentsTable() {
   useEffect(() => {
     if (!loading && !error) {
       const updatedRows = data.youtubeMedias.map((arr, idx) => {
-        const { title, description, isPublic, created_at, thumbnail, contents } = arr
-
+        const { id, title, description, isPublic, created_at, thumbnail, contents } = arr
+        console.log(id)
         // 영상링크
-        // contents.url
+
         return createData(
-          idx,
+          id,
           title,
           process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail.url,
           created_at,
@@ -260,10 +266,9 @@ export default function ContentsTable() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
+    setPage(0) // 페이지를 첫 번째 페이지로 다시 설정
   }
 
   const isSelected = (id) => selected.indexOf(id) !== -1
@@ -280,7 +285,23 @@ export default function ContentsTable() {
   )
 
   const deleteHandler = () => {
-    setRows(rows.filter((row) => !selected.includes(row.id)))
+    selected.map((select) => {
+      deleteVideo({ variables: { id: select } })
+        .then((res) => {
+          console.log(res)
+          alert(`" ${select} " 삭제 완료`)
+          // 결과를 처리하거나 다음 작업을 수행할 수 있음
+        })
+        .catch((error) => {
+          console.error(error)
+          // 에러 처리
+        })
+    })
+
+    // FE에서 제거
+    const filtered = rows.filter((row) => !selected.includes(row.id))
+    console.log("filterd", filtered)
+    setRows(filtered)
     setSelected([])
     console.log(rows)
   }
@@ -297,7 +318,6 @@ export default function ContentsTable() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      {/* <button onClick={() => console.log(data)}>d</button> */}
       <Paper sx={{ width: "100%", mb: 2 }}>
         <ContentsTableToolbar numSelected={selected.length} onDelete={deleteHandler} />
         <TableContainer>

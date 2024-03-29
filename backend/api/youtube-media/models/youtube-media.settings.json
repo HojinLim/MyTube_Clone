@@ -28,9 +28,6 @@
       "plugin": "upload",
       "required": false
     },
-    "createdBy": {
-      "type": "email"
-    },
     "isPublic": {
       "type": "boolean",
       "default": false
@@ -45,6 +42,12 @@
       ],
       "plugin": "upload",
       "required": false
+    },
+    "createdBy": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
     }
   }
 }

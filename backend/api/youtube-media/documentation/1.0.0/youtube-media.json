@@ -608,9 +608,6 @@
               }
             }
           },
-          "createdBy": {
-            "type": "string"
-          },
           "isPublic": {
             "type": "boolean",
             "default": false
@@ -682,6 +679,12 @@
               }
             }
           },
+          "createdBy": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -695,12 +698,15 @@
           "description": {
             "type": "string"
           },
-          "createdBy": {
-            "type": "string"
-          },
           "isPublic": {
             "type": "boolean",
             "default": false
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
           },
           "published_at": {
             "type": "datetime"

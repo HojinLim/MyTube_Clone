@@ -38,6 +38,8 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 import { VideoInfoContainer } from "components/Watch/VideoInfoContainer"
 import { MenuSelector } from "components/common/MenuSelector"
 import { NextVideoContainer } from "components/Watch/NextVideoContainer"
+import { useQuery } from "@apollo/client"
+import { GET_ALL_VIDEOS } from "apollo/query"
 
 export const WatchVideoPage = () => {
   const params = useParams()
@@ -101,14 +103,18 @@ export const WatchVideoPage = () => {
   }, [volumn])
 
   const videoId = params.id
+  const { loading, error, data: videos } = useQuery(GET_ALL_VIDEOS)
 
   // 현재 영상
-  const video = dummyData.find((video) => video.id + "" === videoId)
 
+  const videoo = videos?.youtubeMedias?.find((video) => video.id === videoId)
+  // const video = dummyData.find((video) => video.id + "" === videoId)
   // 현재 영상을 제외한 영상들
-  const restVideos = dummyData.filter((video) => video.id + "" !== videoId)
-
-  const { thumb, title, subtitle, sources, duration } = video
+  const restVideoss = videos?.youtubeMedias?.filter((video) => video.id !== videoId)
+  // const restVideos = dummyData.filter((video) => video.id + "" !== videoId)
+  // console.log(restVideoss)
+  const { title, createdBy: subtitle, contents, duration } = videoo
+  // const { thumb, title, subtitle, sources, duration } = video
 
   useMemo(() => {
     setTimePercent((playTime / stringToSeconds(duration)) * 100)
@@ -183,7 +189,7 @@ export const WatchVideoPage = () => {
             onProgress={(progress) => {
               setPlayTime(progress.playedSeconds)
             }}
-            url={sources[0]}
+            url={process.env.REACT_APP_BACKEND_URL_UPLOAD + contents.url}
             width={matches && isMoviescreen && "85%"}
             height={"100%"}
             playing={startVid}
@@ -330,7 +336,7 @@ export const WatchVideoPage = () => {
             </div>
 
             <div className={"videos_bottom_container"}>
-              {restVideos.map((video, key) => (
+              {restVideoss.map((video, key) => (
                 <NextVideoContainer key={key} data={video} />
               ))}
             </div>
@@ -350,7 +356,7 @@ export const WatchVideoPage = () => {
           {isMoviescreen && (
             <div className="videos_side_container">
               <MenuSelector categories={["모두", "blarblar", "blarbla"]} />
-              {restVideos.map((video, key) => (
+              {restVideoss.map((video, key) => (
                 <NextVideoContainer key={key} data={video} />
               ))}
             </div>
@@ -361,7 +367,7 @@ export const WatchVideoPage = () => {
       {!isMoviescreen && !isFullscreen && (
         <div className="videos_side_container">
           {/* 다음 영상 틀 */}
-          {restVideos.map((video, key) => (
+          {restVideoss.map((video, key) => (
             <NextVideoContainer key={key} data={video} />
           ))}
         </div>

@@ -9,8 +9,26 @@ import { formatTime } from "functions/formatTime"
 import { stringToSeconds } from "functions/stringToSeconds"
 import { secondsToTime } from "functions/secondsToTime"
 
-export const VideoContainer = (data) => {
-  const { thumb, title, subtitle, sources, duration } = data.data
+export const VideoContainer = ({ data }) => {
+  // const { thumb, title, subtitle, sources, duration } = data
+  const {
+    // thumb,
+    title,
+    subtitle,
+    sources,
+    duration,
+    id,
+
+    createdBy,
+    description,
+    isPublic,
+    created_at,
+    thumbnail: thumb,
+    contents,
+  } = data
+
+  // console.log(data)
+
   const [hover, setHover] = useState(false)
   // const [timer, setTimer] = useState(0)
   const navigate = useNavigate()
@@ -33,8 +51,9 @@ export const VideoContainer = (data) => {
     setStartVideo(false)
   }
   const moveDetailPage = () => {
-    navigate(`/watch/${data.data.id}`)
+    navigate(`/watch/${id}`)
   }
+  // console.log(thumb.url)
   return (
     <Container
       sx={{
@@ -72,7 +91,7 @@ export const VideoContainer = (data) => {
         >
           {hover ? (
             <ReactPlayer
-              url={sources[0]}
+              url={process.env.REACT_APP_BACKEND_URL_UPLOAD + contents.url}
               width="100%"
               height="100%"
               playing={startVideo}
@@ -84,7 +103,7 @@ export const VideoContainer = (data) => {
             />
           ) : (
             <img
-              src={thumb}
+              src={process.env.REACT_APP_BACKEND_URL_UPLOAD + thumb.url}
               alt="Video Thumbnail"
               style={{ width: "100%", height: "100%", borderRadius: "20px" }}
             />
@@ -136,7 +155,7 @@ export const VideoContainer = (data) => {
             {title}
           </Typography>
           <Typography variant="body2" gutterBottom color={"gray"}>
-            {subtitle}
+            {createdBy}
           </Typography>
           <Typography variant="body2" gutterBottom color={"gray"}>
             조회수 100회 ⦁ 10시간 전

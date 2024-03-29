@@ -1,3 +1,3 @@
 const STRAPI_TOKEN = "strapi-token"
-
-export { STRAPI_TOKEN }
+const USER_INFO = "user"
+export { STRAPI_TOKEN, USER_INFO }
