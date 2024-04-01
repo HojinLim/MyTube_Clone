@@ -25,12 +25,6 @@ export default function VideosContainer() {
   return (
     <>
       <StyledGrid>
-        {/* {dummyData?.map((data, key) => (
-          <VideoContainer key={key} data={data} />
-        ))} */}
-        {/* {dummyData?.map((data, key) => (
-          <VideoContainer key={key} data={data} />
-        ))} */}
         {!error &&
           !loading &&
           videos.youtubeMedias.map((data, key) => <VideoContainer key={key} data={data} />)}

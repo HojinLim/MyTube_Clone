@@ -10,12 +10,14 @@ import FormControlLabel from "@mui/material/FormControlLabel"
 import FormControl from "@mui/material/FormControl"
 import FormLabel from "@mui/material/FormLabel"
 // Icon
-
+import ArchiveIcon from "@mui/icons-material/Archive"
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined"
-
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import { flex_column } from "styles/globalStyle"
 
 import MultilineTextField from "components/common/MultilineTextField"
+import CustomMenu from "components/common/CustomMenu"
+import { CustomIconMenu } from "components/common/CustomIconMenu"
 
 export const AfterUploadContainer = ({
   uploadedFile,
@@ -28,6 +30,7 @@ export const AfterUploadContainer = ({
   isPublic,
   inputText,
   inputContents,
+  handleSetDuration,
 }) => {
   const { size, name, type } = uploadedFile
 
@@ -64,9 +67,16 @@ export const AfterUploadContainer = ({
         initialText={inputContents}
         onTextChange={handleContentsChange}
       />
-
+      <MultilineTextField
+        label={"영상 길이"}
+        // initialText={inputContents}
+        onTextChange={handleSetDuration}
+      />
+      <Typography id="modal-modal-description" fontSize={"15px"} sx={{ mt: 1 }}>
+        공개 여부
+      </Typography>
       <FormControl component="fieldset">
-        <FormLabel id="demo-row-radio-buttons-group-label">공개여부</FormLabel>
+        {/* <FormLabel id="demo-row-radio-buttons-group-label">공개여부</FormLabel> */}
         <RadioGroup
           value={isPublic}
           onChange={handleIsChangeHandler}
@@ -87,6 +97,18 @@ export const AfterUploadContainer = ({
           alignItems: "start",
         }}
       >
+        <Typography id="modal-modal-description" fontSize={"15px"} sx={{ mt: 1 }}>
+          카테고리
+        </Typography>
+        <CustomIconMenu
+          iconButton={<ArrowDropDownIcon />}
+          menuItems={[
+            { text: "movie", onClick: () => {} },
+            { text: "game", onClick: () => {} },
+            { text: "anime", onClick: () => {} },
+            { text: "music", onClick: () => {} },
+          ]}
+        />
         <Typography id="modal-modal-description" fontSize={"15px"} sx={{ mt: 1 }}>
           썸네일
         </Typography>

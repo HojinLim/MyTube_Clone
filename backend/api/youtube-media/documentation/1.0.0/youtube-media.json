@@ -685,6 +685,18 @@
           "duration": {
             "type": "string"
           },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "anime",
+              "music",
+              "game"
+            ]
+          },
+          "views": {
+            "type": "integer"
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -707,6 +719,18 @@
           },
           "duration": {
             "type": "string"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "anime",
+              "music",
+              "game"
+            ]
+          },
+          "views": {
+            "type": "integer"
           },
           "published_at": {
             "type": "datetime"

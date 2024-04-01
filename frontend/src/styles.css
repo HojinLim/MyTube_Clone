@@ -625,3 +625,22 @@ line-height: 1;
   cursor: pointer;
   border: 1px dotted black
 }
+
+/* 댓글 컨테이너 */
+
+
+@media (max-width: 1024px) {
+  .comments-container {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .comments-container {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    margin: auto;
+    width: 100%;
+  }
+}

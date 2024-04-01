@@ -22,6 +22,7 @@ import LiveHelpIcon from "@mui/icons-material/LiveHelp"
 
 import { useSetRecoilState } from "recoil"
 import { studioMenuState } from "atom/studioMenuState"
+import { USER_INFO } from "Constants/value"
 
 export const Sidebar = () => {
   const [selectedItem, setSelectedItem] = useState("dashboard")
@@ -31,12 +32,13 @@ export const Sidebar = () => {
     setSelectedItem(item)
     setMenu(item)
   }
+  const user = JSON.parse(localStorage.getItem(USER_INFO))
 
   return (
     <nav className="menu">
       <div className="avatar_container">
         <IconButton>
-          <Avatar sx={{ width: 130, height: 130 }} />
+          <Avatar src={user.picture} sx={{ width: 130, height: 130 }} />
         </IconButton>
         <Typography variant="body1" fontFamily={"bold"} fontWeight={700}>
           내 채널

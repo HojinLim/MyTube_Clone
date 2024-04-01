@@ -48,6 +48,18 @@
     },
     "duration": {
       "type": "string"
+    },
+    "sort": {
+      "type": "enumeration",
+      "enum": [
+        "movie",
+        "anime",
+        "music",
+        "game"
+      ]
+    },
+    "views": {
+      "type": "integer"
     }
   }
 }

@@ -62,6 +62,9 @@
     },
     "locale": {
       "type": "string"
+    },
+    "subscribers": {
+      "type": "json"
     }
   }
 }

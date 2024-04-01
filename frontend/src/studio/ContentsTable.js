@@ -28,6 +28,8 @@ import { useMutation, useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"
 import { formatDate } from "functions/formatDate"
 import { DELETE_VIDEO } from "apollo/mutation"
+import { CustomIconMenu } from "components/common/CustomIconMenu"
+import CustomMenu from "components/common/CustomMenu"
 
 function createData(id, name, thumbnail, date, isPublic, views, comments, likes) {
   return {
@@ -178,7 +180,13 @@ function ContentsTableToolbar(props) {
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
-            <FilterListIcon />
+            <CustomIconMenu
+              iconButton={<FilterListIcon />}
+              menuItems={[
+                { text: "test", onclick: () => {} },
+                { text: "test2", onclick: () => {} },
+              ]}
+            />
           </IconButton>
         </Tooltip>
       )}
@@ -211,7 +219,7 @@ export default function ContentsTable() {
     if (!loading && !error) {
       const updatedRows = data.youtubeMedias.map((arr, idx) => {
         const { id, title, description, isPublic, created_at, thumbnail, contents } = arr
-        console.log(id)
+        // console.log(id)
         // 영상링크
 
         return createData(
@@ -382,7 +390,27 @@ export default function ContentsTable() {
                         }}
                         style={{ padding: 0, minWidth: 0, borderRadius: "25px" }}
                       >
-                        <ArrowDropDownIcon />
+                        <CustomIconMenu
+                          iconButton={<ArrowDropDownIcon />}
+                          menuItems={[
+                            {
+                              text: "공개",
+                              onClick: () => {
+                                console.log("공개")
+                                togglePublicStatus()
+                                console.log(rows)
+                              },
+                            },
+                            {
+                              text: "비공개",
+                              onClick: () => {
+                                console.log("비공개")
+                                togglePublicStatus()
+                                console.log(rows)
+                              },
+                            },
+                          ]}
+                        />
                       </Button>
                     </TableCell>
                     <TableCell align="right" style={{ minWidth: "200px" }}>

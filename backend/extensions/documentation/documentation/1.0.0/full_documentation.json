@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "03/29/2024 4:59:36 PM"
+    "x-generation-date": "04/01/2024 6:29:15 PM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -3947,6 +3947,18 @@
           "duration": {
             "type": "string"
           },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "anime",
+              "music",
+              "game"
+            ]
+          },
+          "views": {
+            "type": "integer"
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -3969,6 +3981,18 @@
           },
           "duration": {
             "type": "string"
+          },
+          "sort": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "anime",
+              "music",
+              "game"
+            ]
+          },
+          "views": {
+            "type": "integer"
           },
           "published_at": {
             "type": "datetime"
@@ -4085,6 +4109,9 @@
                 },
                 "locale": {
                   "type": "string"
+                },
+                "subscribers": {
+                  "type": "object"
                 },
                 "created_by": {
                   "type": "string"
@@ -4207,6 +4234,9 @@
           },
           "locale": {
             "type": "string"
+          },
+          "subscribers": {
+            "type": "object"
           }
         }
       },
@@ -4253,6 +4283,9 @@
           },
           "locale": {
             "type": "string"
+          },
+          "subscribers": {
+            "type": "object"
           },
           "created_by": {
             "type": "string"

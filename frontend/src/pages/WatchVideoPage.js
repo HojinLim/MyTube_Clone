@@ -19,6 +19,8 @@ import FullscreenExitIcon from "@mui/icons-material/FullscreenExit"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import SkipNextIcon from "@mui/icons-material/SkipNext"
 import PauseIcon from "@mui/icons-material/Pause"
+import MoodIcon from "@mui/icons-material/Mood"
+import SortIcon from "@mui/icons-material/Sort"
 
 import screenfull from "screenfull"
 import { useRecoilState } from "recoil"
@@ -40,6 +42,7 @@ import { MenuSelector } from "components/common/MenuSelector"
 import { NextVideoContainer } from "components/Watch/NextVideoContainer"
 import { useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"
+import { CommentInputContainer } from "components/Watch/CommentInputContainer"
 
 export const WatchVideoPage = () => {
   const params = useParams()
@@ -74,11 +77,11 @@ export const WatchVideoPage = () => {
   }
 
   const handleVideoChange = (event, newValue) => {
-    // newValue = 0 ~ 100
-
-    setTimePercent(newValue)
-    const time = (newValue / 100) * stringToSeconds(duration)
-    goToThere(time)
+    if (currentVideos && currentVideos.duration) {
+      setTimePercent(newValue)
+      const time = (newValue / 100) * stringToSeconds(currentVideos.duration)
+      goToThere(time)
+    }
   }
 
   const muteHandler = () => {
@@ -102,22 +105,25 @@ export const WatchVideoPage = () => {
     }
   }, [volumn])
 
+  const [currentVideos, setCurrentVideos] = useState()
+  const [restVideos, setRestVideos] = useState()
+
   const videoId = params.id
   const { loading, error, data: videos } = useQuery(GET_ALL_VIDEOS)
+  useEffect(() => {
+    if (!loading && !error) {
+      const video = videos.youtubeMedias.find((video) => video.id === videoId)
+      const restVideos = videos.youtubeMedias.filter((video) => video.id !== videoId)
 
-  // 현재 영상
+      setCurrentVideos(video)
+      setRestVideos(restVideos)
+    }
+  }, [loading, error, videos])
 
-  const videoo = videos?.youtubeMedias?.find((video) => video.id === videoId)
-  // const video = dummyData.find((video) => video.id + "" === videoId)
-  // 현재 영상을 제외한 영상들
-  const restVideoss = videos?.youtubeMedias?.filter((video) => video.id !== videoId)
-  // const restVideos = dummyData.filter((video) => video.id + "" !== videoId)
-  // console.log(restVideoss)
-  const { title, createdBy: subtitle, contents, duration } = videoo
-  // const { thumb, title, subtitle, sources, duration } = video
+  // console.log(currentVideos.duration)
 
   useMemo(() => {
-    setTimePercent((playTime / stringToSeconds(duration)) * 100)
+    setTimePercent((playTime / stringToSeconds(currentVideos?.duration ?? "1:00")) * 100)
     setPlayedTime(secondsToTime(Math.trunc(playTime)))
   }, [playTime])
 
@@ -182,20 +188,22 @@ export const WatchVideoPage = () => {
               : { borderRadius: "20px" }
           }
         >
-          <ReactPlayer
-            ref={playerRef}
-            onClick={clickSreen}
-            volume={volumn / 100}
-            onProgress={(progress) => {
-              setPlayTime(progress.playedSeconds)
-            }}
-            url={process.env.REACT_APP_BACKEND_URL_UPLOAD + contents.url}
-            width={matches && isMoviescreen && "85%"}
-            height={"100%"}
-            playing={startVid}
-            autoPlay={true}
-          />
-
+          {currentVideos && (
+            <ReactPlayer
+              ref={playerRef}
+              onClick={clickSreen}
+              volume={volumn / 100}
+              onProgress={(progress) => {
+                setPlayTime(progress.playedSeconds)
+              }}
+              url={process.env.REACT_APP_BACKEND_URL_UPLOAD + currentVideos.contents.url}
+              width={matches && isMoviescreen && "85%"}
+              height={"100%"}
+              playing={startVid}
+              autoPlay={true}
+              style={{ margin: "-10px 0px" }}
+            />
+          )}
           {startVid ? (
             <PlayCircleIcon
               sx={{ fontSize: "70px" }}
@@ -290,7 +298,7 @@ export const WatchVideoPage = () => {
                 />
                 {/* 영상 길이 , 남은 시간 */}
                 <Typography variant="caption" gutterBottom style={{ margin: "0px 15px" }}>
-                  {`${playedTime} / ${duration}`}
+                  {`${playedTime} / ${currentVideos?.duration}`}
                 </Typography>
               </div>
 
@@ -332,11 +340,19 @@ export const WatchVideoPage = () => {
             {/* 영상 정보 컨테이너 */}
 
             <div className="screen_info_container" style={isFullscreen ? { display: "none" } : {}}>
-              <VideoInfoContainer title={title} subtitle={subtitle} />
+              <VideoInfoContainer
+                title={currentVideos?.title}
+                subtitle={currentVideos?.createdBy}
+                views={currentVideos?.views}
+              />
+
+              {/* 댓글 작성 컨테이터 */}
+              <CommentInputContainer />
             </div>
 
+            {/* 나머지 데이터 */}
             <div className={"videos_bottom_container"}>
-              {restVideoss.map((video, key) => (
+              {restVideos?.map((video, key) => (
                 <NextVideoContainer key={key} data={video} />
               ))}
             </div>
@@ -356,7 +372,7 @@ export const WatchVideoPage = () => {
           {isMoviescreen && (
             <div className="videos_side_container">
               <MenuSelector categories={["모두", "blarblar", "blarbla"]} />
-              {restVideoss.map((video, key) => (
+              {restVideos?.map((video, key) => (
                 <NextVideoContainer key={key} data={video} />
               ))}
             </div>
@@ -367,7 +383,8 @@ export const WatchVideoPage = () => {
       {!isMoviescreen && !isFullscreen && (
         <div className="videos_side_container">
           {/* 다음 영상 틀 */}
-          {restVideoss.map((video, key) => (
+
+          {restVideos?.map((video, key) => (
             <NextVideoContainer key={key} data={video} />
           ))}
         </div>

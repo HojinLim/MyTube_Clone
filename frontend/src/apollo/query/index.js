@@ -28,6 +28,8 @@ export const GET_ALL_VIDEOS = gql`
       createdBy
       created_at
       duration
+      sort
+      views
       contents {
         url
       }
@@ -44,6 +46,7 @@ export const GET_VIDEO_BY_ID = gql`
       description
       title
       isPublic
+      views
       thumbnail {
         url
       }

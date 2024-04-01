@@ -567,6 +567,9 @@
                 "locale": {
                   "type": "string"
                 },
+                "subscribers": {
+                  "type": "object"
+                },
                 "created_by": {
                   "type": "string"
                 },

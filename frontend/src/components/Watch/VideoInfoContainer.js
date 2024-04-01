@@ -13,7 +13,7 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt"
 import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded"
 import Stack from "@mui/material/Stack"
 
-export const VideoInfoContainer = ({ title, subtitle }) => {
+export const VideoInfoContainer = ({ title, subtitle, views }) => {
   const [thumbUp, setThumbup] = useState(null)
   const [thumbDown, setThumbDown] = useState(null)
   const [likeCount, setLikeCount] = useState(0)
@@ -119,7 +119,7 @@ export const VideoInfoContainer = ({ title, subtitle }) => {
           }}
         >
           <Typography variant="caption" gutterBottom>
-            조회수 100회 10시간 전
+            {`조회수 ${views}회 10시간 전`}
           </Typography>
           <Typography variant="caption" gutterBottom>
             React JS Tutorial for Beginners - Learn React 18 with TypeScript and build awesome

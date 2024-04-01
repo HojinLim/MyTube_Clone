@@ -46,6 +46,7 @@ export default function UploadModal() {
   const [uploadedThumb, setUploadedThumb] = React.useState(null)
   const [open, setOpen] = useRecoilState(openUploadState)
   const [isPublic, setIsPublic] = React.useState(false)
+  const [duration, setDuration] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
@@ -87,6 +88,11 @@ export default function UploadModal() {
         setUploadedThumb(reader.result)
       }
       reader.readAsDataURL(data)
+    }
+  }
+  function handleSetDuration(e) {
+    if (e.target) {
+      setDuration(e.target.value)
     }
   }
 
@@ -132,7 +138,7 @@ export default function UploadModal() {
         contents: videoID,
         thumbnail: thumbID,
         isPublic: isPublic,
-        duration: "1:30",
+        duration: duration + "",
       },
     })
       .then((res) => {
@@ -185,6 +191,7 @@ export default function UploadModal() {
                 isPublic={isPublic}
                 inputText={inputText}
                 inputContents={inputContents}
+                handleSetDuration={handleSetDuration}
               />
             )}
           </div>

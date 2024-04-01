@@ -47,12 +47,11 @@ export const PlayListSide = ({ sideTitle, background }) => {
             borderRadius: "20px",
             display: "flex",
             flexDirection: "column",
-            border: "1px solid black",
 
             overflow: "hidden",
           }}
         >
-          <Typography color={"white"} variant="h6" fontWeight={"700"} marginBottom={"15px"}>
+          <Typography color={"white"} variant="h6" fontWeight={"800"} marginBottom={"15px"}>
             {sideTitle}
           </Typography>
           <div style={{ display: "flex" }}>

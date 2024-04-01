@@ -10,10 +10,11 @@ export const NextVideoContainer = ({ data }) => {
   const navigate = useNavigate()
   return (
     <div
+      href={`/watch/${id}`}
       className="next_video_container"
       onClick={() => {
         navigate(`/watch/${id}`)
-        window.scrollTo({ top: 0, behavior: "smooth" })
+        window.location.reload()
       }}
     >
       {/* 비디오 파트*/}
