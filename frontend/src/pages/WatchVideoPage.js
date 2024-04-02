@@ -12,6 +12,7 @@ import { UserFeedBackContainer } from "components/UserFeedBackContainer"
 import Grid from "@mui/material/Grid"
 import Button from "@mui/material/Button"
 import { stringToSeconds } from "functions/stringToSeconds"
+import Divider from "@mui/material/Divider"
 //Icons
 import PauseCircleIcon from "@mui/icons-material/PauseCircle"
 import FullscreenIcon from "@mui/icons-material/Fullscreen"
@@ -40,9 +41,10 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 import { VideoInfoContainer } from "components/Watch/VideoInfoContainer"
 import { MenuSelector } from "components/common/MenuSelector"
 import { NextVideoContainer } from "components/Watch/NextVideoContainer"
-import { useQuery } from "@apollo/client"
+import { useLazyQuery, useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"
 import { CommentInputContainer } from "components/Watch/CommentInputContainer"
+import { GET_COMMENTS_BY_ID } from "apollo/query"
 
 export const WatchVideoPage = () => {
   const params = useParams()
@@ -110,6 +112,7 @@ export const WatchVideoPage = () => {
 
   const videoId = params.id
   const { loading, error, data: videos } = useQuery(GET_ALL_VIDEOS)
+
   useEffect(() => {
     if (!loading && !error) {
       const video = videos.youtubeMedias.find((video) => video.id === videoId)
@@ -119,8 +122,6 @@ export const WatchVideoPage = () => {
       setRestVideos(restVideos)
     }
   }, [loading, error, videos])
-
-  // console.log(currentVideos.duration)
 
   useMemo(() => {
     setTimePercent((playTime / stringToSeconds(currentVideos?.duration ?? "1:00")) * 100)
@@ -145,6 +146,18 @@ export const WatchVideoPage = () => {
     return () => {
       screenfull.off("change")
     }
+  }, [])
+
+  const [getCommentsById, { loading: commentsLoading, error: commentError, data: commentData }] =
+    useLazyQuery(GET_COMMENTS_BY_ID)
+  useEffect(() => {
+    if (!commentsLoading && !commentError && commentData) {
+      console.log(commentData)
+    }
+  }, [commentsLoading, commentError, commentData])
+
+  useEffect(() => {
+    getCommentsById({ variables: { subId: videoId } })
   }, [])
 
   const VideoPlaySlider = styled(Slider)({
@@ -340,38 +353,43 @@ export const WatchVideoPage = () => {
             {/* 영상 정보 컨테이너 */}
 
             <div className="screen_info_container" style={isFullscreen ? { display: "none" } : {}}>
-              <VideoInfoContainer
-                title={currentVideos?.title}
-                subtitle={currentVideos?.createdBy}
-                views={currentVideos?.views}
-              />
+              <VideoInfoContainer currentVideos={currentVideos ?? ""} />
 
               {/* 댓글 작성 컨테이터 */}
-              <CommentInputContainer />
+              <CommentInputContainer
+                subId={videoId}
+                numOfComments={commentData?.comments?.length}
+              />
             </div>
 
             {/* 나머지 데이터 */}
             <div className={"videos_bottom_container"}>
+              <MenuSelector
+                categories={["모두", "주인장 제공", "최근에 업로드된 동영상", "감상한 동영상"]}
+              />
               {restVideos?.map((video, key) => (
                 <NextVideoContainer key={key} data={video} />
               ))}
             </div>
+
+            <Divider />
 
             {/* 댓글 컨테이너 */}
             <div
               className="screen_comment_container"
               style={isFullscreen ? { display: "none" } : {}}
             >
-              <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
-              <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
-              <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
-              <UserFeedBackContainer contents={"nice video!"} date={"2024-03-10"} />
+              {commentData?.comments?.map((data, key) => (
+                <>
+                  <UserFeedBackContainer comment={data} />
+                </>
+              ))}
             </div>
           </div>
           {/* part2 */}
+
           {isMoviescreen && (
             <div className="videos_side_container">
-              <MenuSelector categories={["모두", "blarblar", "blarbla"]} />
               {restVideos?.map((video, key) => (
                 <NextVideoContainer key={key} data={video} />
               ))}
@@ -383,7 +401,9 @@ export const WatchVideoPage = () => {
       {!isMoviescreen && !isFullscreen && (
         <div className="videos_side_container">
           {/* 다음 영상 틀 */}
-
+          <MenuSelector
+            categories={["모두", "주인장 제공", "최근에 업로드된 동영상", "감상한 동영상"]}
+          />
           {restVideos?.map((video, key) => (
             <NextVideoContainer key={key} data={video} />
           ))}

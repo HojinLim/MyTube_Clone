@@ -37,8 +37,8 @@ export const CustomIconMenu = ({ iconButton, menuItems }) => {
         }}
       >
         {menuItems.map((menuItem, index) => (
-          <MenuItem key={index} onClick={menuItem.onClick}>
-            {menuItem.text}
+          <MenuItem key={index} onClick={menuItem.onClick} style={{ gap: "12px" }}>
+            {menuItem?.icon} {menuItem.text}
           </MenuItem>
         ))}
       </Menu>

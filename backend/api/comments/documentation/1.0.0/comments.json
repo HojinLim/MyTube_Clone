@@ -1,19 +1,18 @@
 {
   "paths": {
-    "/youtube-medias": {
+    "/comments": {
       "get": {
         "deprecated": false,
-        "description": "",
+        "description": "Find all the comments's records",
         "responses": {
           "200": {
-            "description": "response",
+            "description": "Retrieve comments document(s)",
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "foo": {
-                      "type": "string"
-                    }
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Comments"
                   }
                 }
               }
@@ -52,7 +51,7 @@
         },
         "summary": "",
         "tags": [
-          "Youtube-media"
+          "Comments"
         ],
         "parameters": [
           {
@@ -195,18 +194,14 @@
       },
       "post": {
         "deprecated": false,
-        "description": "Create a new record",
+        "description": "Create a new comments record",
         "responses": {
           "200": {
-            "description": "response",
+            "description": "Retrieve comments document(s)",
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "foo": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Comments"
                 }
               }
             }
@@ -244,7 +239,7 @@
         },
         "summary": "",
         "tags": [
-          "Youtube-media"
+          "Comments"
         ],
         "requestBody": {
           "description": "",
@@ -252,26 +247,26 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewYoutube-media"
+                "$ref": "#/components/schemas/NewComments"
               }
             }
           }
         }
       }
     },
-    "/youtube-medias/count": {
+    "/comments/count": {
       "get": {
         "deprecated": false,
-        "description": "",
+        "description": "Retrieve the numver of comments documents",
         "responses": {
           "200": {
-            "description": "response",
+            "description": "Retrieve comments document(s)",
             "content": {
               "application/json": {
                 "schema": {
                   "properties": {
-                    "foo": {
-                      "type": "string"
+                    "count": {
+                      "type": "integer"
                     }
                   }
                 }
@@ -311,26 +306,22 @@
         },
         "summary": "",
         "tags": [
-          "Youtube-media"
+          "Comments"
         ],
         "parameters": []
       }
     },
-    "/youtube-medias/{id}": {
+    "/comments/{id}": {
       "get": {
         "deprecated": false,
-        "description": "",
+        "description": "Find one comments record",
         "responses": {
           "200": {
-            "description": "response",
+            "description": "Retrieve comments document(s)",
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "foo": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Comments"
                 }
               }
             }
@@ -368,7 +359,7 @@
         },
         "summary": "",
         "tags": [
-          "Youtube-media"
+          "Comments"
         ],
         "parameters": [
           {
@@ -385,18 +376,14 @@
       },
       "put": {
         "deprecated": false,
-        "description": "Update a record",
+        "description": "Update a single comments record",
         "responses": {
           "200": {
-            "description": "response",
+            "description": "Retrieve comments document(s)",
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "foo": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Comments"
                 }
               }
             }
@@ -434,7 +421,7 @@
         },
         "summary": "",
         "tags": [
-          "Youtube-media"
+          "Comments"
         ],
         "requestBody": {
           "description": "",
@@ -442,7 +429,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewYoutube-media"
+                "$ref": "#/components/schemas/NewComments"
               }
             }
           }
@@ -462,10 +449,10 @@
       },
       "delete": {
         "deprecated": false,
-        "description": "Delete a record",
+        "description": "Delete a single comments record",
         "responses": {
           "200": {
-            "description": "deletes a single record based on the ID supplied",
+            "description": "deletes a single comments based on the ID supplied",
             "content": {
               "application/json": {
                 "schema": {
@@ -508,7 +495,7 @@
         },
         "summary": "",
         "tags": [
-          "Youtube-media"
+          "Comments"
         ],
         "parameters": [
           {
@@ -527,7 +514,7 @@
   },
   "components": {
     "schemas": {
-      "Youtube-media": {
+      "Comments": {
         "required": [
           "id"
         ],
@@ -535,241 +522,93 @@
           "id": {
             "type": "string"
           },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
           "contents": {
-            "required": [
-              "id",
-              "name",
-              "hash",
-              "mime",
-              "size",
-              "url",
-              "provider"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "alternativeText": {
-                "type": "string"
-              },
-              "caption": {
-                "type": "string"
-              },
-              "width": {
-                "type": "integer"
-              },
-              "height": {
-                "type": "integer"
-              },
-              "formats": {
-                "type": "object"
-              },
-              "hash": {
-                "type": "string"
-              },
-              "ext": {
-                "type": "string"
-              },
-              "mime": {
-                "type": "string"
-              },
-              "size": {
-                "type": "number"
-              },
-              "url": {
-                "type": "string"
-              },
-              "previewUrl": {
-                "type": "string"
-              },
-              "provider": {
-                "type": "string"
-              },
-              "provider_metadata": {
-                "type": "object"
-              },
-              "related": {
-                "type": "string"
-              },
-              "created_by": {
-                "type": "string"
-              },
-              "updated_by": {
-                "type": "string"
-              }
-            }
-          },
-          "isPublic": {
-            "type": "boolean",
-            "default": false
-          },
-          "thumbnail": {
-            "required": [
-              "id",
-              "name",
-              "hash",
-              "mime",
-              "size",
-              "url",
-              "provider"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "alternativeText": {
-                "type": "string"
-              },
-              "caption": {
-                "type": "string"
-              },
-              "width": {
-                "type": "integer"
-              },
-              "height": {
-                "type": "integer"
-              },
-              "formats": {
-                "type": "object"
-              },
-              "hash": {
-                "type": "string"
-              },
-              "ext": {
-                "type": "string"
-              },
-              "mime": {
-                "type": "string"
-              },
-              "size": {
-                "type": "number"
-              },
-              "url": {
-                "type": "string"
-              },
-              "previewUrl": {
-                "type": "string"
-              },
-              "provider": {
-                "type": "string"
-              },
-              "provider_metadata": {
-                "type": "object"
-              },
-              "related": {
-                "type": "string"
-              },
-              "created_by": {
-                "type": "string"
-              },
-              "updated_by": {
-                "type": "string"
-              }
-            }
-          },
-          "createdBy": {
             "type": "string"
           },
-          "duration": {
+          "profileImage": {
             "type": "string"
           },
-          "sort": {
-            "type": "string",
-            "enum": [
-              "movie",
-              "anime",
-              "music",
-              "game"
-            ]
+          "username": {
+            "type": "string"
           },
-          "views": {
-            "type": "integer"
-          },
-          "comment": {
-            "required": [
-              "id"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "contents": {
-                "type": "string"
-              },
-              "profileImage": {
-                "type": "string"
-              },
-              "username": {
-                "type": "string"
-              },
-              "youtube_medias": {
-                "type": "array",
-                "items": {
+          "youtube_medias": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "contents": {
+                  "type": "string"
+                },
+                "isPublic": {
+                  "type": "boolean"
+                },
+                "thumbnail": {
+                  "type": "string"
+                },
+                "createdBy": {
+                  "type": "string"
+                },
+                "duration": {
+                  "type": "string"
+                },
+                "sort": {
+                  "type": "string"
+                },
+                "views": {
+                  "type": "integer"
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "published_at": {
+                  "type": "datetime"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
                   "type": "string"
                 }
-              },
-              "subId": {
-                "type": "string"
-              },
-              "published_at": {
-                "type": "datetime"
-              },
-              "created_by": {
-                "type": "string"
-              },
-              "updated_by": {
-                "type": "string"
               }
             }
+          },
+          "subId": {
+            "type": "string"
           },
           "published_at": {
             "type": "datetime"
           }
         }
       },
-      "NewYoutube-media": {
+      "NewComments": {
         "properties": {
-          "title": {
+          "contents": {
             "type": "string"
           },
-          "description": {
+          "profileImage": {
             "type": "string"
           },
-          "isPublic": {
-            "type": "boolean",
-            "default": false
-          },
-          "createdBy": {
+          "username": {
             "type": "string"
           },
-          "duration": {
-            "type": "string"
+          "youtube_medias": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
-          "sort": {
-            "type": "string",
-            "enum": [
-              "movie",
-              "anime",
-              "music",
-              "game"
-            ]
-          },
-          "views": {
-            "type": "integer"
-          },
-          "comment": {
+          "subId": {
             "type": "string"
           },
           "published_at": {
@@ -785,5 +624,9 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    {
+      "name": "Comments"
+    }
+  ]
 }

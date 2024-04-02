@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comments",
+  "info": {
+    "name": "Comments",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "contents": {
+      "type": "string"
+    },
+    "profileImage": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
+    },
+    "youtube_medias": {
+      "collection": "youtube-media",
+      "via": "comment"
+    },
+    "subId": {
+      "type": "string"
+    }
+  }
+}

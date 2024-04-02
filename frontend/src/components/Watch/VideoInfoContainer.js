@@ -12,8 +12,10 @@ import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined"
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt"
 import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded"
 import Stack from "@mui/material/Stack"
+import { timeForBetween } from "functions/timeForBetween"
 
-export const VideoInfoContainer = ({ title, subtitle, views }) => {
+export const VideoInfoContainer = ({ currentVideos }) => {
+  const { title, subtitle, views, created_at } = currentVideos
   const [thumbUp, setThumbup] = useState(null)
   const [thumbDown, setThumbDown] = useState(null)
   const [likeCount, setLikeCount] = useState(0)
@@ -58,7 +60,7 @@ export const VideoInfoContainer = ({ title, subtitle, views }) => {
         <Typography variant="h6" gutterBottom>
           {title}
         </Typography>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", marginBottom: "15px" }}>
           <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
           <div style={{ display: "flex", flexDirection: "column", margin: "0px 12px" }}>
             <Typography variant="body2" gutterBottom color={"gray"}>
@@ -71,12 +73,23 @@ export const VideoInfoContainer = ({ title, subtitle, views }) => {
           <Button
             onClick={() => setSubscript((prev) => !prev)}
             variant="contained"
-            sx={{
-              backgroundColor: "black",
-              borderRadius: "20px",
-              maxHeight: "40px",
-              color: "white",
-            }}
+            sx={
+              subscript
+                ? {
+                    backgroundColor: "black",
+                    borderRadius: "20px",
+                    maxHeight: "40px",
+                    maxWidth: "150px",
+                    color: "white",
+                  }
+                : {
+                    backgroundColor: "lightgray",
+                    borderRadius: "20px",
+                    maxHeight: "40px",
+                    maxWidth: "150px",
+                    // color: "white",
+                  }
+            }
           >
             {subscript && <NotificationsNoneOutlinedIcon />}
             {subscript ? "구독" : "구독중"}
@@ -119,11 +132,10 @@ export const VideoInfoContainer = ({ title, subtitle, views }) => {
           }}
         >
           <Typography variant="caption" gutterBottom>
-            {`조회수 ${views}회 10시간 전`}
+            {`조회수 ${views}회 ${timeForBetween(created_at)}`}
           </Typography>
           <Typography variant="caption" gutterBottom>
-            React JS Tutorial for Beginners - Learn React 18 with TypeScript and build awesome
-            frontend app!
+            {currentVideos?.description}
           </Typography>
         </Box>
       </Container>

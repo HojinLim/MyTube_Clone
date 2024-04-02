@@ -60,6 +60,10 @@
     },
     "views": {
       "type": "integer"
+    },
+    "comment": {
+      "via": "youtube_medias",
+      "model": "comments"
     }
   }
 }

@@ -138,3 +138,32 @@ export const DELETE_VIDEO = gql`
     }
   }
 `
+
+// 댓글 작성
+export const CREATE_COMMENT = gql`
+  mutation createComment(
+    $subId: String
+    $username: String
+    $contents: String
+    $profileImage: String
+  ) {
+    createComment(
+      input: {
+        data: {
+          subId: $subId
+          username: $username
+          contents: $contents
+          profileImage: $profileImage
+        }
+      }
+    ) {
+      comment {
+        id
+        username
+        profileImage
+        subId
+        created_at
+      }
+    }
+  }
+`

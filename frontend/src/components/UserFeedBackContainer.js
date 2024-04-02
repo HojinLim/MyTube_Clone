@@ -4,15 +4,24 @@ import Container from "@mui/material/Container"
 import { IconButton, Button } from "@mui/material"
 
 import Typography from "@mui/material/Typography"
+
+// Icons
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt"
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
+
 import Avatar from "@mui/material/Avatar"
 import ReactPlayer from "react-player/lazy"
 import { timeForToday } from "functions/timeForToday"
+import { CustomIconMenu } from "./common/CustomIconMenu"
+// import { EditOutlinedIcon } from "Constants/value"
 {
   /* eslint-disable react/prop-types  */
 }
-export const UserFeedBackContainer = (props) => {
+export const UserFeedBackContainer = ({ comment }) => {
+  const { username, contents, profileImage, created_at } = comment
   return (
     <Container
       sx={{
@@ -21,8 +30,9 @@ export const UserFeedBackContainer = (props) => {
         display: "flex",
         marginY: "15px",
       }}
+      className="user-comments-container"
     >
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+      <Avatar alt="Remy Sharp" src={profileImage} />
       <Container
         sx={{
           flexGrow: 1,
@@ -33,20 +43,38 @@ export const UserFeedBackContainer = (props) => {
         <div
           style={{
             display: "flex",
+            justifyContent: "space-between",
           }}
         >
-          <Typography variant="body2" sx={{ marginRight: "5px" }}>
-            @Mr. Beast
-          </Typography>
-          {/* 댓글 시간 */}
-          <Typography variant="body2" gutterBottom color={"gray"}>
-            {timeForToday(props.date)}
-          </Typography>
+          <div>
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              <Typography variant="body2" sx={{ marginRight: "5px" }}>
+                {`@${username}`}
+              </Typography>
+              {/* 댓글 시간 */}
+              <Typography variant="body2" gutterBottom color={"gray"}>
+                {timeForToday(created_at)}
+              </Typography>
+            </div>
+            {/* eslint-disable react/prop-types  */}
+            <Typography variant="h6" gutterBottom>
+              {contents}
+            </Typography>
+          </div>
+          <div>
+            <CustomIconMenu
+              iconButton={<MoreVertIcon />}
+              menuItems={[
+                { icon: <EditOutlinedIcon />, text: "수정", onclick: () => {} },
+                { icon: <DeleteOutlineOutlinedIcon />, text: "삭제", onclick: () => {} },
+              ]}
+            />
+          </div>
         </div>
-        {/* eslint-disable react/prop-types  */}
-        <Typography variant="h6" gutterBottom>
-          {props.contents}
-        </Typography>
         {/* 유저 피드백 상호 버튼 */}
         <div
           style={{

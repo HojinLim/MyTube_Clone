@@ -56,3 +56,15 @@ export const GET_VIDEO_BY_ID = gql`
     }
   }
 `
+export const GET_COMMENTS_BY_ID = gql`
+  query GetComments($subId: String) {
+    comments(where: { subId: $subId }) {
+      id
+      subId
+      username
+      contents
+      profileImage
+      created_at
+    }
+  }
+`
