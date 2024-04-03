@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import logo from "assets/images/logos/logo.png"
 import person from "assets/images/person.png"
 import Typography from "@mui/material/Typography"
@@ -16,15 +16,36 @@ import { HomeContainer } from "components/Creator/HomeContainer"
 import { VideoContainer } from "components/Creator/VideoContainer"
 import { PlayListContainer } from "components/Creator/PlayListContainer"
 import { CommunityContainer } from "components/Creator/CommunityContainer"
+import { useLazyQuery } from "@apollo/client"
+import { FIND_USER_ID_BY_NAME } from "apollo/query"
 export const CreatorPage = () => {
   const params = useParams()
-  const [value, setValue] = React.useState(0)
+  const [value, setValue] = useState(0)
   const [subscript, setSubscript] = useState(false)
+  const [nicknamee, setNicknamee] = useState()
+  const [findUserIdByName, { loading, data, error }] = useLazyQuery(FIND_USER_ID_BY_NAME)
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
-  const nickname = params.nickname
 
+  const nickname = params.nickname.split("@")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!loading && data && !error) {
+          // loading이 false이고 data와 error가 있을 때만 실행
+          const response = await findUserIdByName({ variables: { username: nickname[1] } })
+          console.log(response)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchData()
+  }, [loading, data, error, nickname])
   return (
     <div style={{ padding: "50px" }}>
       {/* 앱 헤더 컨테이너 */}
@@ -41,7 +62,7 @@ export const CreatorPage = () => {
               </Typography>
             </Tooltip>
             <Typography variant="caption" style={{ margin: "10px 0px" }}>
-              주인장 - 구독자 00명 - 동영상 00개
+              {nickname} - 구독자 00명 - 동영상 00개
             </Typography>
             <Typography className="creator-inform-click" variant="body2">
               정보

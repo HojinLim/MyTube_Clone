@@ -62,8 +62,25 @@
       "type": "integer"
     },
     "comment": {
-      "via": "youtube_medias",
-      "model": "comments"
+      "model": "comments",
+      "via": "youtube_medias"
+    },
+    "tests": {
+      "collection": "test",
+      "via": "youtube_media"
+    },
+    "liked": {
+      "model": "liked",
+      "via": "youtube_medias"
+    },
+    "later": {
+      "model": "later",
+      "via": "youtube_medias"
+    },
+    "users_permissions_users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "youtube_media"
     }
   }
 }

@@ -102,7 +102,7 @@ export default function SideBar() {
         navigate("/shorts")
         break
       case name:
-        navigate(`/${name}`)
+        navigate(`/@${name}`)
         break
       default:
         break
@@ -181,7 +181,7 @@ export default function SideBar() {
             </Typography>
 
             <List>
-              {["침착맨", "슈카월드"].map((text, index) => (
+              {["임호진", "슈카월드"].map((text, index) => (
                 <ListItem key={text} disablePadding>
                   <ListItemButton onClick={() => movePage(text)}>
                     <ListItemIcon>

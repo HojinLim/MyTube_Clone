@@ -65,6 +65,14 @@
     },
     "subscribers": {
       "type": "json"
+    },
+    "tests": {
+      "via": "users_permissions_user",
+      "collection": "test"
+    },
+    "youtube_media": {
+      "via": "users_permissions_users",
+      "model": "youtube-media"
     }
   }
 }

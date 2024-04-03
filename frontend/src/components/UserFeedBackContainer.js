@@ -13,15 +13,33 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 
 import Avatar from "@mui/material/Avatar"
-import ReactPlayer from "react-player/lazy"
 import { timeForToday } from "functions/timeForToday"
 import { CustomIconMenu } from "./common/CustomIconMenu"
+import { DELETE_COMMENT } from "apollo/mutation"
+import { useMutation } from "@apollo/client"
+import { USER_INFO } from "Constants/value"
+import { CommentInput } from "./Watch/CommentInput"
 // import { EditOutlinedIcon } from "Constants/value"
 {
   /* eslint-disable react/prop-types  */
 }
 export const UserFeedBackContainer = ({ comment }) => {
-  const { username, contents, profileImage, created_at } = comment
+  const { id, username, contents, profileImage, created_at } = comment
+  const user = JSON.parse(localStorage.getItem(USER_INFO))
+
+  const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] =
+    useMutation(DELETE_COMMENT)
+  const deleteCommentHandler = async () => {
+    try {
+      const res = await deleteComment({ variables: { id: id } })
+      console.log(res)
+      location.href = location.href
+      // 성공적으로 삭제되었을 때 처리
+    } catch (error) {
+      console.error(error)
+      // 에러 처리
+    }
+  }
   return (
     <Container
       sx={{
@@ -65,15 +83,21 @@ export const UserFeedBackContainer = ({ comment }) => {
               {contents}
             </Typography>
           </div>
-          <div>
-            <CustomIconMenu
-              iconButton={<MoreVertIcon />}
-              menuItems={[
-                { icon: <EditOutlinedIcon />, text: "수정", onclick: () => {} },
-                { icon: <DeleteOutlineOutlinedIcon />, text: "삭제", onclick: () => {} },
-              ]}
-            />
-          </div>
+          {user.name == username && (
+            <div>
+              <CustomIconMenu
+                iconButton={<MoreVertIcon />}
+                menuItems={[
+                  { icon: <EditOutlinedIcon />, text: "수정", onClick: () => {} },
+                  {
+                    icon: <DeleteOutlineOutlinedIcon />,
+                    text: "삭제",
+                    onClick: () => confirm("real 삭제?") && deleteCommentHandler(),
+                  },
+                ]}
+              />
+            </div>
+          )}
         </div>
         {/* 유저 피드백 상호 버튼 */}
         <div
@@ -87,8 +111,9 @@ export const UserFeedBackContainer = ({ comment }) => {
           <Button sx={{ borderRadius: "50px" }}>
             <ThumbDownOffAltIcon sx={{ width: "20px" }} />
           </Button>
-          <Button>답글</Button>
+          <Button onClick={() => {}}>답글</Button>
         </div>
+        {/* <CommentInput /> */}
       </Container>
     </Container>
   )

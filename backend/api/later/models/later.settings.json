@@ -1,8 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "comments",
+  "collectionName": "laters",
   "info": {
-    "name": "Comments",
+    "name": "later",
     "description": ""
   },
   "options": {
@@ -11,21 +11,12 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "contents": {
-      "type": "string"
-    },
-    "profileImage": {
-      "type": "string"
-    },
-    "username": {
+    "uid": {
       "type": "string"
     },
     "youtube_medias": {
-      "via": "comment",
+      "via": "later",
       "collection": "youtube-media"
-    },
-    "subId": {
-      "type": "string"
     }
   }
 }

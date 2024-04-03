@@ -14,9 +14,9 @@ export default function VideosContainer() {
 
   const { loading, error, data: videos } = useQuery(GET_ALL_VIDEOS)
 
-  // useEffect(() => {
-  //   setVideoDatas(videos)
-  // }, [loading, error, videos])
+  useEffect(() => {
+    console.log(videos)
+  }, [loading, error, videos])
 
   React.useEffect(() => {
     setDummy(dummyData)

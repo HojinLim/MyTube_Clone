@@ -6,9 +6,13 @@ import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import Divider from "@mui/material/Divider"
-export const VideoItem = ({ datas }) => {
-  const { id, thumb, title, subtitle, sources, duration } = datas
+import { timeForBetween } from "functions/timeForBetween"
+import { useNavigate } from "react-router-dom"
+export const VideoItem = ({ datas, key }) => {
+  const { id, thumbnail, title, subtitle, views, createdBy, created_at, sources, duration } = datas
+  console.log(datas)
   const [anchorEl, setAnchorEl] = React.useState(null)
+  const navigate = useNavigate()
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -18,9 +22,16 @@ export const VideoItem = ({ datas }) => {
   }
 
   return (
-    <div className="later_video_container">
+    <div
+      className="later_video_container"
+      onClick={(e) => {
+        e.stopPropagation()
+        navigate(`/watch/${id}`)
+        window.location.reload()
+      }}
+    >
       <Typography variant="body1" style={{ margin: "15px" }}>
-        {id}
+        {key}
       </Typography>
       <div
         style={{
@@ -34,7 +45,7 @@ export const VideoItem = ({ datas }) => {
         }}
       >
         <img
-          src={thumb}
+          src={process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail.url}
           style={{
             backgroundColor: "wheat",
             margin: "auto",
@@ -74,11 +85,11 @@ export const VideoItem = ({ datas }) => {
             overflow: "hidden",
           }}
         >
-          <Typography variant="caption">{subtitle}</Typography>
+          <Typography variant="caption">{createdBy}</Typography>
           <Typography variant="caption"> • </Typography>
-          <Typography variant="caption">조회수 10회</Typography>
+          <Typography variant="caption">조회수 {views}회</Typography>
           <Typography variant="caption"> • </Typography>
-          <Typography variant="caption">1개월 전</Typography>
+          <Typography variant="caption">{timeForBetween(created_at)}</Typography>
         </div>
       </div>
       <div className="dot-menu-button">

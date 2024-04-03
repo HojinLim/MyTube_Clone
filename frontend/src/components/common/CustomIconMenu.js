@@ -6,15 +6,15 @@ import MenuItem from "@mui/material/MenuItem"
 export const CustomIconMenu = ({ iconButton, menuItems }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
+
   const handleClick = (event) => {
-    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
     setAnchorEl(null)
   }
-  console.log(anchorEl)
+
   return (
     <div>
       <IconButton

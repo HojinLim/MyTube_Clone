@@ -3,10 +3,10 @@ import ArchiveIcon from "@mui/icons-material/Archive"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
 import { useLazyQuery } from "@apollo/client"
 import { GET_COMMENTS_BY_ID } from "apollo/query"
-
+import { useNavigate } from "react-router-dom"
 export const TestPage = () => {
   const [getCommentsById, { loading, error, data }] = useLazyQuery(GET_COMMENTS_BY_ID)
-
+  const navigate = useNavigate()
   useEffect(() => {
     if (!loading && !error && data) {
       console.log(data)
@@ -16,7 +16,7 @@ export const TestPage = () => {
   useEffect(() => {
     getCommentsById({ variables: { subId: "64" } })
   }, [])
-
+  const name = "hojin"
   return (
     <>
       <CustomIconMenu
@@ -26,6 +26,7 @@ export const TestPage = () => {
           { text: "test2", onclick: () => {} },
         ]}
       />
+      <div onClick={() => navigate(`/@${name}`)}>test</div>
     </>
   )
 }

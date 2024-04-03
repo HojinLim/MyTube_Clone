@@ -4,15 +4,20 @@ import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import person from "assets/images/person.png"
 import IconButton from "@mui/material/IconButton"
-
+import { useNavigate } from "react-router-dom"
 // Icons
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import ShuffleIcon from "@mui/icons-material/Shuffle"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 
 import { dummyData } from "dummy"
+import { timeForBetween } from "functions/timeForBetween"
 
-export const PlayListSide = ({ sideTitle, background }) => {
+export const PlayListSide = ({ datas, length, sideTitle, background }) => {
+  const navigate = useNavigate()
+  if (!datas) return null
+  console.log(datas)
+  const { id, thumbnail, title, subtitle, views, createdBy, created_at, sources, duration } = datas
   return (
     <div className="later_outer">
       <div className="later_inner_outer" style={{ backgroundColor: background }}>
@@ -27,7 +32,12 @@ export const PlayListSide = ({ sideTitle, background }) => {
           }}
         >
           <img
-            src={dummyData[0].thumb}
+            className="pointerlable"
+            onClick={() => {
+              navigate(`/watch/${id}`)
+              window.location.reload()
+            }}
+            src={process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail.url}
             style={{
               backgroundColor: "wheat",
               width: "100%",
@@ -66,18 +76,18 @@ export const PlayListSide = ({ sideTitle, background }) => {
               }}
             >
               <Typography color={"white"} variant="body2">
-                주인장
+                {createdBy}
               </Typography>
               <Box display={"flex"} flexDirection={"column"}>
                 <div style={{ display: "flex", textOverflow: "ellipsis", overflow: "auto" }}>
                   <Typography color={"lightgray"} variant="caption">
-                    동영상 83개
+                    동영상 {length}개
                   </Typography>
                   <Typography color={"lightgray"} margin={"0px 5px"} variant="caption">
                     조회수 없음
                   </Typography>
                   <Typography color={"lightgray"} variant="caption" textOverflow={"ellipsis"}>
-                    2일 전에 업데이트됨
+                    {timeForBetween(created_at)}에 업데이트됨
                   </Typography>
                 </div>
               </Box>

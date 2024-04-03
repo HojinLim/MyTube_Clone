@@ -571,6 +571,24 @@
                 "comment": {
                   "type": "string"
                 },
+                "tests": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "liked": {
+                  "type": "string"
+                },
+                "later": {
+                  "type": "string"
+                },
+                "users_permissions_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "published_at": {
                   "type": "datetime"
                 },

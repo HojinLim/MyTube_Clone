@@ -8,7 +8,14 @@ import Avatar from "@mui/material/Avatar"
 import { formatTime } from "functions/formatTime"
 import { stringToSeconds } from "functions/stringToSeconds"
 import { secondsToTime } from "functions/secondsToTime"
-
+import { timeForBetween } from "functions/timeForBetween"
+import { CustomIconMenu } from "components/common/CustomIconMenu"
+// Icons
+import MoreVertIcon from "@mui/icons-material/MoreVert"
+import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay"
+import ReplyIcon from "@mui/icons-material/Reply"
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd"
+import AccessTimeIcon from "@mui/icons-material/AccessTime"
 export const VideoContainer = ({ data }) => {
   // const { thumb, title, subtitle, sources, duration } = data
   const {
@@ -18,7 +25,7 @@ export const VideoContainer = ({ data }) => {
     sources,
     duration,
     id,
-
+    users_permissions_users,
     createdBy,
     description,
     isPublic,
@@ -26,8 +33,8 @@ export const VideoContainer = ({ data }) => {
     thumbnail: thumb,
     contents,
   } = data
-
-  // console.log(data)
+  const { profileImage } = users_permissions_users[0]
+  console.log(data)
 
   const [hover, setHover] = useState(false)
   // const [timer, setTimer] = useState(0)
@@ -136,7 +143,7 @@ export const VideoContainer = ({ data }) => {
           overflow: "hidden",
         }}
       >
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        <Avatar alt="Remy Sharp" src={profileImage} />
         <Container
           sx={{
             flexGrow: 1,
@@ -144,21 +151,34 @@ export const VideoContainer = ({ data }) => {
             display: "flex",
           }}
         >
-          <Typography
-            variant="h6"
-            gutterBottom
-            style={{
-              overflow: "auto",
-              maxHeight: "1.5em",
-            }}
-          >
-            {title}
-          </Typography>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              style={{
+                overflow: "auto",
+                maxHeight: "1.5em",
+              }}
+            >
+              {title}
+            </Typography>
+
+            <CustomIconMenu
+              iconButton={<MoreVertIcon />}
+              menuItems={[
+                { icon: <PlaylistPlayIcon />, text: "현재 재생목록에 추가", onClick: () => {} },
+                { icon: <AccessTimeIcon />, text: "나중에 볼 동영상에 저장", onClick: () => {} },
+
+                { icon: <PlaylistAddIcon />, text: "재생목록에 저장", onClick: () => {} },
+                { icon: <ReplyIcon />, text: "공유", onClick: () => {} },
+              ]}
+            />
+          </div>
           <Typography variant="body2" gutterBottom color={"gray"}>
             {createdBy}
           </Typography>
           <Typography variant="body2" gutterBottom color={"gray"}>
-            조회수 100회 ⦁ 10시간 전
+            조회수 100회 ⦁ {timeForBetween(created_at)}
           </Typography>
         </Container>
       </Container>

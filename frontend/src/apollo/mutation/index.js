@@ -97,6 +97,7 @@ export const UPLOAD_VIDEO = gql`
     $thumbnail: ID!
     $isPublic: Boolean!
     $duration: String!
+    $user_id: [ID]
   ) {
     createYoutubeMedia(
       input: {
@@ -108,6 +109,7 @@ export const UPLOAD_VIDEO = gql`
           thumbnail: $thumbnail
           isPublic: $isPublic
           duration: $duration
+          users_permissions_users: $user_id
         }
       }
     ) {
@@ -123,6 +125,9 @@ export const UPLOAD_VIDEO = gql`
         createdBy
         isPublic
         duration
+        users_permissions_users {
+          id
+        }
       }
     }
   }
@@ -134,6 +139,16 @@ export const DELETE_VIDEO = gql`
       youtubeMedia {
         id
         title
+      }
+    }
+  }
+`
+export const DELETE_COMMENT = gql`
+  mutation DeleteComment($id: ID!) {
+    deleteComment(input: { where: { id: $id } }) {
+      comment {
+        id
+        contents
       }
     }
   }

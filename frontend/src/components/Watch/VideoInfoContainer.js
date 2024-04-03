@@ -15,7 +15,11 @@ import Stack from "@mui/material/Stack"
 import { timeForBetween } from "functions/timeForBetween"
 
 export const VideoInfoContainer = ({ currentVideos }) => {
-  const { title, subtitle, views, created_at } = currentVideos
+  const { title, subtitle, views, created_at, users_permissions_users } = currentVideos
+
+  const user =
+    users_permissions_users && users_permissions_users.length > 0 ? users_permissions_users[0] : {}
+  const { id, profileImage, username } = user
   const [thumbUp, setThumbup] = useState(null)
   const [thumbDown, setThumbDown] = useState(null)
   const [likeCount, setLikeCount] = useState(0)
@@ -61,7 +65,7 @@ export const VideoInfoContainer = ({ currentVideos }) => {
           {title}
         </Typography>
         <div style={{ display: "flex", marginBottom: "15px" }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Avatar alt="Remy Sharp" src={profileImage} />
           <div style={{ display: "flex", flexDirection: "column", margin: "0px 12px" }}>
             <Typography variant="body2" gutterBottom color={"gray"}>
               {subtitle}

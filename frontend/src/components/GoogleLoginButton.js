@@ -59,15 +59,17 @@ export const GoogleLoginButton = () => {
               user = { email, picture, name }
             }
 
-            localStorage.setItem(USER_INFO, JSON.stringify(user))
-            setUser(user)
-
             loginUser({ variables: { identifier: email, password: sub } })
               .then((res2) => {
                 console.log(res2, "스트라피 data")
                 console.log("str_JWT:", res2.data.login.jwt)
+                console.log(res2.data.login.user.id)
                 localStorage.setItem(STRAPI_TOKEN, res2.data.login.jwt)
-                localStorage.setItem(user - Info)
+                localStorage.setItem(USER_INFO, JSON.stringify(user)) // Fixed this line
+
+                const updatedUser = { ...user, uid: res2.data.login.user.id } // Changed variable name to avoid conflict
+                localStorage.setItem(USER_INFO, JSON.stringify(updatedUser))
+                setUser(updatedUser)
               })
               .catch((error) => {
                 // 유저가 없는거임 -> 회원가입

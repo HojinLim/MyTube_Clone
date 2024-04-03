@@ -46,7 +46,7 @@ export default function UploadModal() {
   const [uploadedThumb, setUploadedThumb] = React.useState(null)
   const [open, setOpen] = useRecoilState(openUploadState)
   const [isPublic, setIsPublic] = React.useState(false)
-  const [duration, setDuration] = React.useState(false)
+  const [duration, setDuration] = React.useState()
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
@@ -90,9 +90,9 @@ export default function UploadModal() {
       reader.readAsDataURL(data)
     }
   }
-  function handleSetDuration(e) {
-    if (e.target) {
-      setDuration(e.target.value)
+  function handleSetDuration(duration) {
+    if (duration) {
+      setDuration(duration)
     }
   }
 
@@ -139,6 +139,7 @@ export default function UploadModal() {
         thumbnail: thumbID,
         isPublic: isPublic,
         duration: duration + "",
+        user_id: user.uid,
       },
     })
       .then((res) => {

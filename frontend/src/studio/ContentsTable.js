@@ -395,7 +395,8 @@ export default function ContentsTable() {
                           menuItems={[
                             {
                               text: "공개",
-                              onClick: () => {
+                              onClick: (e) => {
+                                e.stopPropagation()
                                 console.log("공개")
                                 togglePublicStatus()
                                 console.log(rows)

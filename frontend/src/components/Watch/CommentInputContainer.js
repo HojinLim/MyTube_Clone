@@ -22,6 +22,7 @@ import TextField from "@mui/material/TextField"
 import { useMutation } from "@apollo/client"
 import { CREATE_COMMENT } from "apollo/mutation"
 import { USER_INFO } from "Constants/value"
+import { CommentInput } from "./CommentInput"
 
 export const CommentInputContainer = ({ subId, numOfComments }) => {
   const [text, setText] = useState()
@@ -31,25 +32,6 @@ export const CommentInputContainer = ({ subId, numOfComments }) => {
 
   const user = JSON.parse(localStorage.getItem(USER_INFO))
 
-  const onCancelSubmit = () => {
-    setText("")
-  }
-  const onSubmitComment = () => {
-    console.log("submit")
-    createComment({
-      variables: { subId: subId, username: user.name, contents: text, profileImage: user.picture },
-    })
-      .then((res) => {
-        console.log(res)
-        alert("댓글 작성 완료!")
-
-        // TODO: 임시 새로고침
-        window.location.reload()
-        setText("")
-      })
-      .catch((e) => console.log(e))
-      .finally((e) => {})
-  }
   return (
     // 영상 댓글 컨테이너
     <Container>
@@ -64,60 +46,8 @@ export const CommentInputContainer = ({ subId, numOfComments }) => {
           </IconButton>
           <Typography>정렬 기준</Typography>
         </div>
-        <div style={{ display: "flex" }}>
-          <Avatar alt="Remy Sharp" src={user.picture} />
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              justifyContent: "space-between",
-            }}
-          >
-            <TextField
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              id="standard-basic"
-              label="댓글 추가..."
-              variant="standard"
-              fullWidth
-            />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "15px",
-              }}
-            >
-              <IconButton style={{ color: "black" }}>
-                <MoodIcon />
-              </IconButton>
-              <div style={{ display: "flex" }}>
-                <Button
-                  onClick={onCancelSubmit}
-                  sx={{
-                    borderRadius: "20px",
-                    maxHeight: "40px",
-                  }}
-                >
-                  취소
-                </Button>
-                <Button
-                  onClick={onSubmitComment}
-                  variant="contained"
-                  sx={{
-                    borderRadius: "20px",
-                    maxHeight: "40px",
-                    backgroundColor: "#eee",
-                  }}
-                >
-                  댓글
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <CommentInput />
       </div>
     </Container>
   )
