@@ -18,9 +18,9 @@
       "type": "string"
     },
     "users_permissions_user": {
+      "via": "tests",
       "plugin": "users-permissions",
-      "model": "user",
-      "via": "tests"
+      "model": "user"
     },
     "youtube_media": {
       "via": "tests",

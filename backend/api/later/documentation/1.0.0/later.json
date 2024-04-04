@@ -595,6 +595,75 @@
               }
             }
           },
+          "user": {
+            "required": [
+              "id",
+              "username",
+              "email"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "resetPasswordToken": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "blocked": {
+                "type": "boolean"
+              },
+              "role": {
+                "type": "string"
+              },
+              "try": {
+                "type": "integer"
+              },
+              "profileImage": {
+                "type": "string"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "subscribers": {
+                "type": "object"
+              },
+              "tests": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "youtube_medias": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "later": {
+                "type": "string"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -610,6 +679,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "user": {
+            "type": "string"
           },
           "published_at": {
             "type": "datetime"

@@ -78,9 +78,10 @@
       "via": "youtube_medias"
     },
     "users_permissions_users": {
+      "via": "youtube_medias",
       "plugin": "users-permissions",
       "collection": "user",
-      "via": "youtube_media"
+      "dominant": true
     }
   }
 }

@@ -67,12 +67,16 @@
       "type": "json"
     },
     "tests": {
-      "via": "users_permissions_user",
-      "collection": "test"
+      "collection": "test",
+      "via": "users_permissions_user"
     },
-    "youtube_media": {
-      "via": "users_permissions_users",
-      "model": "youtube-media"
+    "youtube_medias": {
+      "collection": "youtube-media",
+      "via": "users_permissions_users"
+    },
+    "later": {
+      "model": "later",
+      "via": "user"
     }
   }
 }

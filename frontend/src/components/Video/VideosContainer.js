@@ -2,8 +2,7 @@ import React, { useEffect } from "react"
 
 import { VideoContainer } from "./VideoContainer"
 import { dummyData } from "dummy"
-import { styled } from "@mui/material/styles"
-import { MenuSelector } from "components/common/MenuSelector"
+
 import { StyledGrid } from "styles/globalStyle"
 import { useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"

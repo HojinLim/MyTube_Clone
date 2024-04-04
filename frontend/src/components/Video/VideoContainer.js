@@ -16,6 +16,13 @@ import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay"
 import ReplyIcon from "@mui/icons-material/Reply"
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
+import useLaterData from "hooks/useLaterData"
+import { USER_INFO } from "Constants/value"
+import { useLazyQuery, useMutation } from "@apollo/client"
+import { CREATE_LATER } from "apollo/mutation"
+import { GET_LATER_BY_UID } from "apollo/query"
+import { UPDATE_LATER } from "apollo/mutation"
+
 export const VideoContainer = ({ data }) => {
   // const { thumb, title, subtitle, sources, duration } = data
   const {
@@ -60,7 +67,74 @@ export const VideoContainer = ({ data }) => {
   const moveDetailPage = () => {
     navigate(`/watch/${id}`)
   }
-  // console.log(thumb.url)
+  const updateLaterVideo = () => {
+    let arr = []
+    console.log(arr)
+    arr.push(id)
+    laterData.laters[0].youtube_medias.map((data) => arr.push(data.id))
+
+    updateLater({ variables: { id: laterData.laters[0].id, youtube_id: arr, uid: id } })
+    console.log(arr)
+  }
+  const removeUpdateVideo = () => {
+    let arr = []
+    laterData.laters[0].youtube_medias
+      .filter((data) => id !== data.id)
+      .map((value) => arr.push(value.id))
+    updateLater({ variables: { id: laterData.laters[0].id, youtube_id: arr, uid: id } })
+    console.log(arr)
+  }
+
+  const user = JSON.parse(localStorage.getItem(USER_INFO)) ?? ""
+
+  const [getLaterByUid, { data: laterData, loading, error }] = useLazyQuery(GET_LATER_BY_UID)
+  const [createDefaultArray] = useMutation(CREATE_LATER)
+
+  const [updateLater] = useMutation(UPDATE_LATER)
+  useEffect(() => {
+    // 나중에 볼 영상 조회
+    if (!error && !loading && laterData) {
+      // 껍데기도 없음
+      if (laterData.laters.length === 0) {
+        createDefaultArray({ variables: { uid: user.uid, youtube_id: [] } })
+        // 껍데기는 있음
+      } else {
+        // 해당 영상이 있는지 확인
+
+        // 있으면 update로 해당 영상 빼기
+
+        if (laterData.laters[0].youtube_medias.find((data) => id == data.id)) {
+          removeUpdateVideo()
+        } else {
+          // 없으면
+          // update로 해당 영상 추가
+          updateLaterVideo()
+        }
+      }
+    }
+    console.log(laterData)
+  }, [laterData, loading, error])
+
+  useEffect(() => {
+    getLaterByUid({ variables: user.uid }).then((result) => result.data)
+  }, [])
+
+  const addLaterVideoHandler = () => {
+    if (!error && !loading && laterData) {
+      // Check if the video already exists in the "Watch Later" list
+      const videoExists = laterData.laters[0]?.youtube_medias.find((video) => video.id === id)
+
+      // If the video exists, remove it
+      if (videoExists) {
+        removeUpdateVideo()
+        console.log("up")
+      } else {
+        // If the video doesn't exist, add it
+        updateLaterVideo()
+        console.log("down")
+      }
+    }
+  }
   return (
     <Container
       sx={{
@@ -167,7 +241,11 @@ export const VideoContainer = ({ data }) => {
               iconButton={<MoreVertIcon />}
               menuItems={[
                 { icon: <PlaylistPlayIcon />, text: "현재 재생목록에 추가", onClick: () => {} },
-                { icon: <AccessTimeIcon />, text: "나중에 볼 동영상에 저장", onClick: () => {} },
+                {
+                  icon: <AccessTimeIcon />,
+                  text: "나중에 볼 동영상에 저장",
+                  onClick: addLaterVideoHandler,
+                },
 
                 { icon: <PlaylistAddIcon />, text: "재생목록에 저장", onClick: () => {} },
                 { icon: <ReplyIcon />, text: "공유", onClick: () => {} },

@@ -17,6 +17,11 @@
     "youtube_medias": {
       "via": "later",
       "collection": "youtube-media"
+    },
+    "user": {
+      "via": "later",
+      "plugin": "users-permissions",
+      "model": "user"
     }
   }
 }

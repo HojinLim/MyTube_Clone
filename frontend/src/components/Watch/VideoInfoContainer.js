@@ -1,8 +1,7 @@
 import React, { useEffect } from "react"
 import { Container, Typography, Avatar, Button, Box } from "@mui/material"
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined"
-import Grid from "@mui/material/Grid"
-import Tooltip from "@mui/material/Tooltip"
+import IconButton from "@mui/material/IconButton"
 import { useState } from "react"
 import Divider from "@mui/material/Divider"
 
@@ -11,8 +10,13 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp"
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined"
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt"
 import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded"
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
+import ShareIcon from "@mui/icons-material/Share"
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd"
+
 import Stack from "@mui/material/Stack"
 import { timeForBetween } from "functions/timeForBetween"
+import { CustomIconMenu } from "components/common/CustomIconMenu"
 
 export const VideoInfoContainer = ({ currentVideos }) => {
   const { title, subtitle, views, created_at, users_permissions_users } = currentVideos
@@ -64,6 +68,7 @@ export const VideoInfoContainer = ({ currentVideos }) => {
         <Typography variant="h6" gutterBottom>
           {title}
         </Typography>
+
         <div style={{ display: "flex", marginBottom: "15px" }}>
           <Avatar alt="Remy Sharp" src={profileImage} />
           <div style={{ display: "flex", flexDirection: "column", margin: "0px 12px" }}>
@@ -74,55 +79,84 @@ export const VideoInfoContainer = ({ currentVideos }) => {
               구독자 100만명
             </Typography>
           </div>
-          <Button
-            onClick={() => setSubscript((prev) => !prev)}
-            variant="contained"
-            sx={
-              subscript
-                ? {
-                    backgroundColor: "black",
-                    borderRadius: "20px",
-                    maxHeight: "40px",
-                    maxWidth: "150px",
-                    color: "white",
-                  }
-                : {
-                    backgroundColor: "lightgray",
-                    borderRadius: "20px",
-                    maxHeight: "40px",
-                    maxWidth: "150px",
-                    // color: "white",
-                  }
-            }
-          >
-            {subscript && <NotificationsNoneOutlinedIcon />}
-            {subscript ? "구독" : "구독중"}
-          </Button>
 
-          <Stack
-            direction="row"
-            spacing={1}
-            borderRadius={"20px"}
-            padding={"0px 15px"}
-            backgroundColor={"lightgray"}
-            className="hover"
-            justifyContent={"center"}
-            alignItems={"center"}
-            maxHeight="40px"
-            margin={"0px 10px"}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+            <div style={{ display: "flex" }}>
+              <Button
+                onClick={() => setSubscript((prev) => !prev)}
+                variant="contained"
+                sx={
+                  subscript
+                    ? {
+                        backgroundColor: "black",
+                        borderRadius: "20px",
+                        maxHeight: "40px",
+                        maxWidth: "150px",
+                        color: "white",
+                      }
+                    : {
+                        backgroundColor: "lightgray",
+                        borderRadius: "20px",
+                        maxHeight: "40px",
+                        maxWidth: "150px",
+                        // color: "white",
+                      }
+                }
+              >
+                {subscript && <NotificationsNoneOutlinedIcon />}
+                {subscript ? "구독" : "구독중"}
+              </Button>
+            </div>
             <div
-              onClick={thumbUpHandler}
-              style={{ justifyContent: "center", alignItems: "center", display: "flex" }}
+              style={{
+                display: "flex",
+
+                alignItems: "center",
+                // width: "100%",
+              }}
             >
-              {likeCount}
-              {thumbUp ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />}
+              <Stack
+                direction="row"
+                spacing={1}
+                borderRadius={"20px"}
+                padding={"0px 15px"}
+                backgroundColor={"lightgray"}
+                className="hover"
+                height={"40px"}
+                alignItems={"center"}
+              >
+                <div
+                  onClick={thumbUpHandler}
+                  style={{ justifyContent: "center", alignItems: "center", display: "flex" }}
+                >
+                  {likeCount}
+                  {thumbUp ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />}
+                </div>
+                <Divider orientation="vertical" />
+                <div onClick={thumbDownHandler}>
+                  {thumbDown ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />}
+                </div>
+              </Stack>
+              <IconButton
+                size="small"
+                style={{
+                  backgroundColor: "lightgray",
+                  borderRadius: "100px",
+                  height: "40px",
+                  width: "40px",
+                  margin: "0px 5px",
+                  color: "black",
+                }}
+              >
+                <ShareIcon />
+              </IconButton>
+              <CustomIconMenu
+                style={{ backgroundColor: "lightgray", borderRadius: "20px" }}
+                iconButton={<MoreHorizIcon />}
+                menuItems={[{ icon: <PlaylistAddIcon />, text: "저장", onclick: () => {} }]}
+              />
             </div>
-            <Divider orientation="vertical" />
-            <div onClick={thumbDownHandler}>
-              {thumbDown ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />}
-            </div>
-          </Stack>
+          </div>
         </div>
         <Box
           style={{

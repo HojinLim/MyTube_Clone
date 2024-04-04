@@ -182,3 +182,34 @@ export const CREATE_COMMENT = gql`
     }
   }
 `
+
+// 나중에 볼 영상
+
+export const CREATE_LATER = gql`
+  mutation createLater($uid: String, $youtube_id: [ID]) {
+    createLater(input: { data: { uid: $uid, youtube_medias: $youtube_id } }) {
+      later {
+        id
+        uid
+        youtube_medias {
+          title
+          description
+        }
+      }
+    }
+  }
+`
+export const UPDATE_LATER = gql`
+  mutation updateLaterVideo($id: ID!, $uid: String, $youtube_id: [ID]) {
+    updateLater(input: { where: { id: $id }, data: { uid: $uid, youtube_medias: $youtube_id } }) {
+      later {
+        id
+        youtube_medias {
+          id
+          title
+          description
+        }
+      }
+    }
+  }
+`

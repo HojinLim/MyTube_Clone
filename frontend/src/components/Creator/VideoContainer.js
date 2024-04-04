@@ -12,7 +12,6 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import { VideoContainer as Video } from "components/common/VideoContainer"
 import { dummyData } from "dummy"
 
-import { styled } from "@mui/material/styles"
 import { StyledGrid } from "styles/globalStyle"
 
 export const VideoContainer = () => {

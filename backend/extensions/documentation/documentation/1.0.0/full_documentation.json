@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "04/03/2024 2:46:35 PM"
+    "x-generation-date": "04/04/2024 3:05:23 PM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -5497,6 +5497,75 @@
               }
             }
           },
+          "user": {
+            "required": [
+              "id",
+              "username",
+              "email"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "resetPasswordToken": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "blocked": {
+                "type": "boolean"
+              },
+              "role": {
+                "type": "string"
+              },
+              "try": {
+                "type": "integer"
+              },
+              "profileImage": {
+                "type": "string"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "subscribers": {
+                "type": "object"
+              },
+              "tests": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "youtube_medias": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "later": {
+                "type": "string"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -5512,6 +5581,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "user": {
+            "type": "string"
           },
           "published_at": {
             "type": "datetime"
@@ -5698,7 +5770,13 @@
                   "type": "string"
                 }
               },
-              "youtube_media": {
+              "youtube_medias": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "later": {
                 "type": "string"
               },
               "created_by": {
@@ -6092,6 +6170,9 @@
                   "type": "string"
                 }
               },
+              "user": {
+                "type": "string"
+              },
               "published_at": {
                 "type": "datetime"
               },
@@ -6157,7 +6238,13 @@
                     "type": "string"
                   }
                 },
-                "youtube_media": {
+                "youtube_medias": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "later": {
                   "type": "string"
                 },
                 "created_by": {
@@ -6350,7 +6437,13 @@
                     "type": "string"
                   }
                 },
-                "youtube_media": {
+                "youtube_medias": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "later": {
                   "type": "string"
                 },
                 "created_by": {
@@ -6512,7 +6605,77 @@
               }
             }
           },
-          "youtube_media": {
+          "youtube_medias": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "contents": {
+                  "type": "string"
+                },
+                "isPublic": {
+                  "type": "boolean"
+                },
+                "thumbnail": {
+                  "type": "string"
+                },
+                "createdBy": {
+                  "type": "string"
+                },
+                "duration": {
+                  "type": "string"
+                },
+                "sort": {
+                  "type": "string"
+                },
+                "views": {
+                  "type": "integer"
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "tests": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "liked": {
+                  "type": "string"
+                },
+                "later": {
+                  "type": "string"
+                },
+                "users_permissions_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "published_at": {
+                  "type": "datetime"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "later": {
             "required": [
               "id"
             ],
@@ -6520,53 +6683,17 @@
               "id": {
                 "type": "string"
               },
-              "title": {
+              "uid": {
                 "type": "string"
               },
-              "description": {
-                "type": "string"
-              },
-              "contents": {
-                "type": "string"
-              },
-              "isPublic": {
-                "type": "boolean"
-              },
-              "thumbnail": {
-                "type": "string"
-              },
-              "createdBy": {
-                "type": "string"
-              },
-              "duration": {
-                "type": "string"
-              },
-              "sort": {
-                "type": "string"
-              },
-              "views": {
-                "type": "integer"
-              },
-              "comment": {
-                "type": "string"
-              },
-              "tests": {
+              "youtube_medias": {
                 "type": "array",
                 "items": {
                   "type": "string"
                 }
               },
-              "liked": {
+              "user": {
                 "type": "string"
-              },
-              "later": {
-                "type": "string"
-              },
-              "users_permissions_users": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
               },
               "published_at": {
                 "type": "datetime"
@@ -6634,7 +6761,13 @@
               "type": "string"
             }
           },
-          "youtube_media": {
+          "youtube_medias": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "later": {
             "type": "string"
           },
           "created_by": {

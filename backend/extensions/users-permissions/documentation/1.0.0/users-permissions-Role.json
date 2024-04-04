@@ -576,7 +576,13 @@
                     "type": "string"
                   }
                 },
-                "youtube_media": {
+                "youtube_medias": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "later": {
                   "type": "string"
                 },
                 "created_by": {

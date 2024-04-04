@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 
-export const CustomIconMenu = ({ iconButton, menuItems }) => {
+export const CustomIconMenu = ({ style, iconButton, menuItems }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -18,7 +18,7 @@ export const CustomIconMenu = ({ iconButton, menuItems }) => {
   return (
     <div>
       <IconButton
-        style={{ color: "black" }}
+        style={style ? { ...style, color: "black" } : { color: "black" }}
         id="custom-menu-button"
         aria-controls={open ? "custom-menu" : undefined}
         aria-haspopup="true"
