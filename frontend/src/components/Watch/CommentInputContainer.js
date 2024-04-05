@@ -47,7 +47,7 @@ export const CommentInputContainer = ({ subId, numOfComments }) => {
           <Typography>정렬 기준</Typography>
         </div>
 
-        <CommentInput />
+        <CommentInput subId={subId} />
       </div>
     </Container>
   )

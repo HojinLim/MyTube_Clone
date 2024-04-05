@@ -7,11 +7,11 @@ import { PlayListSide } from "components/PlayList/PlayListSide"
 import { useLazyQuery } from "@apollo/client"
 import { GET_LATER_BY_UID } from "apollo/query"
 import { USER_INFO } from "Constants/value"
-import useLaterData from "hooks/useLaterData"
+import useUserData from "hooks/useUserData"
 export const LaterPage = () => {
   const user = localStorage.getItem(USER_INFO) ?? ""
 
-  const { data, loading, error, getLaterByUid } = useLaterData()
+  const { data, loading, error, getLaterByUid } = useUserData()
   useEffect(() => {
     if (!error && !loading && data) {
       console.log(data.laters.length)

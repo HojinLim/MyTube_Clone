@@ -87,9 +87,10 @@ export const GET_COMMENTS_BY_ID = gql`
     }
   }
 `
-export const GET_LIKES_BY_UID = gql`
-  query findLikedByUID($uid: String) {
-    likeds(where: { uid: $uid }) {
+
+export const GET_LATER_BY_UID = gql`
+  query findLaterByUID($uid: String) {
+    laters(where: { uid: $uid }) {
       id
       youtube_medias {
         id
@@ -105,10 +106,11 @@ export const GET_LIKES_BY_UID = gql`
     }
   }
 `
-
-export const GET_LATER_BY_UID = gql`
-  query findLaterByUID($uid: String) {
-    laters(where: { uid: $uid }) {
+// 좋아요 영상
+// *READ*
+export const GET_LIKES_BY_UID = gql`
+  query findLikedByUID($uid: String) {
+    likeds(where: { uid: $uid }) {
       id
       youtube_medias {
         id

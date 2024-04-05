@@ -571,23 +571,20 @@
                 "comment": {
                   "type": "string"
                 },
-                "tests": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "liked": {
-                  "type": "string"
-                },
-                "later": {
-                  "type": "string"
-                },
                 "users_permissions_users": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   }
+                },
+                "like_youtube_medias_user": {
+                  "type": "string"
+                },
+                "dislike_youtube_medias_user": {
+                  "type": "string"
+                },
+                "later_youtube_medias_user": {
+                  "type": "string"
                 },
                 "published_at": {
                   "type": "datetime"

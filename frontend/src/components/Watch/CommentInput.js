@@ -22,7 +22,7 @@ import TextField from "@mui/material/TextField"
 import { useMutation } from "@apollo/client"
 import { CREATE_COMMENT } from "apollo/mutation"
 import { USER_INFO } from "Constants/value"
-export const CommentInput = () => {
+export const CommentInput = ({ subId }) => {
   const [text, setText] = useState()
   const [createComment, { data, error, loading }] = useMutation(CREATE_COMMENT)
 

@@ -63,20 +63,32 @@
     "locale": {
       "type": "string"
     },
-    "subscribers": {
-      "type": "json"
-    },
-    "tests": {
-      "collection": "test",
-      "via": "users_permissions_user"
-    },
     "youtube_medias": {
       "collection": "youtube-media",
       "via": "users_permissions_users"
     },
-    "later": {
-      "model": "later",
-      "via": "user"
+    "subscribed_channels": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "users",
+      "dominant": true
+    },
+    "users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "subscribed_channels"
+    },
+    "like_youtube_medias": {
+      "collection": "youtube-media",
+      "via": "like_youtube_medias_user"
+    },
+    "dislike_youtube_medias": {
+      "collection": "youtube-media",
+      "via": "dislike_youtube_medias_user"
+    },
+    "later_youtube_medias": {
+      "collection": "youtube-media",
+      "via": "later_youtube_medias_user"
     }
   }
 }

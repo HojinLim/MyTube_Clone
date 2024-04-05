@@ -10,18 +10,22 @@ import { stringToSeconds } from "functions/stringToSeconds"
 import { secondsToTime } from "functions/secondsToTime"
 import { timeForBetween } from "functions/timeForBetween"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
+import Alert from "@mui/material/Alert"
+
 // Icons
+import CheckIcon from "@mui/icons-material/Check"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay"
 import ReplyIcon from "@mui/icons-material/Reply"
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
-import useLaterData from "hooks/useLaterData"
+import useUserData from "hooks/useUserData"
 import { USER_INFO } from "Constants/value"
 import { useLazyQuery, useMutation } from "@apollo/client"
 import { CREATE_LATER } from "apollo/mutation"
 import { GET_LATER_BY_UID } from "apollo/query"
 import { UPDATE_LATER } from "apollo/mutation"
+import { AlertContainer } from "components/common/AlertContainer"
 
 export const VideoContainer = ({ data }) => {
   // const { thumb, title, subtitle, sources, duration } = data
@@ -41,7 +45,6 @@ export const VideoContainer = ({ data }) => {
     contents,
   } = data
   const { profileImage } = users_permissions_users[0]
-  console.log(data)
 
   const [hover, setHover] = useState(false)
   // const [timer, setTimer] = useState(0)
@@ -50,6 +53,9 @@ export const VideoContainer = ({ data }) => {
   const [playTime, setPlayTime] = useState(0)
   const [playedTime, setPlayedTime] = useState("0:00")
   const [startVideo, setStartVideo] = useState(false)
+
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useMemo(() => {
     setPlayedTime(secondsToTime(Math.trunc(playTime)))
@@ -74,14 +80,31 @@ export const VideoContainer = ({ data }) => {
     laterData.laters[0].youtube_medias.map((data) => arr.push(data.id))
 
     updateLater({ variables: { id: laterData.laters[0].id, youtube_id: arr, uid: id } })
-    console.log(arr)
+      .then(() => {
+        setSuccessMessage("재생목록 추가 완료!")
+        setErrorMessage(null)
+        getLaterByUid({ variables: user.uid }).then((result) => result.data)
+      })
+      .catch((error) => {
+        setSuccessMessage(null)
+        setErrorMessage(error.message) // You should provide a meaningful error message
+      })
+
+    console.log(arr) // arr after pushing the ids
   }
+
   const removeUpdateVideo = () => {
     let arr = []
     laterData.laters[0].youtube_medias
       .filter((data) => id !== data.id)
       .map((value) => arr.push(value.id))
     updateLater({ variables: { id: laterData.laters[0].id, youtube_id: arr, uid: id } })
+      .then(() => {
+        setSuccessMessage(null)
+        setErrorMessage("재생목록 삭제 완료")
+        getLaterByUid({ variables: user.uid }).then((result) => result.data)
+      })
+      .catch()
     console.log(arr)
   }
 
@@ -99,17 +122,6 @@ export const VideoContainer = ({ data }) => {
         createDefaultArray({ variables: { uid: user.uid, youtube_id: [] } })
         // 껍데기는 있음
       } else {
-        // 해당 영상이 있는지 확인
-
-        // 있으면 update로 해당 영상 빼기
-
-        if (laterData.laters[0].youtube_medias.find((data) => id == data.id)) {
-          removeUpdateVideo()
-        } else {
-          // 없으면
-          // update로 해당 영상 추가
-          updateLaterVideo()
-        }
       }
     }
     console.log(laterData)
@@ -151,6 +163,10 @@ export const VideoContainer = ({ data }) => {
         padding: "auto",
       }}
     >
+      {successMessage && (
+        <AlertContainer type="success" message={successMessage} onClose={() => {}} />
+      )}
+      {errorMessage && <AlertContainer type="error" message={errorMessage} onClose={() => {}} />}
       <Box
         sx={{
           position: "relative",
@@ -208,6 +224,7 @@ export const VideoContainer = ({ data }) => {
           {hover ? `${playedTime} / ${duration}` : `${duration ?? "00:00"}`}
         </Typography>
       </Box>
+
       {/* 프로필, 제목, 조회수 */}
       <Container
         sx={{

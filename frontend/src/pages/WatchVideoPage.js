@@ -201,6 +201,7 @@ export const WatchVideoPage = () => {
               : { borderRadius: "20px" }
           }
         >
+          {loading && <div>loadding..</div>}
           {currentVideos && (
             <ReactPlayer
               ref={playerRef}

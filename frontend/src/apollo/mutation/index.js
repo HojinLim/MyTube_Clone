@@ -213,3 +213,33 @@ export const UPDATE_LATER = gql`
     }
   }
 `
+// 좋아요 영상
+// *UPDATE*
+
+// export const UPDATE_LIKES = gql`
+//   mutation updateLikeVideo(
+//     $id: ID!
+//     $uid: String
+//     $like_youtube_id: [ID]
+//     $dislike_youtube_id: [ID]
+//   ) {
+//     updateLiked(
+//       input: {
+//         where: { id: $id }
+//         data: { uid: $uid, like_medias: $like_youtube_id, dislike_medias: $dislike_youtube_id }
+//     ) {
+//       liked {
+//         id
+//         like_medias {
+//           id
+//           title
+//           description
+//         }
+//         dislike_medias {
+//           id
+//           title
+//         }
+//       }
+//     }
+//   }
+// `

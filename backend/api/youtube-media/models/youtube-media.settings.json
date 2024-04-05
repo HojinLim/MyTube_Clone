@@ -65,23 +65,26 @@
       "model": "comments",
       "via": "youtube_medias"
     },
-    "tests": {
-      "collection": "test",
-      "via": "youtube_media"
-    },
-    "liked": {
-      "model": "liked",
-      "via": "youtube_medias"
-    },
-    "later": {
-      "model": "later",
-      "via": "youtube_medias"
-    },
     "users_permissions_users": {
       "via": "youtube_medias",
       "plugin": "users-permissions",
       "collection": "user",
       "dominant": true
+    },
+    "like_youtube_medias_user": {
+      "via": "like_youtube_medias",
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "dislike_youtube_medias_user": {
+      "via": "dislike_youtube_medias",
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "later_youtube_medias_user": {
+      "via": "later_youtube_medias",
+      "plugin": "users-permissions",
+      "model": "user"
     }
   }
 }
