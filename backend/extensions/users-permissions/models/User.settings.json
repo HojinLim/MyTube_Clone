@@ -63,32 +63,26 @@
     "locale": {
       "type": "string"
     },
-    "youtube_medias": {
+    "subscribes": {
+      "via": "sub_users",
       "collection": "youtube-media",
-      "via": "users_permissions_users"
-    },
-    "subscribed_channels": {
-      "plugin": "users-permissions",
-      "collection": "user",
-      "via": "users",
       "dominant": true
     },
-    "users": {
-      "plugin": "users-permissions",
-      "collection": "user",
-      "via": "subscribed_channels"
+    "youtube": {
+      "via": "later_users",
+      "model": "youtube-media"
     },
-    "like_youtube_medias": {
-      "collection": "youtube-media",
-      "via": "like_youtube_medias_user"
+    "dislike_youtube": {
+      "via": "dislike_user",
+      "model": "youtube-media"
     },
-    "dislike_youtube_medias": {
-      "collection": "youtube-media",
-      "via": "dislike_youtube_medias_user"
+    "like_youtube": {
+      "via": "like_user",
+      "model": "youtube-media"
     },
-    "later_youtube_medias": {
-      "collection": "youtube-media",
-      "via": "later_youtube_medias_user"
+    "created_youtube": {
+      "via": "created",
+      "model": "youtube-media"
     }
   }
 }

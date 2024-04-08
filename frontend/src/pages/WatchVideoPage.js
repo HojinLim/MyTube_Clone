@@ -113,13 +113,16 @@ export const WatchVideoPage = () => {
   const videoId = params.id
   const { loading, error, data: videos } = useQuery(GET_ALL_VIDEOS)
 
+  const getData = async () => {
+    const video = await videos.youtubeMedias.find((video) => video.id === videoId)
+    const restVideos = await videos.youtubeMedias.filter((video) => video.id !== videoId)
+
+    setCurrentVideos(video)
+    setRestVideos(restVideos)
+  }
   useEffect(() => {
     if (!loading && !error) {
-      const video = videos.youtubeMedias.find((video) => video.id === videoId)
-      const restVideos = videos.youtubeMedias.filter((video) => video.id !== videoId)
-
-      setCurrentVideos(video)
-      setRestVideos(restVideos)
+      getData()
     }
   }, [loading, error, videos])
 
@@ -147,6 +150,9 @@ export const WatchVideoPage = () => {
       screenfull.off("change")
     }
   }, [])
+  const getComments = async () => {
+    await getCommentsById({ variables: { subId: videoId } })
+  }
 
   const [getCommentsById, { loading: commentsLoading, error: commentError, data: commentData }] =
     useLazyQuery(GET_COMMENTS_BY_ID)
@@ -157,7 +163,7 @@ export const WatchVideoPage = () => {
   }, [commentsLoading, commentError, commentData])
 
   useEffect(() => {
-    getCommentsById({ variables: { subId: videoId } })
+    getComments()
   }, [])
 
   const VideoPlaySlider = styled(Slider)({
@@ -354,7 +360,12 @@ export const WatchVideoPage = () => {
             {/* 영상 정보 컨테이너 */}
 
             <div className="screen_info_container" style={isFullscreen ? { display: "none" } : {}}>
-              <VideoInfoContainer currentVideos={currentVideos ?? ""} />
+              <VideoInfoContainer
+                loading={loading}
+                error={error}
+                currentVideos={currentVideos ?? ""}
+                getData={getData}
+              />
 
               {/* 댓글 작성 컨테이터 */}
               <CommentInputContainer
@@ -382,7 +393,11 @@ export const WatchVideoPage = () => {
             >
               {commentData?.comments?.map((data, key) => (
                 <>
-                  <UserFeedBackContainer comment={data} />
+                  <UserFeedBackContainer
+                    commentsLoading={commentsLoading}
+                    getComments={getComments}
+                    comment={data}
+                  />
                 </>
               ))}
             </div>

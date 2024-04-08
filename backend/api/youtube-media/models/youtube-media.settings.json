@@ -2,7 +2,7 @@
   "kind": "collectionType",
   "collectionName": "youtube_medias",
   "info": {
-    "name": "youtube-media",
+    "name": "youtube",
     "description": ""
   },
   "options": {
@@ -65,26 +65,30 @@
       "model": "comments",
       "via": "youtube_medias"
     },
-    "users_permissions_users": {
-      "via": "youtube_medias",
+    "sub_users": {
       "plugin": "users-permissions",
       "collection": "user",
-      "dominant": true
+      "via": "subscribes"
     },
-    "like_youtube_medias_user": {
-      "via": "like_youtube_medias",
+    "later_users": {
       "plugin": "users-permissions",
-      "model": "user"
+      "collection": "user",
+      "via": "youtube"
     },
-    "dislike_youtube_medias_user": {
-      "via": "dislike_youtube_medias",
+    "dislike_user": {
       "plugin": "users-permissions",
-      "model": "user"
+      "collection": "user",
+      "via": "dislike_youtube"
     },
-    "later_youtube_medias_user": {
-      "via": "later_youtube_medias",
+    "like_user": {
       "plugin": "users-permissions",
-      "model": "user"
+      "collection": "user",
+      "via": "like_youtube"
+    },
+    "created": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "created_youtube"
     }
   }
 }

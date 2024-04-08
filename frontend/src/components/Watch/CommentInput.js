@@ -24,6 +24,7 @@ import { CREATE_COMMENT } from "apollo/mutation"
 import { USER_INFO } from "Constants/value"
 export const CommentInput = ({ subId }) => {
   const [text, setText] = useState()
+
   const [createComment, { data, error, loading }] = useMutation(CREATE_COMMENT)
 
   // 유저 정보 가져오기

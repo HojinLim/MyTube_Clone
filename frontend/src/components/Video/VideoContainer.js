@@ -36,7 +36,7 @@ export const VideoContainer = ({ data }) => {
     sources,
     duration,
     id,
-    users_permissions_users,
+    user: userInfo,
     createdBy,
     description,
     isPublic,
@@ -44,7 +44,7 @@ export const VideoContainer = ({ data }) => {
     thumbnail: thumb,
     contents,
   } = data
-  const { profileImage } = users_permissions_users[0]
+  // const { profileImage } = userInfo[0]
 
   const [hover, setHover] = useState(false)
   // const [timer, setTimer] = useState(0)
@@ -234,7 +234,7 @@ export const VideoContainer = ({ data }) => {
           overflow: "hidden",
         }}
       >
-        <Avatar alt="Remy Sharp" src={profileImage} />
+        {/* <Avatar alt="Remy Sharp" src={profileImage} /> */}
         <Container
           sx={{
             flexGrow: 1,

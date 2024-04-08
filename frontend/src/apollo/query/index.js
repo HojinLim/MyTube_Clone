@@ -28,7 +28,7 @@ export const FIND_USER_ID_BY_NAME = gql`
 `
 
 export const GET_ALL_VIDEOS = gql`
-  query AllYoutubeMedia {
+  query AllYoutube {
     youtubeMedias {
       id
       description
@@ -45,10 +45,18 @@ export const GET_ALL_VIDEOS = gql`
       thumbnail {
         url
       }
-      users_permissions_users {
+      created {
         id
         profileImage
-        username
+      }
+      sub_users {
+        id
+      }
+      later_users {
+        id
+      }
+      like_user {
+        id
       }
     }
   }

@@ -4,6 +4,7 @@ import Container from "@mui/material/Container"
 import { IconButton, Button } from "@mui/material"
 
 import Typography from "@mui/material/Typography"
+import TextField from "@mui/material/TextField"
 
 // Icons
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt"
@@ -19,16 +20,21 @@ import { DELETE_COMMENT } from "apollo/mutation"
 import { useMutation } from "@apollo/client"
 import { USER_INFO } from "Constants/value"
 import { CommentInput } from "./Watch/CommentInput"
+import { UPDATE_COMMENT } from "apollo/mutation"
 // import { EditOutlinedIcon } from "Constants/value"
 {
   /* eslint-disable react/prop-types  */
 }
-export const UserFeedBackContainer = ({ comment }) => {
-  const { id, username, contents, profileImage, created_at } = comment
-  const user = JSON.parse(localStorage.getItem(USER_INFO))
+export const UserFeedBackContainer = ({ commentsLoading, getComments, comment }) => {
+  const [isEdit, setIsEdit] = useState(false)
 
+  const { id, username, contents, profileImage, created_at } = comment
+
+  const user = JSON.parse(localStorage.getItem(USER_INFO))
+  const [text, setText] = useState(contents ?? "")
   const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] =
     useMutation(DELETE_COMMENT)
+  const [updateComment] = useMutation(UPDATE_COMMENT)
   const deleteCommentHandler = async () => {
     try {
       const res = await deleteComment({ variables: { id: id } })
@@ -40,6 +46,7 @@ export const UserFeedBackContainer = ({ comment }) => {
       // 에러 처리
     }
   }
+
   return (
     <Container
       sx={{
@@ -79,16 +86,35 @@ export const UserFeedBackContainer = ({ comment }) => {
               </Typography>
             </div>
             {/* eslint-disable react/prop-types  */}
-            <Typography variant="h6" gutterBottom>
-              {contents}
-            </Typography>
+            {isEdit ? (
+              <TextField
+                value={text}
+                onChange={(e) => {
+                  if (!commentsLoading) setText(e.target.value)
+                }}
+                id="standard-basic"
+                label="댓글 추가..."
+                variant="standard"
+                fullWidth
+              />
+            ) : (
+              <Typography variant="h6" gutterBottom>
+                {commentsLoading ? "로딩중" : contents}
+              </Typography>
+            )}
           </div>
           {user.name == username && (
             <div>
               <CustomIconMenu
                 iconButton={<MoreVertIcon />}
                 menuItems={[
-                  { icon: <EditOutlinedIcon />, text: "수정", onClick: () => {} },
+                  {
+                    icon: <EditOutlinedIcon />,
+                    text: "수정",
+                    onClick: () => {
+                      setIsEdit((prev) => !prev)
+                    },
+                  },
                   {
                     icon: <DeleteOutlineOutlinedIcon />,
                     text: "삭제",
@@ -111,7 +137,15 @@ export const UserFeedBackContainer = ({ comment }) => {
           <Button sx={{ borderRadius: "50px" }}>
             <ThumbDownOffAltIcon sx={{ width: "20px" }} />
           </Button>
-          <Button onClick={() => {}}>답글</Button>
+          <Button
+            onClick={() => {
+              updateComment({ variables: { id: id, contents: text } })
+              setIsEdit(false)
+              getComments()
+            }}
+          >
+            {isEdit ? "수정" : "답글"}
+          </Button>
         </div>
         {/* <CommentInput /> */}
       </Container>

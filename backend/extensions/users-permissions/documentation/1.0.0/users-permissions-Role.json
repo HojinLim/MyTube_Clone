@@ -567,41 +567,23 @@
                 "locale": {
                   "type": "string"
                 },
-                "youtube_medias": {
+                "subscribes": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   }
                 },
-                "subscribed_channels": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                "youtube": {
+                  "type": "string"
                 },
-                "users": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                "dislike_youtube": {
+                  "type": "string"
                 },
-                "like_youtube_medias": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                "like_youtube": {
+                  "type": "string"
                 },
-                "dislike_youtube_medias": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "later_youtube_medias": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                "created_youtube": {
+                  "type": "string"
                 },
                 "created_by": {
                   "type": "string"

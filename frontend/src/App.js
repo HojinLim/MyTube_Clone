@@ -1,6 +1,6 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { GoogleOAuthProvider } from "@react-oauth/google"
-import { HomePage } from "pages/HomePage"
+
 import React from "react"
 import "./styles.css"
 import Router from "router"
@@ -36,20 +36,6 @@ const theme = createTheme({
     ].join(","),
   },
 })
-
-// const authLink = setContext((_, { headers }) => {
-//   // get the authentication token from local storage if it exists
-//   const token = localStorage.getItem("strapi-token")
-//   // return the headers to the context so httpLink can read them
-//   return {
-//     headers: {
-//       ...headers,
-//       authorization: token ? `Bearer ${token}` : "",
-//     },
-//   }
-// })
-// const client = new ApolloClient({
-//   link: authLink.concat(createHttpLink({ uri: process.env.REACT_APP_BACKEND_URL })),
 
 const client = new ApolloClient({
   link: createHttpLink({ uri: process.env.REACT_APP_BACKEND_URL }),

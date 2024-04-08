@@ -199,16 +199,49 @@ export const CREATE_LATER = gql`
     }
   }
 `
+// export const UPDATE_LATER = gql`
+//   mutation updateLaterVideo($id: ID!, $uid: String, $youtube_id: [ID]) {
+//     updateLater(input: { where: { id: $id }, data: { uid: $uid, youtube_medias: $youtube_id } }) {
+//       later {
+//         id
+//         youtube_medias {
+//           id
+//           title
+//           description
+//         }
+//       }
+//     }
+//   }
+// `
 export const UPDATE_LATER = gql`
-  mutation updateLaterVideo($id: ID!, $uid: String, $youtube_id: [ID]) {
-    updateLater(input: { where: { id: $id }, data: { uid: $uid, youtube_medias: $youtube_id } }) {
-      later {
+  mutation updateLaterVideo($id: ID!, $later_users: [ID]) {
+    updateYoutubeMedia(input: { where: { id: $id }, data: { later_users: $later_users } }) {
+      youtubeMedia {
         id
-        youtube_medias {
+        later_users {
           id
-          title
-          description
         }
+      }
+    }
+  }
+`
+export const UPDATE_SUB = gql`
+  mutation updateSubVideo($id: ID!, $sub_users: [ID]) {
+    updateYoutubeMedia(input: { where: { id: $id }, data: { sub_users: $sub_users } }) {
+      youtubeMedia {
+        id
+        sub_users {
+          id
+        }
+      }
+    }
+  }
+`
+export const UPDATE_COMMENT = gql`
+  mutation updateComment($id: ID!, $contents: String) {
+    updateComment(input: { where: { id: $id }, data: { contents: $contents } }) {
+      comment {
+        id
       }
     }
   }
