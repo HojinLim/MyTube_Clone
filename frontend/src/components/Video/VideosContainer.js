@@ -11,8 +11,8 @@ export default function VideosContainer() {
   const [dummy, setDummy] = React.useState()
   const [videoDatas, setVideoDatas] = React.useState()
 
-  const { loading, error, data: videos } = useQuery(GET_ALL_VIDEOS)
-
+  const { loading, error, data: videos, refetch } = useQuery(GET_ALL_VIDEOS)
+  console.log(videos)
   useEffect(() => {
     console.log(videos)
   }, [loading, error, videos])
@@ -26,7 +26,9 @@ export default function VideosContainer() {
       <StyledGrid>
         {!error &&
           !loading &&
-          videos.youtubeMedias.map((data, key) => <VideoContainer key={key} data={data} />)}
+          videos.youtubeMedias.map((data, key) => (
+            <VideoContainer key={key} data={data} refetch={refetch} loading={loading} />
+          ))}
       </StyledGrid>
     </>
   )

@@ -22,7 +22,7 @@ import { Link } from "react-router-dom"
 import OpinionDrawer from "./opinion/OpinionDrawer"
 import { useNavigate } from "react-router-dom"
 import { STRAPI_TOKEN } from "Constants/value"
-
+// onCompleted: setFollow(true)
 export const UserProfileButton = () => {
   const navi = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -42,6 +42,7 @@ export const UserProfileButton = () => {
     localStorage.removeItem("user")
     localStorage.removeItem(STRAPI_TOKEN)
     setUser(null)
+    navi("/")
     window.location.reload()
     alert("로그아웃 되었습니다.")
   }

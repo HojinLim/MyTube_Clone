@@ -68,10 +68,6 @@
       "collection": "youtube-media",
       "dominant": true
     },
-    "youtube": {
-      "via": "later_users",
-      "model": "youtube-media"
-    },
     "dislike_youtube": {
       "via": "dislike_user",
       "model": "youtube-media"
@@ -80,9 +76,13 @@
       "via": "like_user",
       "model": "youtube-media"
     },
-    "created_youtube": {
-      "via": "created",
-      "model": "youtube-media"
+    "youtubes": {
+      "via": "later_users",
+      "collection": "youtube-media"
+    },
+    "created_youtubes": {
+      "via": "created_user",
+      "collection": "youtube-media"
     }
   }
 }

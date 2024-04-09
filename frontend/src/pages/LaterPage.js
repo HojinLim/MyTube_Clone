@@ -2,31 +2,32 @@ import React, { useEffect } from "react"
 
 import { VideoItem } from "components/later/VideoItem"
 import { MenuSelector } from "components/common/MenuSelector"
-import { dummyData } from "dummy"
+
 import { PlayListSide } from "components/PlayList/PlayListSide"
-import { useLazyQuery } from "@apollo/client"
-import { GET_LATER_BY_UID } from "apollo/query"
-import { USER_INFO } from "Constants/value"
-import useUserData from "hooks/useUserData"
+
+import { useRecoilValue } from "recoil"
+import { accountState } from "atom/accountState"
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client"
+import { GET_LATER_VIDEO_BY_ID } from "apollo/query"
+
 export const LaterPage = () => {
-  const user = localStorage.getItem(USER_INFO) ?? ""
+  const user = useRecoilValue(accountState)
 
-  const { data, loading, error, getLaterByUid } = useUserData()
+  const [getLaterVideo, { data, error, loading, called }] = useLazyQuery(GET_LATER_VIDEO_BY_ID)
+
   useEffect(() => {
-    if (!error && !loading && data) {
-      console.log(data.laters.length)
-      console.log(data)
+    if (!called || loading) {
+      getLaterVideo({ variables: { id: "26" } })
     }
-  }, [data, loading, error])
+    console.log(data?.youtubeMedias)
+  }, [data])
 
-  useEffect(() => {
-    getLaterByUid({ variables: { uid: user.uid } })
-  }, [])
+  // console.log(data?.youtube_medias)
   return (
     <div>
       <PlayListSide
-        datas={data?.laters[0]?.youtube_medias[0]}
-        length={data?.laters[0]?.youtube_medias?.length}
+        datas={data?.youtubeMedias[0]}
+        length={data?.youtubeMedias?.length}
         sideTitle={"나중에 볼 영상"}
       />
 
@@ -37,9 +38,9 @@ export const LaterPage = () => {
           <MenuSelector categories={["전체", "동영상", "Shorts"]} />
         </div>
 
-        {data?.laters[0]?.youtube_medias?.map((data, key) => (
+        {data?.youtubeMedias?.map((data, key) => (
           <div key={key}>
-            <VideoItem datas={data} key={key} />
+            <VideoItem datas={data} />
           </div>
         ))}
       </div>

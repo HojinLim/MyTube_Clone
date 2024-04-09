@@ -15,9 +15,10 @@ import { timeForBetween } from "functions/timeForBetween"
 
 export const PlayListSide = ({ datas, length, sideTitle, background }) => {
   const navigate = useNavigate()
-  if (!datas) return null
-  console.log(datas)
-  const { id, thumbnail, title, subtitle, views, createdBy, created_at, sources, duration } = datas
+
+  if (!datas) return null // datas가 없을 때 null을 반환하여 오류 방지
+
+  const { id, thumbnail, title, createdBy, created_at } = datas
   return (
     <div className="later_outer">
       <div className="later_inner_outer" style={{ backgroundColor: background }}>

@@ -20,11 +20,20 @@ import { USER_INFO } from "Constants/value"
 import { useMutation } from "@apollo/client"
 import { UPDATE_LATER } from "apollo/mutation"
 import { UPDATE_SUB } from "apollo/mutation"
+import { useRecoilValue } from "recoil"
+import { accountState } from "atom/accountState"
 
-export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, getData }) => {
+export const VideoInfoContainer = ({
+  error: err,
+  loading: load,
+  currentVideos,
+  getData,
+  refetch,
+}) => {
   const { id, title, subtitle, views, created_at, created, sub_users, later_users, like_user } =
     currentVideos
-  const user = JSON.parse(localStorage.getItem(USER_INFO)) ?? ""
+  // const user = JSON.parse(localStorage.getItem(USER_INFO)) ?? ""
+  const user = useRecoilValue(accountState)
 
   const { profileImage, username } = !created ? {} : created
 
@@ -33,19 +42,31 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
   const [likeCount, setLikeCount] = useState()
 
   const [subed, setSubed] = useState()
-
+  const [globalArr, setGlobalArr] = useState([])
   const [subscript, setSubscript] = useState(false)
   const [updateLater, { loading, error }] = useMutation(UPDATE_LATER)
   const [updateSub, { updateLoading, updateError }] = useMutation(UPDATE_SUB)
 
+  let arr = []
+
+  useEffect(() => {
+    let glob = []
+    sub_users?.map((data) => glob.push(data.id))
+    setGlobalArr(glob)
+    console.log("sub_users", sub_users)
+
+    const isStored = sub_users?.find((data) => data?.id == user?.uid)
+    console.log("store", isStored)
+    setSubed(isStored.id ? true : false)
+    console.log("sub", subed)
+  }, [sub_users, refetch])
+
   useEffect(() => {
     if (!err && !load) {
-      // setSubed()
       setLikeCount(like_user.length)
 
-      if (sub_users && sub_users.length > 0 && sub_users[0]?.id == user.uid) {
+      if (arr.includes(user.uid)) {
         setSubed(true)
-        // console.log("구독상태")
       } else {
         setSubed(false)
       }
@@ -53,7 +74,6 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
   }, [currentVideos, sub_users])
 
   if (later_users && later_users.length > 0 && later_users[0]?.id == user.uid) {
-    // console.log("나중에보기 영상 추가 상태")
   }
   const thumbUpHandler = () => {
     setThumbup((prev) => !prev)
@@ -75,20 +95,27 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
   }
 
   const handleUpdateSub = async () => {
-    try {
-      // 비동기 작업을 수행하고 업데이트한 후에 상태를 업데이트합니다.
-
-      const res = await updateSub({
-        variables: { id: id, sub_users: ["26"] },
+    // 비동기 작업을 수행하고 업데이트한 후에 상태를 업데이트합니다.
+    if (subed) {
+      const newArr = arr.filter((idx) => idx !== user.uid)
+      await updateSub({
+        variables: { id: id, sub_users: newArr },
+        onCompleted: () => {
+          console.log("hello")
+          getData()
+        },
       })
-      console.log(res)
-      // 업데이트 후 추가 작업 수행 가능
-      // setSubed(true) // 구독 상태 업데이트
-      await getData()
-    } catch (error) {
-      console.error(error)
+    } else {
+      arr.push(user.uid)
+      await updateSub({
+        variables: { id: id, sub_users: arr },
+      }).then(() => {
+        console.log("hello")
+        getData()
+      })
     }
   }
+
   return (
     <Container
       sx={{
@@ -139,7 +166,6 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
                         borderRadius: "20px",
                         maxHeight: "40px",
                         maxWidth: "150px",
-                        // color: "white",
                       }
                 }
               >

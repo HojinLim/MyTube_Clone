@@ -70,11 +70,6 @@
       "collection": "user",
       "via": "subscribes"
     },
-    "later_users": {
-      "plugin": "users-permissions",
-      "collection": "user",
-      "via": "youtube"
-    },
     "dislike_user": {
       "plugin": "users-permissions",
       "collection": "user",
@@ -85,10 +80,16 @@
       "collection": "user",
       "via": "like_youtube"
     },
-    "created": {
+    "later_users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "youtubes",
+      "dominant": true
+    },
+    "created_user": {
       "plugin": "users-permissions",
       "model": "user",
-      "via": "created_youtube"
+      "via": "created_youtubes"
     }
   }
 }

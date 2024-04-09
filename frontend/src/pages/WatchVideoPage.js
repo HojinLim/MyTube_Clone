@@ -111,15 +111,18 @@ export const WatchVideoPage = () => {
   const [restVideos, setRestVideos] = useState()
 
   const videoId = params.id
-  const { loading, error, data: videos } = useQuery(GET_ALL_VIDEOS)
 
   const getData = async () => {
+    refetch()
     const video = await videos.youtubeMedias.find((video) => video.id === videoId)
     const restVideos = await videos.youtubeMedias.filter((video) => video.id !== videoId)
-
+    console.log(videos)
     setCurrentVideos(video)
     setRestVideos(restVideos)
   }
+
+  const { loading, error, data: videos, refetch } = useQuery(GET_ALL_VIDEOS)
+
   useEffect(() => {
     if (!loading && !error) {
       getData()
@@ -158,7 +161,6 @@ export const WatchVideoPage = () => {
     useLazyQuery(GET_COMMENTS_BY_ID)
   useEffect(() => {
     if (!commentsLoading && !commentError && commentData) {
-      console.log(commentData)
     }
   }, [commentsLoading, commentError, commentData])
 
@@ -365,6 +367,7 @@ export const WatchVideoPage = () => {
                 error={error}
                 currentVideos={currentVideos ?? ""}
                 getData={getData}
+                refetch={refetch}
               />
 
               {/* 댓글 작성 컨테이터 */}
@@ -392,13 +395,12 @@ export const WatchVideoPage = () => {
               style={isFullscreen ? { display: "none" } : {}}
             >
               {commentData?.comments?.map((data, key) => (
-                <>
-                  <UserFeedBackContainer
-                    commentsLoading={commentsLoading}
-                    getComments={getComments}
-                    comment={data}
-                  />
-                </>
+                <UserFeedBackContainer
+                  key={key}
+                  commentsLoading={commentsLoading}
+                  getComments={getComments}
+                  comment={data}
+                />
               ))}
             </div>
           </div>

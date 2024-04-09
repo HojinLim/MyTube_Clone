@@ -106,7 +106,7 @@ export const UserFeedBackContainer = ({ commentsLoading, getComments, comment })
           {user.name == username && (
             <div>
               <CustomIconMenu
-                iconButton={<MoreVertIcon />}
+                iconButton={user.name == username && <MoreVertIcon />}
                 menuItems={[
                   {
                     icon: <EditOutlinedIcon />,

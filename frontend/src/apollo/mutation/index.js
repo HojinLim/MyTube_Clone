@@ -97,7 +97,7 @@ export const UPLOAD_VIDEO = gql`
     $thumbnail: ID!
     $isPublic: Boolean!
     $duration: String!
-    $user_id: [ID]
+    $created_user: ID
   ) {
     createYoutubeMedia(
       input: {
@@ -109,7 +109,7 @@ export const UPLOAD_VIDEO = gql`
           thumbnail: $thumbnail
           isPublic: $isPublic
           duration: $duration
-          users_permissions_users: $user_id
+          created_user: $created_user
         }
       }
     ) {
@@ -125,7 +125,7 @@ export const UPLOAD_VIDEO = gql`
         createdBy
         isPublic
         duration
-        users_permissions_users {
+        created_user {
           id
         }
       }
@@ -199,22 +199,9 @@ export const CREATE_LATER = gql`
     }
   }
 `
-// export const UPDATE_LATER = gql`
-//   mutation updateLaterVideo($id: ID!, $uid: String, $youtube_id: [ID]) {
-//     updateLater(input: { where: { id: $id }, data: { uid: $uid, youtube_medias: $youtube_id } }) {
-//       later {
-//         id
-//         youtube_medias {
-//           id
-//           title
-//           description
-//         }
-//       }
-//     }
-//   }
-// `
+
 export const UPDATE_LATER = gql`
-  mutation updateLaterVideo($id: ID!, $later_users: [ID]) {
+  mutation updateLater($id: ID!, $later_users: [ID]) {
     updateYoutubeMedia(input: { where: { id: $id }, data: { later_users: $later_users } }) {
       youtubeMedia {
         id

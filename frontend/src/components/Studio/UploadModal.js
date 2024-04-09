@@ -139,7 +139,7 @@ export default function UploadModal() {
         thumbnail: thumbID,
         isPublic: isPublic,
         duration: duration + "",
-        user_id: user.uid,
+        created_user: user.uid,
       },
     })
       .then((res) => {

@@ -8,9 +8,11 @@ import MoreVertIcon from "@mui/icons-material/MoreVert"
 import Divider from "@mui/material/Divider"
 import { timeForBetween } from "functions/timeForBetween"
 import { useNavigate } from "react-router-dom"
-export const VideoItem = ({ datas, key }) => {
-  const { id, thumbnail, title, subtitle, views, createdBy, created_at, sources, duration } = datas
+export const VideoItem = ({ datas }) => {
   console.log(datas)
+  // if (!datas) return null // datas가 없을 때 null을 반환하여 오류 방지
+
+  const { id, thumbnail, title, createdBy, created_at, views, duration } = datas
   const [anchorEl, setAnchorEl] = React.useState(null)
   const navigate = useNavigate()
   const open = Boolean(anchorEl)
@@ -30,8 +32,9 @@ export const VideoItem = ({ datas, key }) => {
         window.location.reload()
       }}
     >
+      {/* index 변수 대신에 title을 사용하여 키를 지정합니다. */}
       <Typography variant="body1" style={{ margin: "15px" }}>
-        {key}
+        {title}
       </Typography>
       <div
         style={{

@@ -577,12 +577,6 @@
                     "type": "string"
                   }
                 },
-                "later_users": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
                 "dislike_user": {
                   "type": "array",
                   "items": {
@@ -595,7 +589,13 @@
                     "type": "string"
                   }
                 },
-                "created": {
+                "later_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "created_user": {
                   "type": "string"
                 },
                 "published_at": {

@@ -43,6 +43,10 @@ import youtuber1 from "assets/images/logos/youtuber_logo_1.jpg"
 import youtuber2 from "assets/images/logos/youtuber_logo_2.png"
 import { accountState } from "atom/accountState"
 import { useRecoilState } from "recoil"
+import { GET_ALL_VIDEOS } from "apollo/query"
+import { useLazyQuery, useQuery } from "@apollo/client"
+import { USER_INFO } from "Constants/value"
+import { FIND_USER_ID_BY_ID } from "apollo/query"
 
 export default function SideBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false)
@@ -51,6 +55,7 @@ export default function SideBar() {
   const navigate = useNavigate()
   //   const [state, toggleState] = useRecoilState(changeState)
   const [user, setUser] = useRecoilState(accountState)
+
   const handleDrawerClose = () => {
     setIsClosing(true)
     setMobileOpen(false)
@@ -62,7 +67,8 @@ export default function SideBar() {
   const [state, setState] = React.useState({
     left: false,
   })
-
+  const [findUserById, { loading, error, data: videos, refetch }] = useLazyQuery(FIND_USER_ID_BY_ID)
+  // const [findUserIdByName, { loading, data, error }] = useLazyQuery(FIND_USER_ID_BY_NAME)
   const middleList = user
     ? ["나", "시청 기록", "내 동영상", "나중에 볼 동영상", "좋아요 표시한 동영상"]
     : ["나", "시청 기록"]
@@ -74,6 +80,14 @@ export default function SideBar() {
 
     setState({ ...state, [anchor]: open })
   }
+  let arr = []
+
+  React.useEffect(() => {
+    findUserById({ variables: { id: "19" } }).then(() => {
+      refetch()
+      console.log(videos)
+    })
+  }, [])
 
   const movePage = (name) => {
     switch (name) {

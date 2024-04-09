@@ -26,10 +26,22 @@ export const FIND_USER_ID_BY_NAME = gql`
     }
   }
 `
+export const FIND_USER_ID_BY_ID = gql`
+  query findUser($id: ID) {
+    users(where: { id: $id }) {
+      id
+      username
+      subscribes {
+        id
+        title
+      }
+    }
+  }
+`
 
 export const GET_ALL_VIDEOS = gql`
-  query AllYoutube {
-    youtubeMedias {
+  query AllYoutube($id: ID) {
+    youtubeMedias(where: { id: $id }) {
       id
       description
       title
@@ -45,10 +57,7 @@ export const GET_ALL_VIDEOS = gql`
       thumbnail {
         url
       }
-      created {
-        id
-        profileImage
-      }
+
       sub_users {
         id
       }
@@ -75,10 +84,30 @@ export const GET_VIDEO_BY_ID = gql`
       contents {
         url
       }
-      users_permissions_users {
+      created_user {
         id
         profileImage
         username
+      }
+    }
+  }
+`
+export const GET_LATER_VIDEO_BY_ID = gql`
+  query YoutubeMediaById($id: ID!) {
+    youtubeMedias(where: { later_users: { id: $id } }) {
+      id
+      description
+      title
+      isPublic
+      views
+      createdBy
+      created_at
+      duration
+      thumbnail {
+        url
+      }
+      contents {
+        url
       }
     }
   }
@@ -96,24 +125,6 @@ export const GET_COMMENTS_BY_ID = gql`
   }
 `
 
-export const GET_LATER_BY_UID = gql`
-  query findLaterByUID($uid: String) {
-    laters(where: { uid: $uid }) {
-      id
-      youtube_medias {
-        id
-        title
-        createdBy
-        created_at
-        views
-        duration
-        thumbnail {
-          url
-        }
-      }
-    }
-  }
-`
 // 좋아요 영상
 // *READ*
 export const GET_LIKES_BY_UID = gql`

@@ -19,16 +19,17 @@ import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay"
 import ReplyIcon from "@mui/icons-material/Reply"
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
-import useUserData from "hooks/useUserData"
+
 import { USER_INFO } from "Constants/value"
 import { useLazyQuery, useMutation } from "@apollo/client"
 import { CREATE_LATER } from "apollo/mutation"
-import { GET_LATER_BY_UID } from "apollo/query"
+
 import { UPDATE_LATER } from "apollo/mutation"
 import { AlertContainer } from "components/common/AlertContainer"
-
-export const VideoContainer = ({ data }) => {
-  // const { thumb, title, subtitle, sources, duration } = data
+import { useRecoilValue } from "recoil"
+import { accountState } from "atom/accountState"
+import DoDisturbIcon from "@mui/icons-material/DoDisturb"
+export const VideoContainer = ({ data, refetch, loading }) => {
   const {
     // thumb,
     title,
@@ -43,11 +44,13 @@ export const VideoContainer = ({ data }) => {
     created_at,
     thumbnail: thumb,
     contents,
+    sub_users,
+    later_users,
   } = data
-  // const { profileImage } = userInfo[0]
 
+  console.log(data)
+  const user = useRecoilValue(accountState)
   const [hover, setHover] = useState(false)
-  // const [timer, setTimer] = useState(0)
   const navigate = useNavigate()
 
   const [playTime, setPlayTime] = useState(0)
@@ -57,6 +60,8 @@ export const VideoContainer = ({ data }) => {
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
+  const [later, setLater] = useState(null)
+  const [globalArr, setGlobalArr] = useState([])
   useMemo(() => {
     setPlayedTime(secondsToTime(Math.trunc(playTime)))
   }, [playTime])
@@ -73,78 +78,66 @@ export const VideoContainer = ({ data }) => {
   const moveDetailPage = () => {
     navigate(`/watch/${id}`)
   }
-  const updateLaterVideo = () => {
-    let arr = []
-    console.log(arr)
-    arr.push(id)
-    laterData.laters[0].youtube_medias.map((data) => arr.push(data.id))
 
-    updateLater({ variables: { id: laterData.laters[0].id, youtube_id: arr, uid: id } })
-      .then(() => {
+  // 나중에 볼 영상 array 적용
+  useEffect(() => {
+    let glob = []
+    later_users?.map((data) => glob.push(data.id))
+    setGlobalArr(glob)
+    const isStored = later_users?.find((data) => data?.id == user?.uid)
+    setLater(isStored ? true : false)
+    console.log("later", later)
+  }, [later_users, refetch])
+
+  console.log(globalArr)
+  console.log(later)
+  const updateLaterVideo = () => {
+    let arr = [...globalArr, user?.uid] // Add user's ID to the array
+    console.log(arr)
+    updateLater({
+      variables: { id: id, later_users: arr },
+      onCompleted: () => {
         setSuccessMessage("재생목록 추가 완료!")
         setErrorMessage(null)
-        getLaterByUid({ variables: user.uid }).then((result) => result.data)
-      })
-      .catch((error) => {
+        refetch()
+      },
+      onError: (error) => {
         setSuccessMessage(null)
-        setErrorMessage(error.message) // You should provide a meaningful error message
-      })
-
-    console.log(arr) // arr after pushing the ids
+        setErrorMessage(error.message)
+      },
+    })
   }
 
   const removeUpdateVideo = () => {
-    let arr = []
-    laterData.laters[0].youtube_medias
-      .filter((data) => id !== data.id)
-      .map((value) => arr.push(value.id))
-    updateLater({ variables: { id: laterData.laters[0].id, youtube_id: arr, uid: id } })
-      .then(() => {
+    let arr = globalArr.filter((value) => value !== user?.uid) // Remove user's ID from the array
+    console.log(arr)
+    updateLater({
+      variables: { id: id, later_users: arr },
+      onCompleted: () => {
         setSuccessMessage(null)
         setErrorMessage("재생목록 삭제 완료")
-        getLaterByUid({ variables: user.uid }).then((result) => result.data)
-      })
-      .catch()
-    console.log(arr)
+        refetch()
+      },
+      onError: (error) => {
+        console.error(error)
+      },
+    })
   }
+  console.log("global", globalArr)
 
-  const user = JSON.parse(localStorage.getItem(USER_INFO)) ?? ""
-
-  const [getLaterByUid, { data: laterData, loading, error }] = useLazyQuery(GET_LATER_BY_UID)
-  const [createDefaultArray] = useMutation(CREATE_LATER)
+  // const user = JSON.parse(localStorage.getItem(USER_INFO)) ?? ""
 
   const [updateLater] = useMutation(UPDATE_LATER)
-  useEffect(() => {
-    // 나중에 볼 영상 조회
-    if (!error && !loading && laterData) {
-      // 껍데기도 없음
-      if (laterData.laters.length === 0) {
-        createDefaultArray({ variables: { uid: user.uid, youtube_id: [] } })
-        // 껍데기는 있음
-      } else {
-      }
-    }
-    console.log(laterData)
-  }, [laterData, loading, error])
 
   useEffect(() => {
-    getLaterByUid({ variables: user.uid }).then((result) => result.data)
+    // getLaterByUid({ variables: user.uid }).then((result) => result.data)
   }, [])
 
   const addLaterVideoHandler = () => {
-    if (!error && !loading && laterData) {
-      // Check if the video already exists in the "Watch Later" list
-      const videoExists = laterData.laters[0]?.youtube_medias.find((video) => video.id === id)
-
-      // If the video exists, remove it
-      if (videoExists) {
-        removeUpdateVideo()
-        console.log("up")
-      } else {
-        // If the video doesn't exist, add it
-        updateLaterVideo()
-        console.log("down")
-      }
+    if (later) {
+      removeUpdateVideo()
+    } else {
+      updateLaterVideo()
     }
   }
   return (
@@ -259,11 +252,10 @@ export const VideoContainer = ({ data }) => {
               menuItems={[
                 { icon: <PlaylistPlayIcon />, text: "현재 재생목록에 추가", onClick: () => {} },
                 {
-                  icon: <AccessTimeIcon />,
-                  text: "나중에 볼 동영상에 저장",
+                  icon: later ? <DoDisturbIcon /> : <AccessTimeIcon />,
+                  text: later ? "나중에 볼 동영상에서 해제" : "나중에 볼 동영상에 저장",
                   onClick: addLaterVideoHandler,
                 },
-
                 { icon: <PlaylistAddIcon />, text: "재생목록에 저장", onClick: () => {} },
                 { icon: <ReplyIcon />, text: "공유", onClick: () => {} },
               ]}
