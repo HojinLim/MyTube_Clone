@@ -571,12 +571,6 @@
                 "comment": {
                   "type": "string"
                 },
-                "sub_users": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
                 "dislike_user": {
                   "type": "array",
                   "items": {

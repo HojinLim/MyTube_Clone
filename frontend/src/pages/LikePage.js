@@ -1,30 +1,36 @@
 import { useLazyQuery, useQuery } from "@apollo/client"
 import { GET_LIKES_BY_UID } from "apollo/query"
+import { accountState } from "atom/accountState"
 import { MenuSelector } from "components/common/MenuSelector"
 import { VideoItem } from "components/later/VideoItem"
 import { PlayListSide } from "components/PlayList/PlayListSide"
 import { USER_INFO } from "Constants/value"
 import { dummyData } from "dummy"
 import React, { useEffect } from "react"
+import { useRecoilValue } from "recoil"
 
 export const LikePage = () => {
-  const user = localStorage.getItem(USER_INFO) ?? ""
-  const [getLikeByUid, { data, loading, error }] = useLazyQuery(GET_LIKES_BY_UID)
-  useEffect(() => {
-    if (!error && !loading && data) {
-      console.log(data)
-    }
-  }, [data, loading, error])
+  const user = useRecoilValue(accountState)
+  const [getLikeByUid, { data, error, loading }] = useLazyQuery(GET_LIKES_BY_UID)
 
   useEffect(() => {
-    getLikeByUid({ variables: { uid: user.uid } })
-  }, [])
+    if (user && user.uid) {
+      // Ensure user object and user.uid exist
+      getLikeByUid({ variables: { id: user.uid } })
+    }
+  }, [getLikeByUid, user])
+
+  useEffect(() => {
+    if (!loading && data) {
+      console.log("Liked videos data:", data)
+    }
+  }, [data, loading])
 
   return (
     <div>
       <PlayListSide
-        datas={data?.likeds[0]?.youtube_medias[0]}
-        length={data?.likeds[0]?.youtube_medias?.length}
+        datas={data?.youtubeMedias[0]}
+        length={data?.youtubeMedias?.length}
         sideTitle={"좋아요 표시한 동영상"}
       />
 
@@ -35,10 +41,10 @@ export const LikePage = () => {
           <MenuSelector categories={["전체", "동영상", "Shorts"]} />
         </div>
 
-        {data?.likeds[0]?.youtube_medias?.map((data, key) => (
-          <>
-            <VideoItem datas={data} key={key} />
-          </>
+        {data?.youtubeMedias?.map((data, key) => (
+          <div key={key}>
+            <VideoItem datas={data} />
+          </div>
         ))}
       </div>
     </div>

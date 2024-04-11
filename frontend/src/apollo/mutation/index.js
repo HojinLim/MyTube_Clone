@@ -212,11 +212,34 @@ export const UPDATE_LATER = gql`
     }
   }
 `
-export const UPDATE_SUB = gql`
-  mutation updateSubVideo($id: ID!, $sub_users: [ID]) {
-    updateYoutubeMedia(input: { where: { id: $id }, data: { sub_users: $sub_users } }) {
+export const UPDATE_LIKE = gql`
+  mutation updateLike($id: ID!, $like_user: [ID]) {
+    updateYoutubeMedia(input: { where: { id: $id }, data: { like_user: $like_user } }) {
       youtubeMedia {
         id
+        like_user {
+          id
+        }
+      }
+    }
+  }
+`
+export const UPDATE_DISLIKE = gql`
+  mutation updateDislike($id: ID!, $dislike_user: [ID]) {
+    updateYoutubeMedia(input: { where: { id: $id }, data: { dislike_user: $dislike_user } }) {
+      youtubeMedia {
+        id
+        dislike_user {
+          id
+        }
+      }
+    }
+  }
+`
+export const UPDATE_SUB = gql`
+  mutation updateUser($id: ID!, $user_id: [ID]!) {
+    updateUser(input: { where: { id: $id }, data: { sub_users: $user_id } }) {
+      user {
         sub_users {
           id
         }
@@ -233,33 +256,12 @@ export const UPDATE_COMMENT = gql`
     }
   }
 `
-// 좋아요 영상
-// *UPDATE*
-
-// export const UPDATE_LIKES = gql`
-//   mutation updateLikeVideo(
-//     $id: ID!
-//     $uid: String
-//     $like_youtube_id: [ID]
-//     $dislike_youtube_id: [ID]
-//   ) {
-//     updateLiked(
-//       input: {
-//         where: { id: $id }
-//         data: { uid: $uid, like_medias: $like_youtube_id, dislike_medias: $dislike_youtube_id }
-//     ) {
-//       liked {
-//         id
-//         like_medias {
-//           id
-//           title
-//           description
-//         }
-//         dislike_medias {
-//           id
-//           title
-//         }
-//       }
-//     }
-//   }
-// `
+export const INCREMENT_VIEWS = gql`
+  mutation IncrementViews($id: ID!, $views: Int) {
+    updateYoutubeMedia(input: { where: { id: $id }, data: { views: $views } }) {
+      youtubeMedia {
+        views
+      }
+    }
+  }
+`

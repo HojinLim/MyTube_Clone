@@ -31,9 +31,8 @@ export const FIND_USER_ID_BY_ID = gql`
     users(where: { id: $id }) {
       id
       username
-      subscribes {
+      sub_users {
         id
-        title
       }
     }
   }
@@ -58,14 +57,18 @@ export const GET_ALL_VIDEOS = gql`
         url
       }
 
-      sub_users {
-        id
-      }
       later_users {
         id
       }
       like_user {
         id
+      }
+      dislike_user {
+        id
+      }
+      created_user {
+        id
+        profileImage
       }
     }
   }
@@ -128,19 +131,20 @@ export const GET_COMMENTS_BY_ID = gql`
 // 좋아요 영상
 // *READ*
 export const GET_LIKES_BY_UID = gql`
-  query findLikedByUID($uid: String) {
-    likeds(where: { uid: $uid }) {
+  query findLikedByUID($id: String!) {
+    youtubeMedias(where: { like_user: { id: $id } }) {
       id
-      youtube_medias {
+      like_user {
         id
-        title
-        createdBy
-        created_at
-        views
-        duration
-        thumbnail {
-          url
-        }
+      }
+      id
+      title
+      createdBy
+      created_at
+      views
+      duration
+      thumbnail {
+        url
       }
     }
   }

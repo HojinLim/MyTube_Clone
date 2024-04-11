@@ -6,7 +6,6 @@ import { timeForBetween } from "functions/timeForBetween"
 import { MenuSelector } from "components/common/MenuSelector"
 
 export const NextVideoContainer = ({ data }) => {
-  console.log(data)
   const { id, thumbnail, title, createdBy, contents, duration, created_at } = data
   const [hover, setHover] = React.useState(false)
   const [playTime, setPlayTime] = useState(0)

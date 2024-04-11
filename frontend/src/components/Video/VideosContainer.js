@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 
-import { VideoContainer } from "./VideoContainer"
 import { dummyData } from "dummy"
 
 import { StyledGrid } from "styles/globalStyle"
 import { useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"
+import VideoContainer from "./VideoContainer"
 
 export default function VideosContainer() {
   const [dummy, setDummy] = React.useState()

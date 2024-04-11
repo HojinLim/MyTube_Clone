@@ -34,7 +34,7 @@ export const VideoItem = ({ datas }) => {
     >
       {/* index 변수 대신에 title을 사용하여 키를 지정합니다. */}
       <Typography variant="body1" style={{ margin: "15px" }}>
-        {title}
+        ✵
       </Typography>
       <div
         style={{

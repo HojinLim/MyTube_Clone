@@ -1,16 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
-import Box from "@mui/material/Box"
-import Container from "@mui/material/Container"
+import React, { useMemo, useState } from "react"
+import { Container, Typography, Box } from "@mui/material"
 import ReactPlayer from "react-player/lazy"
-import Typography from "@mui/material/Typography"
 import { useNavigate } from "react-router-dom"
-import Avatar from "@mui/material/Avatar"
-import { formatTime } from "functions/formatTime"
-import { stringToSeconds } from "functions/stringToSeconds"
+import { CustomIconMenu } from "components/common/CustomIconMenu"
+import useUpdateLater from "hooks/useUpdateLater"
+
 import { secondsToTime } from "functions/secondsToTime"
 import { timeForBetween } from "functions/timeForBetween"
-import { CustomIconMenu } from "components/common/CustomIconMenu"
-import Alert from "@mui/material/Alert"
 
 // Icons
 import CheckIcon from "@mui/icons-material/Check"
@@ -29,117 +25,51 @@ import { AlertContainer } from "components/common/AlertContainer"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import DoDisturbIcon from "@mui/icons-material/DoDisturb"
-export const VideoContainer = ({ data, refetch, loading }) => {
+const VideoContainer = ({ data, refetch }) => {
   const {
-    // thumb,
     title,
-    subtitle,
-    sources,
-    duration,
     id,
-    user: userInfo,
-    createdBy,
-    description,
-    isPublic,
-    created_at,
     thumbnail: thumb,
     contents,
-    sub_users,
     later_users,
+    duration,
+    createdBy,
+    created_at,
+    views,
   } = data
 
-  console.log(data)
-  const user = useRecoilValue(accountState)
-  const [hover, setHover] = useState(false)
   const navigate = useNavigate()
+  const user = useRecoilValue(accountState)
+  const { isAdded, addLaterVideoHandler } = useUpdateLater({
+    later_users: later_users,
+    refetch: refetch,
+    user: user,
+    id: id,
+  })
 
-  const [playTime, setPlayTime] = useState(0)
   const [playedTime, setPlayedTime] = useState("0:00")
+  const [hover, setHover] = useState(false)
   const [startVideo, setStartVideo] = useState(false)
+  const [playTime, setPlayTime] = useState(0)
 
-  const [successMessage, setSuccessMessage] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
-
-  const [later, setLater] = useState(null)
-  const [globalArr, setGlobalArr] = useState([])
   useMemo(() => {
     setPlayedTime(secondsToTime(Math.trunc(playTime)))
   }, [playTime])
-
   const mouseHoverOver = () => {
     setHover(true)
     setStartVideo(true)
   }
+
   const mouseHoverOut = () => {
     setHover(false)
     setPlayTime(0)
     setStartVideo(false)
   }
+
   const moveDetailPage = () => {
     navigate(`/watch/${id}`)
   }
 
-  // 나중에 볼 영상 array 적용
-  useEffect(() => {
-    let glob = []
-    later_users?.map((data) => glob.push(data.id))
-    setGlobalArr(glob)
-    const isStored = later_users?.find((data) => data?.id == user?.uid)
-    setLater(isStored ? true : false)
-    console.log("later", later)
-  }, [later_users, refetch])
-
-  console.log(globalArr)
-  console.log(later)
-  const updateLaterVideo = () => {
-    let arr = [...globalArr, user?.uid] // Add user's ID to the array
-    console.log(arr)
-    updateLater({
-      variables: { id: id, later_users: arr },
-      onCompleted: () => {
-        setSuccessMessage("재생목록 추가 완료!")
-        setErrorMessage(null)
-        refetch()
-      },
-      onError: (error) => {
-        setSuccessMessage(null)
-        setErrorMessage(error.message)
-      },
-    })
-  }
-
-  const removeUpdateVideo = () => {
-    let arr = globalArr.filter((value) => value !== user?.uid) // Remove user's ID from the array
-    console.log(arr)
-    updateLater({
-      variables: { id: id, later_users: arr },
-      onCompleted: () => {
-        setSuccessMessage(null)
-        setErrorMessage("재생목록 삭제 완료")
-        refetch()
-      },
-      onError: (error) => {
-        console.error(error)
-      },
-    })
-  }
-  console.log("global", globalArr)
-
-  // const user = JSON.parse(localStorage.getItem(USER_INFO)) ?? ""
-
-  const [updateLater] = useMutation(UPDATE_LATER)
-
-  useEffect(() => {
-    // getLaterByUid({ variables: user.uid }).then((result) => result.data)
-  }, [])
-
-  const addLaterVideoHandler = () => {
-    if (later) {
-      removeUpdateVideo()
-    } else {
-      updateLaterVideo()
-    }
-  }
   return (
     <Container
       sx={{
@@ -156,10 +86,8 @@ export const VideoContainer = ({ data, refetch, loading }) => {
         padding: "auto",
       }}
     >
-      {successMessage && (
-        <AlertContainer type="success" message={successMessage} onClose={() => {}} />
-      )}
-      {errorMessage && <AlertContainer type="error" message={errorMessage} onClose={() => {}} />}
+      {/* {isAdded && <AlertContainer type={"success"} message={"저장완료!"} onClose={() => {}} />} */}
+
       <Box
         sx={{
           position: "relative",
@@ -252,8 +180,8 @@ export const VideoContainer = ({ data, refetch, loading }) => {
               menuItems={[
                 { icon: <PlaylistPlayIcon />, text: "현재 재생목록에 추가", onClick: () => {} },
                 {
-                  icon: later ? <DoDisturbIcon /> : <AccessTimeIcon />,
-                  text: later ? "나중에 볼 동영상에서 해제" : "나중에 볼 동영상에 저장",
+                  icon: isAdded ? <DoDisturbIcon /> : <AccessTimeIcon />,
+                  text: isAdded ? "나중에 볼 동영상에서 해제" : "나중에 볼 동영상에 저장",
                   onClick: addLaterVideoHandler,
                 },
                 { icon: <PlaylistAddIcon />, text: "재생목록에 저장", onClick: () => {} },
@@ -265,10 +193,12 @@ export const VideoContainer = ({ data, refetch, loading }) => {
             {createdBy}
           </Typography>
           <Typography variant="body2" gutterBottom color={"gray"}>
-            조회수 100회 ⦁ {timeForBetween(created_at)}
+            조회수 {views}회 ⦁ {timeForBetween(created_at)}
           </Typography>
         </Container>
       </Container>
     </Container>
   )
 }
+
+export default VideoContainer

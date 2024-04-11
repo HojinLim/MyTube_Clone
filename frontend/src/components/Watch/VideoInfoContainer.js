@@ -13,29 +13,36 @@ import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import ShareIcon from "@mui/icons-material/Share"
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd"
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline"
+
 import Stack from "@mui/material/Stack"
 import { timeForBetween } from "functions/timeForBetween"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
 import { USER_INFO } from "Constants/value"
-import { useMutation } from "@apollo/client"
+import { useLazyQuery, useMutation } from "@apollo/client"
 import { UPDATE_LATER } from "apollo/mutation"
 import { UPDATE_SUB } from "apollo/mutation"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
+import useUpdateLater from "hooks/useUpdateLater"
+import useHandleLike from "hooks/useHandleLike"
+import { INCREMENT_VIEWS } from "apollo/mutation"
+import { FIND_USER_ID_BY_ID } from "apollo/query"
 
-export const VideoInfoContainer = ({
-  error: err,
-  loading: load,
-  currentVideos,
-  getData,
-  refetch,
-}) => {
-  const { id, title, subtitle, views, created_at, created, sub_users, later_users, like_user } =
-    currentVideos
-  // const user = JSON.parse(localStorage.getItem(USER_INFO)) ?? ""
+export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, getData }) => {
+  const {
+    id,
+    title,
+    subtitle,
+    views,
+    created_at,
+    created_user,
+    sub_users,
+    later_users,
+    like_user,
+    dislike_user,
+  } = currentVideos
   const user = useRecoilValue(accountState)
-
-  const { profileImage, username } = !created ? {} : created
 
   const [thumbUp, setThumbup] = useState(null)
   const [thumbDown, setThumbDown] = useState(null)
@@ -47,19 +54,70 @@ export const VideoInfoContainer = ({
   const [updateLater, { loading, error }] = useMutation(UPDATE_LATER)
   const [updateSub, { updateLoading, updateError }] = useMutation(UPDATE_SUB)
 
+  const [isYours, setYours] = useState()
+
+  const { isAdded, addLaterVideoHandler } = useUpdateLater({
+    later_users: later_users,
+    refetch: getData,
+    user: user,
+    id: id,
+  })
+
+  const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
+    like_users: like_user,
+    dislike_users: dislike_user,
+    refetch: getData,
+    user: user,
+    id,
+  })
+
   let arr = []
+  const [viewCount, setViewCount] = useState(0)
+  const [increaseView] = useMutation(INCREMENT_VIEWS)
+
+  const [getUserById, { data, loaded, called }] = useLazyQuery(FIND_USER_ID_BY_ID)
+
+  useEffect(() => {
+    if (!loaded && !called) {
+      getUserById({
+        variables: { id: "26" },
+        onCompleted: () => {
+          console.log(data)
+        },
+      })
+    }
+  }, [id, getUserById, called, data])
+
+  useEffect(() => {
+    if (!load && views !== null) {
+      setViewCount(views)
+    }
+  }, [views, load])
+  useEffect(() => {
+    if (!load && !views && id) increaseView({ variables: { id: id, views: 0 } })
+    if (!load && views !== null && id) {
+      increaseView({ variables: { id: id, views: views + 1 } })
+      setViewCount((prevViews) => prevViews + 1)
+    }
+  }, [id, views, load, increaseView])
 
   useEffect(() => {
     let glob = []
-    sub_users?.map((data) => glob.push(data.id))
+    sub_users?.map((data) => glob.push(data?.id))
     setGlobalArr(glob)
-    console.log("sub_users", sub_users)
 
     const isStored = sub_users?.find((data) => data?.id == user?.uid)
-    console.log("store", isStored)
-    setSubed(isStored.id ? true : false)
-    console.log("sub", subed)
-  }, [sub_users, refetch])
+
+    setSubed(isStored?.id ? true : false)
+    console.log("isStored", isStored)
+    console.log("sub_users", sub_users)
+  }, [sub_users, getData, id])
+
+  useEffect(() => {
+    if (!load) {
+      created_user?.id == user.uid ? setYours(true) : setYours(false)
+    }
+  }, [load, currentVideos])
 
   useEffect(() => {
     if (!err && !load) {
@@ -73,25 +131,11 @@ export const VideoInfoContainer = ({
     }
   }, [currentVideos, sub_users])
 
-  if (later_users && later_users.length > 0 && later_users[0]?.id == user.uid) {
-  }
   const thumbUpHandler = () => {
-    setThumbup((prev) => !prev)
-    if (thumbDown) {
-      setThumbDown(false)
-    }
-    if (!thumbUp) {
-      setLikeCount((prev) => prev + 1)
-    } else {
-      setLikeCount((prev) => prev - 1)
-    }
+    clickLike()
   }
   const thumbDownHandler = () => {
-    setThumbDown((prev) => !prev)
-    if (thumbUp) {
-      setThumbup(false)
-      setLikeCount((prev) => prev - 1)
-    }
+    clickDislike()
   }
 
   const handleUpdateSub = async () => {
@@ -137,19 +181,20 @@ export const VideoInfoContainer = ({
         </Typography>
 
         <div style={{ display: "flex", marginBottom: "15px" }}>
-          <Avatar alt="Remy Sharp" src={profileImage} />
+          <Avatar alt="Remy Sharp" src={created_user?.profileImage} />
           <div style={{ display: "flex", flexDirection: "column", margin: "0px 12px" }}>
             <Typography variant="body2" gutterBottom color={"gray"}>
               {subtitle}
             </Typography>
-            <Typography variant="body2" gutterBottom color={"gray"}>
-              구독자 100만명
+            <Typography style={{ minWidth: "70px" }} variant="body2" gutterBottom color={"gray"}>
+              구독자 {sub_users?.length}명
             </Typography>
           </div>
 
           <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
             <div style={{ display: "flex" }}>
               <Button
+                disabled={isYours ? true : false}
                 onClick={handleUpdateSub}
                 variant="contained"
                 sx={
@@ -169,8 +214,10 @@ export const VideoInfoContainer = ({
                       }
                 }
               >
-                {!subed && <NotificationsNoneOutlinedIcon />}
-                {subed ? "구독중" : "구독"}
+                {!isYours && !subed ? <NotificationsNoneOutlinedIcon /> : null}
+                {isYours && "당신의 영상입니다"}
+                {!isYours && subed && "구독중"}
+                {!isYours && !subed && "구독"}
               </Button>
             </div>
             <div
@@ -196,11 +243,11 @@ export const VideoInfoContainer = ({
                   style={{ justifyContent: "center", alignItems: "center", display: "flex" }}
                 >
                   {likeCount}
-                  {thumbUp ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />}
+                  {isLikeAdded ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />}
                 </div>
                 <Divider orientation="vertical" />
                 <div onClick={thumbDownHandler}>
-                  {thumbDown ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />}
+                  {isDisLikeAdded ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />}
                 </div>
               </Stack>
               <IconButton
@@ -219,7 +266,13 @@ export const VideoInfoContainer = ({
               <CustomIconMenu
                 style={{ backgroundColor: "lightgray", borderRadius: "20px" }}
                 iconButton={<MoreHorizIcon />}
-                menuItems={[{ icon: <PlaylistAddIcon />, text: "저장", onclick: () => {} }]}
+                menuItems={[
+                  {
+                    icon: isAdded ? <RemoveCircleOutlineIcon /> : <PlaylistAddIcon />,
+                    text: isAdded ? "나중에 보기 삭제" : "나중에 보기 추가",
+                    onClick: addLaterVideoHandler,
+                  },
+                ]}
               />
             </div>
           </div>
@@ -236,7 +289,7 @@ export const VideoInfoContainer = ({
           }}
         >
           <Typography variant="caption" gutterBottom>
-            {`조회수 ${views}회 ${timeForBetween(created_at)}`}
+            {`조회수 ${viewCount}회 ${timeForBetween(created_at)}`}
           </Typography>
           <Typography variant="caption" gutterBottom>
             {currentVideos?.description}

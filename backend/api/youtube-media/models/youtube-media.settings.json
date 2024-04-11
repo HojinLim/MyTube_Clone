@@ -65,31 +65,26 @@
       "model": "comments",
       "via": "youtube_medias"
     },
-    "sub_users": {
-      "plugin": "users-permissions",
-      "collection": "user",
-      "via": "subscribes"
-    },
     "dislike_user": {
+      "via": "dislike_youtube",
       "plugin": "users-permissions",
-      "collection": "user",
-      "via": "dislike_youtube"
+      "collection": "user"
     },
     "like_user": {
+      "via": "like_youtube",
       "plugin": "users-permissions",
-      "collection": "user",
-      "via": "like_youtube"
+      "collection": "user"
     },
     "later_users": {
+      "via": "youtubes",
       "plugin": "users-permissions",
       "collection": "user",
-      "via": "youtubes",
       "dominant": true
     },
     "created_user": {
+      "via": "created_youtubes",
       "plugin": "users-permissions",
-      "model": "user",
-      "via": "created_youtubes"
+      "model": "user"
     }
   }
 }

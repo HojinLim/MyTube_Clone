@@ -116,7 +116,7 @@ export const WatchVideoPage = () => {
     refetch()
     const video = await videos.youtubeMedias.find((video) => video.id === videoId)
     const restVideos = await videos.youtubeMedias.filter((video) => video.id !== videoId)
-    console.log(videos)
+
     setCurrentVideos(video)
     setRestVideos(restVideos)
   }
@@ -367,7 +367,6 @@ export const WatchVideoPage = () => {
                 error={error}
                 currentVideos={currentVideos ?? ""}
                 getData={getData}
-                refetch={refetch}
               />
 
               {/* 댓글 작성 컨테이터 */}
