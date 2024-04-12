@@ -42,33 +42,41 @@ import { GoogleLoginButton } from "./GoogleLoginButton"
 import youtuber1 from "assets/images/logos/youtuber_logo_1.jpg"
 import youtuber2 from "assets/images/logos/youtuber_logo_2.png"
 import { accountState } from "atom/accountState"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { GET_ALL_VIDEOS } from "apollo/query"
 import { useLazyQuery, useQuery } from "@apollo/client"
 import { USER_INFO } from "Constants/value"
 import { FIND_USER_ID_BY_ID } from "apollo/query"
+import { useMySubArr } from "hooks/useMySubArr"
+import { clickTermState } from "atom/clickTermState"
 
 export default function SideBar() {
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [isClosing, setIsClosing] = React.useState(false)
-  const [dummy, setDummy] = React.useState()
   const navigate = useNavigate()
-  //   const [state, toggleState] = useRecoilState(changeState)
-  const [user, setUser] = useRecoilState(accountState)
 
-  const handleDrawerClose = () => {
-    setIsClosing(true)
-    setMobileOpen(false)
-  }
+  const user = useRecoilValue(accountState)
+  const [clickTerm, setClickTerm] = useRecoilState(clickTermState)
+  const { data, refetch: sub_refetch } = useMySubArr({ my_id: user?.uid })
+  const { sub_users } = data?.users[0] || {}
+  console.log(sub_users)
+
   const commonStyle = {
     color: "black",
   }
+  React.useEffect(() => {
+    if (clickTerm) {
+      setTimeout(() => {
+        console.log("0.5초가 지났습니다.")
+        sub_refetch()
+        setClickTerm(false)
+      }, 500)
+    }
+  }, [clickTerm])
 
   const [state, setState] = React.useState({
     left: false,
   })
   const [findUserById, { loading, error, data: videos, refetch }] = useLazyQuery(FIND_USER_ID_BY_ID)
-  // const [findUserIdByName, { loading, data, error }] = useLazyQuery(FIND_USER_ID_BY_NAME)
+
   const middleList = user
     ? ["나", "시청 기록", "내 동영상", "나중에 볼 동영상", "좋아요 표시한 동영상"]
     : ["나", "시청 기록"]
@@ -80,7 +88,6 @@ export default function SideBar() {
 
     setState({ ...state, [anchor]: open })
   }
-  let arr = []
 
   React.useEffect(() => {
     findUserById({ variables: { id: "19" } }).then(() => {
@@ -139,7 +146,7 @@ export default function SideBar() {
           sx={{
             display: { xs: "none", sm: "block" },
           }}
-          onClick={() => movePage(name)}
+          onClick={() => movePage("Home")}
         >
           <img src={YoutubeLogo} alt="Youtube" width="100" height="50" />
         </Button>
@@ -195,14 +202,13 @@ export default function SideBar() {
             </Typography>
 
             <List>
-              {["임호진", "슈카월드"].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton onClick={() => movePage(text)}>
+              {sub_users?.map((data, index) => (
+                <ListItem key={data?.username} disablePadding>
+                  <ListItemButton onClick={() => movePage(data?.username)}>
                     <ListItemIcon>
-                      {index === 0 && <Avatar src={youtuber1} />}
-                      {index === 1 && <Avatar src={youtuber2} />}
+                      <Avatar src={data?.profileImage} />
                     </ListItemIcon>
-                    <ListItemText primary={text} />
+                    <ListItemText primary={data?.username} />
                   </ListItemButton>
                 </ListItem>
               ))}

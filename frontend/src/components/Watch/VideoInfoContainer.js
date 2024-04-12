@@ -1,4 +1,5 @@
 import React, { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { Container, Typography, Avatar, Button, Box } from "@mui/material"
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined"
 import IconButton from "@mui/material/IconButton"
@@ -20,14 +21,14 @@ import { timeForBetween } from "functions/timeForBetween"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
 import { USER_INFO } from "Constants/value"
 import { useLazyQuery, useMutation } from "@apollo/client"
-import { UPDATE_LATER } from "apollo/mutation"
-import { UPDATE_SUB } from "apollo/mutation"
+
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import useUpdateLater from "hooks/useUpdateLater"
 import useHandleLike from "hooks/useHandleLike"
 import { INCREMENT_VIEWS } from "apollo/mutation"
-import { FIND_USER_ID_BY_ID } from "apollo/query"
+
+import { useHandleSub } from "hooks/useHandleSub"
 
 export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, getData }) => {
   const {
@@ -38,6 +39,7 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
     created_at,
     created_user,
     sub_users,
+    createdBy,
     later_users,
     like_user,
     dislike_user,
@@ -47,15 +49,7 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
   const [thumbUp, setThumbup] = useState(null)
   const [thumbDown, setThumbDown] = useState(null)
   const [likeCount, setLikeCount] = useState()
-
-  const [subed, setSubed] = useState()
-  const [globalArr, setGlobalArr] = useState([])
-  const [subscript, setSubscript] = useState(false)
-  const [updateLater, { loading, error }] = useMutation(UPDATE_LATER)
-  const [updateSub, { updateLoading, updateError }] = useMutation(UPDATE_SUB)
-
-  const [isYours, setYours] = useState()
-
+  const navigate = useNavigate()
   const { isAdded, addLaterVideoHandler } = useUpdateLater({
     later_users: later_users,
     refetch: getData,
@@ -71,22 +65,13 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
     id,
   })
 
-  let arr = []
+  const { subArr, subed, changeSubHandler, isYours, data } = useHandleSub({
+    owner_id: created_user?.id,
+    my_id: user?.uid,
+  })
+
   const [viewCount, setViewCount] = useState(0)
   const [increaseView] = useMutation(INCREMENT_VIEWS)
-
-  const [getUserById, { data, loaded, called }] = useLazyQuery(FIND_USER_ID_BY_ID)
-
-  useEffect(() => {
-    if (!loaded && !called) {
-      getUserById({
-        variables: { id: "26" },
-        onCompleted: () => {
-          console.log(data)
-        },
-      })
-    }
-  }, [id, getUserById, called, data])
 
   useEffect(() => {
     if (!load && views !== null) {
@@ -101,63 +86,14 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
     }
   }, [id, views, load, increaseView])
 
-  useEffect(() => {
-    let glob = []
-    sub_users?.map((data) => glob.push(data?.id))
-    setGlobalArr(glob)
-
-    const isStored = sub_users?.find((data) => data?.id == user?.uid)
-
-    setSubed(isStored?.id ? true : false)
-    console.log("isStored", isStored)
-    console.log("sub_users", sub_users)
-  }, [sub_users, getData, id])
-
-  useEffect(() => {
-    if (!load) {
-      created_user?.id == user.uid ? setYours(true) : setYours(false)
-    }
-  }, [load, currentVideos])
-
-  useEffect(() => {
-    if (!err && !load) {
-      setLikeCount(like_user.length)
-
-      if (arr.includes(user.uid)) {
-        setSubed(true)
-      } else {
-        setSubed(false)
-      }
-    }
-  }, [currentVideos, sub_users])
-
   const thumbUpHandler = () => {
     clickLike()
   }
   const thumbDownHandler = () => {
     clickDislike()
   }
-
-  const handleUpdateSub = async () => {
-    // 비동기 작업을 수행하고 업데이트한 후에 상태를 업데이트합니다.
-    if (subed) {
-      const newArr = arr.filter((idx) => idx !== user.uid)
-      await updateSub({
-        variables: { id: id, sub_users: newArr },
-        onCompleted: () => {
-          console.log("hello")
-          getData()
-        },
-      })
-    } else {
-      arr.push(user.uid)
-      await updateSub({
-        variables: { id: id, sub_users: arr },
-      }).then(() => {
-        console.log("hello")
-        getData()
-      })
-    }
+  const moveCreaterPage = () => {
+    navigate(`/@${createdBy}`)
   }
 
   return (
@@ -181,13 +117,15 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
         </Typography>
 
         <div style={{ display: "flex", marginBottom: "15px" }}>
-          <Avatar alt="Remy Sharp" src={created_user?.profileImage} />
+          <IconButton sx={{ padding: 0 }} onClick={moveCreaterPage}>
+            <Avatar alt="Remy Sharp" src={created_user?.profileImage} />
+          </IconButton>
           <div style={{ display: "flex", flexDirection: "column", margin: "0px 12px" }}>
-            <Typography variant="body2" gutterBottom color={"gray"}>
-              {subtitle}
-            </Typography>
+            <div className="clickable" onClick={moveCreaterPage}>
+              <Typography variant="body1">{createdBy}</Typography>
+            </div>
             <Typography style={{ minWidth: "70px" }} variant="body2" gutterBottom color={"gray"}>
-              구독자 {sub_users?.length}명
+              구독자 {subArr?.length}명
             </Typography>
           </div>
 
@@ -195,7 +133,7 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
             <div style={{ display: "flex" }}>
               <Button
                 disabled={isYours ? true : false}
-                onClick={handleUpdateSub}
+                onClick={changeSubHandler}
                 variant="contained"
                 sx={
                   subed
@@ -223,9 +161,7 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
             <div
               style={{
                 display: "flex",
-
                 alignItems: "center",
-                // width: "100%",
               }}
             >
               <Stack

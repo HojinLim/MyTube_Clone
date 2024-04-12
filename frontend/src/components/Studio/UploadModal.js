@@ -48,7 +48,14 @@ export default function UploadModal() {
   const [isPublic, setIsPublic] = React.useState(false)
   const [duration, setDuration] = React.useState()
   const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const handleClose = () => {
+    setUploaded(false)
+    setUploadedFile(null)
+    setModalTitle("동영상 업로드")
+    setUploaded(null)
+
+    setOpen(false)
+  }
 
   // 제목 입력
   const [inputText, setInputText] = React.useState()
@@ -64,11 +71,18 @@ export default function UploadModal() {
     const data = e.target.files[0]
     console.log(data)
     if (data !== null) {
+      if (!data.type.startsWith("video/")) {
+        // 파일이 동영상이 아닌 경우
+        alert("동영상 파일이 아닙니다!")
+        return
+      }
+      // 파일이 존재하는 경우
       setUploadedFile(data)
       setModalTitle(data.name)
       setUploaded(true)
     } else {
-      alert("잘못된 데이터 형식입니다!!!!")
+      // 파일이 존재하지 않는 경우
+      alert("파일이 선택되지 않았습니다!")
     }
   }
   const handleIsChangeHandler = (e) => {
@@ -106,7 +120,9 @@ export default function UploadModal() {
         alert("제목이 비어있습니다!!")
         return
       }
+      // const { size, name, type } = uploadedFile
       var formData = new FormData()
+      // uploadedFile.type
       formData.append("files", uploadedFile)
       formData.append("files", uploadThumbImage)
 

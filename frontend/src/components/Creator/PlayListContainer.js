@@ -4,10 +4,11 @@ import Button from "@mui/material/Button"
 import SortIcon from "@mui/icons-material/Sort"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
-import { VideoContainer } from "components/common/VideoContainer"
+
 import { StyledGrid } from "styles/globalStyle"
 import { dummyData } from "dummy"
-export const PlayListContainer = () => {
+import VideosContainer from "components/Video/VideosContainer"
+export const PlayListContainer = ({ datas }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -52,11 +53,9 @@ export const PlayListContainer = () => {
           <MenuItem onClick={handleClose}>최근 추가된 동영상순</MenuItem>
         </Menu>
       </div>
-      <StyledGrid>
-        <VideoContainer data={dummyData[0]} hasCreator={false} />
-        <VideoContainer data={dummyData[0]} hasCreator={false} />
-        <VideoContainer data={dummyData[0]} hasCreator={false} />
-      </StyledGrid>
+      {datas?.map((value, key) => (
+        <VideosContainer data={value} key={key} />
+      ))}
     </div>
   )
 }

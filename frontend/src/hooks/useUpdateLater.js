@@ -18,7 +18,7 @@ const useUpdateLater = ({ later_users, refetch, user, id }) => {
   }, [later_users, user])
 
   const updateLaterVideo = () => {
-    let arr = [...globalArr, user?.uid] // Add user's ID to the array
+    let arr = [...globalArr, user?.uid]
     updateLater({
       variables: { id: id, later_users: arr },
       onCompleted: () => {

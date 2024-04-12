@@ -8,24 +8,19 @@ import Typography from "@mui/material/Typography"
 import { useNavigate, useParams } from "react-router-dom"
 import { Container, Avatar, Button, Box, IconButton, Divider } from "@mui/material"
 
-import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import { VideoContainer as Video } from "components/common/VideoContainer"
+// import { VideoContainer as Video } from "components/common/VideoContainer"
 import { dummyData } from "dummy"
 
 import { StyledGrid } from "styles/globalStyle"
+import VideosContainer from "components/Video/VideosContainer"
 
-export const VideoContainer = () => {
+export const VideoContainer = ({ datas }) => {
   return (
     <div>
       <MenuSelector categories={["최신순", "인기순", "날짜순"]} />
-      <StyledGrid>
-        <Video data={dummyData[0]} hasCreator={false} />
-        <Video data={dummyData[0]} hasCreator={false} />
-        <Video data={dummyData[0]} hasCreator={false} />
-        <Video data={dummyData[0]} hasCreator={false} />
-        <Video data={dummyData[0]} hasCreator={false} />
-        <Video data={dummyData[0]} hasCreator={false} />
-      </StyledGrid>
+      {datas?.map((value, key) => (
+        <VideosContainer data={value} key={key} />
+      ))}
     </div>
   )
 }

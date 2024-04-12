@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react"
-import { Container, Typography, Box } from "@mui/material"
+import { Container, Typography, Box, Avatar } from "@mui/material"
 import ReactPlayer from "react-player/lazy"
 import { useNavigate } from "react-router-dom"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
@@ -36,6 +36,7 @@ const VideoContainer = ({ data, refetch }) => {
     createdBy,
     created_at,
     views,
+    created_user,
   } = data
 
   const navigate = useNavigate()
@@ -155,7 +156,8 @@ const VideoContainer = ({ data, refetch }) => {
           overflow: "hidden",
         }}
       >
-        {/* <Avatar alt="Remy Sharp" src={profileImage} /> */}
+        <Avatar alt="Remy Sharp" src={created_user?.profileImage} />
+
         <Container
           sx={{
             flexGrow: 1,

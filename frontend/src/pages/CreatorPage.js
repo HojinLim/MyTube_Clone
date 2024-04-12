@@ -16,36 +16,35 @@ import { HomeContainer } from "components/Creator/HomeContainer"
 import { VideoContainer } from "components/Creator/VideoContainer"
 import { PlayListContainer } from "components/Creator/PlayListContainer"
 import { CommunityContainer } from "components/Creator/CommunityContainer"
-import { useLazyQuery } from "@apollo/client"
+import { useLazyQuery, useQuery } from "@apollo/client"
 import { FIND_USER_ID_BY_NAME } from "apollo/query"
+import { useHandleSub } from "hooks/useHandleSub"
+import { useRecoilValue } from "recoil"
+import { accountState } from "atom/accountState"
+import { useFindUserData } from "hooks/useFindUserData"
 export const CreatorPage = () => {
   const params = useParams()
   const [value, setValue] = useState(0)
   const [subscript, setSubscript] = useState(false)
-  const [nicknamee, setNicknamee] = useState()
-  const [findUserIdByName, { loading, data, error }] = useLazyQuery(FIND_USER_ID_BY_NAME)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
   const nickname = params.nickname.split("@")
+  const user = useRecoilValue(accountState)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!loading && data && !error) {
-          // loading이 false이고 data와 error가 있을 때만 실행
-          const response = await findUserIdByName({ variables: { username: nickname[1] } })
-          console.log(response)
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    }
+  // 영상 주인
+  const { userData } = useFindUserData({ nickname: nickname[1] })
+  const { id: owner_id, profileImage, created_youtubes } = userData?.users[0] || {}
 
-    fetchData()
-  }, [loading, data, error, nickname])
+  console.log(userData)
+  console.log(created_youtubes)
+  const { subArr, subed, changeSubHandler, isYours, data } = useHandleSub({
+    owner_id: owner_id,
+    my_id: user?.uid,
+  })
+
   return (
     <div style={{ padding: "50px" }}>
       {/* 앱 헤더 컨테이너 */}
@@ -54,22 +53,31 @@ export const CreatorPage = () => {
           <img className="creator-app-header" src={logo} style={{ position: "relative" }} />
         </div>
         <div className="creator-inform-container">
-          <img src={person} />
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <img
+            style={{
+              minWidth: "150px",
+              maxHeight: "150px",
+              objectFit: "cover",
+              borderRadius: "50%",
+            }}
+            src={profileImage}
+          />
+          <div style={{ display: "flex", flexDirection: "column", margin: "0px 30px" }}>
             <Tooltip title={nickname} placement="top">
               <Typography variant="h3" fontWeight={"800"}>
                 {nickname}
               </Typography>
             </Tooltip>
             <Typography variant="caption" style={{ margin: "10px 0px" }}>
-              {nickname} - 구독자 00명 - 동영상 00개
+              {nickname} - 구독자 {subArr?.length}명 - 동영상 {created_youtubes?.length}개
             </Typography>
             <Typography className="creator-inform-click" variant="body2">
               정보
             </Typography>
             <Link href="#">example.com</Link>
             <Button
-              onClick={() => setSubscript((prev) => !prev)}
+              disabled={isYours ? true : false}
+              onClick={changeSubHandler}
               variant="contained"
               sx={{
                 backgroundColor: "lightgray",
@@ -78,8 +86,10 @@ export const CreatorPage = () => {
                 margin: "10px 0px",
               }}
             >
-              {subscript && <NotificationsNoneOutlinedIcon />}
-              {subscript ? "구독중" : "구독"}
+              {!isYours && subed && <NotificationsNoneOutlinedIcon />}
+              {!isYours && subed && "구독중"}
+              {!isYours && !subed && "구독"}
+              {isYours && "당신 채널"}
             </Button>
           </div>
         </div>
@@ -104,9 +114,9 @@ export const CreatorPage = () => {
       <Divider />
 
       {/* 홈 컨테이너 */}
-      {value === 0 && <HomeContainer />}
-      {value === 1 && <VideoContainer />}
-      {value === 2 && <PlayListContainer />}
+      {value === 0 && <HomeContainer datas={created_youtubes} />}
+      {value === 1 && <VideoContainer datas={created_youtubes} />}
+      {value === 2 && <PlayListContainer datas={created_youtubes} />}
       {value === 3 && <CommunityContainer />}
     </div>
   )

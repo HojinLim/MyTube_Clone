@@ -1,6 +1,7 @@
 export function formatTime(seconds) {
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = seconds % 60
+  const filterdSeconds = Math.trunc(seconds)
+  const minutes = Math.floor(filterdSeconds / 60)
+  const remainingSeconds = filterdSeconds % 60
 
   const formattedMinutes = String(minutes).padStart(2, "0")
   const formattedSeconds = String(remainingSeconds).padStart(2, "0")

@@ -18,6 +18,8 @@ import { flex_column } from "styles/globalStyle"
 import MultilineTextField from "components/common/MultilineTextField"
 import CustomMenu from "components/common/CustomMenu"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
+import { dummyData } from "dummy"
+import { formatTime } from "functions/formatTime"
 
 export const AfterUploadContainer = ({
   uploadedFile,
@@ -33,6 +35,7 @@ export const AfterUploadContainer = ({
   handleSetDuration,
 }) => {
   const { size, name, type } = uploadedFile
+  const videoRef = React.useRef(null)
 
   // useRef를 이용해 input태그에 접근
   const thumbInput = React.useRef()
@@ -40,6 +43,27 @@ export const AfterUploadContainer = ({
   const thumbUploadHandler = () => {
     thumbInput.current.click()
   }
+
+  // TODO: 방법1. 일단 strapi 에 올린 영상 링크화해서 붙여놓고 계산
+  // 방법2 . 임시로 링크화 시킬수 있으면 그렇게 ㄱ
+  React.useEffect(() => {
+    // 비디오 요소가 준비되면 이벤트를 추가합니다.
+    if (videoRef.current) {
+      videoRef.current.addEventListener("loadedmetadata", function () {
+        console.log(videoRef.current.duration)
+        console.log(formatTime(videoRef?.current.duration))
+      })
+    }
+
+    // 컴포넌트가 언마운트될 때 이벤트를 제거합니다.
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.removeEventListener("loadedmetadata", function () {
+          console.log(videoRef.current.duration)
+        })
+      }
+    }
+  }, []) // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행되도록 합니다.
 
   return (
     <div
@@ -57,6 +81,17 @@ export const AfterUploadContainer = ({
       <div>크기: {size}</div>
       <div>이름: {name}</div>
       <div>타입: {type}</div>
+      <video
+        ref={videoRef}
+        width="560"
+        height="315"
+        src={dummyData[0].sources[0]}
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+        controls
+      ></video>
       <MultilineTextField
         label={"제목(필수 항목)"}
         initialText={inputText}

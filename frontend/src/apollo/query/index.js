@@ -23,6 +23,20 @@ export const FIND_USER_ID_BY_NAME = gql`
     users(where: { username: $username }) {
       id
       username
+      profileImage
+      created_youtubes {
+        id
+        title
+        views
+        duration
+        created_at
+        contents {
+          url
+        }
+        thumbnail {
+          url
+        }
+      }
     }
   }
 `
@@ -33,6 +47,8 @@ export const FIND_USER_ID_BY_ID = gql`
       username
       sub_users {
         id
+        username
+        profileImage
       }
     }
   }

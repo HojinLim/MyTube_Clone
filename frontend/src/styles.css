@@ -14,6 +14,9 @@ body, html {
 .logo:hover{
   cursor: pointer;
 }
+.clickable:hover{
+  cursor: pointer;
+}
 .pointerlable:hover{
   cursor: pointer;
 }
@@ -567,9 +570,11 @@ line-height: 1;
 .grid-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+
+  justify-content: flex-start;
   margin: 0 auto;
   padding: 10px;
+  gap: 30px;
   justify-self: start;
 }
 
