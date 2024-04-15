@@ -98,6 +98,7 @@ export const UPLOAD_VIDEO = gql`
     $isPublic: Boolean!
     $duration: String!
     $created_user: ID
+    $sort: ENUM_YOUTUBEMEDIA_SORT!
   ) {
     createYoutubeMedia(
       input: {
@@ -110,6 +111,7 @@ export const UPLOAD_VIDEO = gql`
           isPublic: $isPublic
           duration: $duration
           created_user: $created_user
+          sort: $sort
         }
       }
     ) {
@@ -125,6 +127,7 @@ export const UPLOAD_VIDEO = gql`
         createdBy
         isPublic
         duration
+        sort
         created_user {
           id
         }
@@ -213,11 +216,11 @@ export const UPDATE_LATER = gql`
   }
 `
 export const UPDATE_LIKE = gql`
-  mutation updateLike($id: ID!, $like_user: [ID]) {
-    updateYoutubeMedia(input: { where: { id: $id }, data: { like_user: $like_user } }) {
+  mutation updateLike($id: ID!, $like_users: [ID]) {
+    updateYoutubeMedia(input: { where: { id: $id }, data: { like_users: $like_users } }) {
       youtubeMedia {
         id
-        like_user {
+        like_users {
           id
         }
       }
@@ -252,6 +255,16 @@ export const UPDATE_COMMENT = gql`
     updateComment(input: { where: { id: $id }, data: { contents: $contents } }) {
       comment {
         id
+      }
+    }
+  }
+`
+export const UPDATE_ISPUBLIC = gql`
+  mutation updateIsPublic($id: ID!, $isPublic: Boolean!) {
+    updateYoutubeMedia(input: { where: { id: $id }, data: { isPublic: $isPublic } }) {
+      youtubeMedia {
+        id
+        isPublic
       }
     }
   }

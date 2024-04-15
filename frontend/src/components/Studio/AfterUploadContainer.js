@@ -33,6 +33,9 @@ export const AfterUploadContainer = ({
   inputText,
   inputContents,
   handleSetDuration,
+  duration,
+  handleSort,
+  sort,
 }) => {
   const { size, name, type } = uploadedFile
   const videoRef = React.useRef(null)
@@ -44,14 +47,13 @@ export const AfterUploadContainer = ({
     thumbInput.current.click()
   }
 
-  // TODO: 방법1. 일단 strapi 에 올린 영상 링크화해서 붙여놓고 계산
-  // 방법2 . 임시로 링크화 시킬수 있으면 그렇게 ㄱ
   React.useEffect(() => {
     // 비디오 요소가 준비되면 이벤트를 추가합니다.
     if (videoRef.current) {
       videoRef.current.addEventListener("loadedmetadata", function () {
-        console.log(videoRef.current.duration)
         console.log(formatTime(videoRef?.current.duration))
+        const duration = formatTime(videoRef?.current.duration)
+        handleSetDuration(duration)
       })
     }
 
@@ -78,20 +80,33 @@ export const AfterUploadContainer = ({
       <Typography id="modal-modal-title" variant="h5" component="h2" fontWeight={800}>
         세부정보
       </Typography>
-      <div>크기: {size}</div>
-      <div>이름: {name}</div>
-      <div>타입: {type}</div>
-      <video
-        ref={videoRef}
-        width="560"
-        height="315"
-        src={dummyData[0].sources[0]}
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-        controls
-      ></video>
+      <div style={{ display: "flex" }}>
+        <ul
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "left",
+            marginRight: "250px",
+          }}
+        >
+          <li>크기: {size}</li>
+          <li>타입: {type}</li>
+          <li>이름: {name}</li>
+          <li>시간: {duration}</li>
+        </ul>
+        {/* 미리보기 영상 */}
+        <video
+          ref={videoRef}
+          width="360"
+          height="215"
+          src={URL.createObjectURL(uploadedFile)}
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+          controls
+        ></video>
+      </div>
       <MultilineTextField
         label={"제목(필수 항목)"}
         initialText={inputText}
@@ -102,16 +117,11 @@ export const AfterUploadContainer = ({
         initialText={inputContents}
         onTextChange={handleContentsChange}
       />
-      <MultilineTextField
-        label={"영상 길이"}
-        // initialText={inputContents}
-        onTextChange={handleSetDuration}
-      />
+
       <Typography id="modal-modal-description" fontSize={"15px"} sx={{ mt: 1 }}>
         공개 여부
       </Typography>
       <FormControl component="fieldset">
-        {/* <FormLabel id="demo-row-radio-buttons-group-label">공개여부</FormLabel> */}
         <RadioGroup
           value={isPublic}
           onChange={handleIsChangeHandler}
@@ -132,18 +142,24 @@ export const AfterUploadContainer = ({
           alignItems: "start",
         }}
       >
-        <Typography id="modal-modal-description" fontSize={"15px"} sx={{ mt: 1 }}>
-          카테고리
-        </Typography>
-        <CustomIconMenu
-          iconButton={<ArrowDropDownIcon />}
-          menuItems={[
-            { text: "movie", onClick: () => {} },
-            { text: "game", onClick: () => {} },
-            { text: "anime", onClick: () => {} },
-            { text: "music", onClick: () => {} },
-          ]}
-        />
+        <div style={{ display: "flex" }}>
+          <Typography id="modal-modal-description" fontSize={"15px"} sx={{ mt: 1 }}>
+            카테고리
+          </Typography>
+          <CustomIconMenu
+            iconButton={<ArrowDropDownIcon />}
+            menuItems={[
+              { text: "movie", onClick: () => handleSort("movie") },
+              { text: "game", onClick: () => handleSort("game") },
+              { text: "anime", onClick: () => handleSort("anime") },
+              { text: "music", onClick: () => handleSort("music") },
+            ]}
+          />
+          <Typography fontSize={"15px"} sx={{ mt: 1, borderBottom: "1px solid black" }}>
+            {sort}
+          </Typography>
+        </div>
+
         <Typography id="modal-modal-description" fontSize={"15px"} sx={{ mt: 1 }}>
           썸네일
         </Typography>

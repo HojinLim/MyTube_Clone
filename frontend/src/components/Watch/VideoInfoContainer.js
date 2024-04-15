@@ -19,8 +19,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline"
 import Stack from "@mui/material/Stack"
 import { timeForBetween } from "functions/timeForBetween"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
-import { USER_INFO } from "Constants/value"
-import { useLazyQuery, useMutation } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
@@ -29,6 +28,7 @@ import useHandleLike from "hooks/useHandleLike"
 import { INCREMENT_VIEWS } from "apollo/mutation"
 
 import { useHandleSub } from "hooks/useHandleSub"
+import { GET_IN_SITE } from "Constants/value"
 
 export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, getData }) => {
   const {
@@ -41,14 +41,11 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
     sub_users,
     createdBy,
     later_users,
-    like_user,
+    like_users,
     dislike_user,
   } = currentVideos
   const user = useRecoilValue(accountState)
 
-  const [thumbUp, setThumbup] = useState(null)
-  const [thumbDown, setThumbDown] = useState(null)
-  const [likeCount, setLikeCount] = useState()
   const navigate = useNavigate()
   const { isAdded, addLaterVideoHandler } = useUpdateLater({
     later_users: later_users,
@@ -58,7 +55,7 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
   })
 
   const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
-    like_users: like_user,
+    like_users,
     dislike_users: dislike_user,
     refetch: getData,
     user: user,
@@ -80,8 +77,14 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
   }, [views, load])
   useEffect(() => {
     if (!load && !views && id) increaseView({ variables: { id: id, views: 0 } })
-    if (!load && views !== null && id) {
-      increaseView({ variables: { id: id, views: views + 1 } })
+    if (!load && views !== null && id && localStorage.getItem(GET_IN_SITE) == "false") {
+      increaseView({
+        variables: { id: id, views: views + 1 },
+        onCompleted: () => {
+          localStorage.setItem(GET_IN_SITE, "true")
+        },
+      })
+
       setViewCount((prevViews) => prevViews + 1)
     }
   }, [id, views, load, increaseView])
@@ -178,7 +181,7 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
                   onClick={thumbUpHandler}
                   style={{ justifyContent: "center", alignItems: "center", display: "flex" }}
                 >
-                  {likeCount}
+                  {like_users?.length}
                   {isLikeAdded ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />}
                 </div>
                 <Divider orientation="vertical" />

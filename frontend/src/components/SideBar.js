@@ -90,7 +90,7 @@ export default function SideBar() {
   }
 
   React.useEffect(() => {
-    findUserById({ variables: { id: "19" } }).then(() => {
+    findUserById({ variables: { id: user?.uid } }).then(() => {
       refetch()
       console.log(videos)
     })

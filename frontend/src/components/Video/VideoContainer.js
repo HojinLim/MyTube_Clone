@@ -156,7 +156,14 @@ const VideoContainer = ({ data, refetch }) => {
           overflow: "hidden",
         }}
       >
-        <Avatar alt="Remy Sharp" src={created_user?.profileImage} />
+        <Avatar
+          className="clickable"
+          alt="Remy Sharp"
+          src={created_user?.profileImage}
+          onClick={() => {
+            navigate(`/@${createdBy}`)
+          }}
+        />
 
         <Container
           sx={{

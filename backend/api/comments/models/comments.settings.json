@@ -26,6 +26,10 @@
     },
     "subId": {
       "type": "string"
+    },
+    "youtube_comments": {
+      "via": "comments",
+      "model": "youtube-media"
     }
   }
 }

@@ -1,14 +1,27 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
 import person from "assets/images/person.png"
 import { Button } from "@mui/material"
-import { useSetRecoilState } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import { openUploadState } from "atom/openUploadState"
 import Divider from "@mui/material/Divider"
+import { accountState } from "atom/accountState"
+import { useMySubArr } from "hooks/useMySubArr"
 
 export const DashboardItem = () => {
   const setOpen = useSetRecoilState(openUploadState)
+  const user = useRecoilValue(accountState)
+  const { data, refetch, called, loading } = useMySubArr({ my_id: user?.uid })
+  const [views, setViews] = useState(0)
+
+  useEffect(() => {
+    data?.users[0]?.created_youtubes.map((value) => {
+      setViews((prev) => (prev += value.views))
+    })
+  }, [called, loading])
+
+  console.log(data)
   return (
     <div style={{ backgroundColor: "#eee", flex: "1", display: "flex", flexDirection: "column" }}>
       <Typography variant="h5" fontWeight={"700"} style={{ marginTop: "23px", marginLeft: "32px" }}>
@@ -73,7 +86,7 @@ export const DashboardItem = () => {
             현재 구독자 수
           </Typography>
           <Typography variant="h4" style={{ marginBottom: "60px" }}>
-            00명
+            {data?.users[0]?.sub_users?.length}명
           </Typography>
           <Divider />
           <div style={{ marginTop: "15px", marginBottom: "25px" }}>
@@ -81,7 +94,7 @@ export const DashboardItem = () => {
             <Typography variant="body1">지난 00일</Typography>
 
             <Typography variant="body1">조회수</Typography>
-            <Typography variant="body1">00회</Typography>
+            <Typography variant="body1">{views}회</Typography>
             <Typography variant="body1">시청시간(단위:시간)</Typography>
             <Typography variant="body1">0.0</Typography>
           </div>

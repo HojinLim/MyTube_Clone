@@ -19,13 +19,20 @@ import { CustomIconMenu } from "./common/CustomIconMenu"
 import { DELETE_COMMENT } from "apollo/mutation"
 import { useMutation } from "@apollo/client"
 import { USER_INFO } from "Constants/value"
-import { CommentInput } from "./Watch/CommentInput"
+
 import { UPDATE_COMMENT } from "apollo/mutation"
+
 // import { EditOutlinedIcon } from "Constants/value"
 {
   /* eslint-disable react/prop-types  */
 }
-export const UserFeedBackContainer = ({ commentsLoading, getComments, comment }) => {
+
+export const UserFeedBackContainer = ({
+  commentsLoading,
+  getComments,
+  comment,
+  refetchComments,
+}) => {
   const [isEdit, setIsEdit] = useState(false)
 
   const { id, username, contents, profileImage, created_at } = comment
@@ -39,14 +46,17 @@ export const UserFeedBackContainer = ({ commentsLoading, getComments, comment })
     try {
       const res = await deleteComment({ variables: { id: id } })
       console.log(res)
-      location.href = location.href
+      refetchComments()
       // 성공적으로 삭제되었을 때 처리
     } catch (error) {
       console.error(error)
       // 에러 처리
     }
   }
-
+  useEffect(() => {
+    setText(contents)
+    console.log(contents)
+  }, [refetchComments, contents, comment])
   return (
     <Container
       sx={{
@@ -99,7 +109,7 @@ export const UserFeedBackContainer = ({ commentsLoading, getComments, comment })
               />
             ) : (
               <Typography variant="h6" gutterBottom>
-                {commentsLoading ? "로딩중" : contents}
+                {contents}
               </Typography>
             )}
           </div>
@@ -139,15 +149,19 @@ export const UserFeedBackContainer = ({ commentsLoading, getComments, comment })
           </Button>
           <Button
             onClick={() => {
-              updateComment({ variables: { id: id, contents: text } })
-              setIsEdit(false)
-              getComments()
+              updateComment({
+                variables: { id: id, contents: text },
+                onCompleted: () => {
+                  setIsEdit(false)
+
+                  refetchComments()
+                },
+              })
             }}
           >
             {isEdit ? "수정" : "답글"}
           </Button>
         </div>
-        {/* <CommentInput /> */}
       </Container>
     </Container>
   )

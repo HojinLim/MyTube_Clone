@@ -75,20 +75,20 @@
       "via": "sub_users"
     },
     "dislike_youtube": {
-      "model": "youtube-media",
-      "via": "dislike_user"
-    },
-    "like_youtube": {
-      "model": "youtube-media",
-      "via": "like_user"
+      "via": "dislike_user",
+      "model": "youtube-media"
     },
     "youtubes": {
-      "collection": "youtube-media",
-      "via": "later_users"
+      "via": "later_users",
+      "collection": "youtube-media"
     },
     "created_youtubes": {
-      "collection": "youtube-media",
-      "via": "created_user"
+      "via": "created_user",
+      "collection": "youtube-media"
+    },
+    "like_youtubes": {
+      "via": "like_users",
+      "collection": "youtube-media"
     }
   }
 }

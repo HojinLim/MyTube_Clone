@@ -24,7 +24,7 @@ import { CREATE_COMMENT } from "apollo/mutation"
 import { USER_INFO } from "Constants/value"
 import { CommentInput } from "./CommentInput"
 
-export const CommentInputContainer = ({ subId, numOfComments }) => {
+export const CommentInputContainer = ({ subId, numOfComments, refetchComments }) => {
   const [text, setText] = useState()
   const [createComment, { data, error, loading }] = useMutation(CREATE_COMMENT)
 
@@ -47,7 +47,7 @@ export const CommentInputContainer = ({ subId, numOfComments }) => {
           <Typography>정렬 기준</Typography>
         </div>
 
-        <CommentInput subId={subId} />
+        <CommentInput subId={subId} refetchComments={refetchComments} />
       </div>
     </Container>
   )

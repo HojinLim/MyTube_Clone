@@ -3,7 +3,7 @@ import { FIND_USER_ID_BY_ID } from "apollo/query"
 import React, { useEffect } from "react"
 
 export const useMySubArr = ({ my_id }) => {
-  const [getUserById, { data, loading, refetch }] = useLazyQuery(FIND_USER_ID_BY_ID)
+  const [getUserById, { data, loading, refetch, called }] = useLazyQuery(FIND_USER_ID_BY_ID)
 
   useEffect(() => {
     const getSubData = async () => {
@@ -15,5 +15,5 @@ export const useMySubArr = ({ my_id }) => {
     }
     getSubData()
   }, [getUserById, my_id])
-  return { data, refetch }
+  return { data, refetch, called, loading }
 }

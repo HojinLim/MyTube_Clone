@@ -577,12 +577,6 @@
                     "type": "string"
                   }
                 },
-                "like_user": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
                 "later_users": {
                   "type": "array",
                   "items": {
@@ -591,6 +585,18 @@
                 },
                 "created_user": {
                   "type": "string"
+                },
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "like_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 },
                 "published_at": {
                   "type": "datetime"
@@ -606,6 +612,82 @@
           },
           "subId": {
             "type": "string"
+          },
+          "youtube_comments": {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "contents": {
+                "type": "string"
+              },
+              "isPublic": {
+                "type": "boolean"
+              },
+              "thumbnail": {
+                "type": "string"
+              },
+              "createdBy": {
+                "type": "string"
+              },
+              "duration": {
+                "type": "string"
+              },
+              "sort": {
+                "type": "string"
+              },
+              "views": {
+                "type": "integer"
+              },
+              "comment": {
+                "type": "string"
+              },
+              "dislike_user": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "later_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "created_user": {
+                "type": "string"
+              },
+              "comments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "like_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "published_at": {
+                "type": "datetime"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
           },
           "published_at": {
             "type": "datetime"
@@ -630,6 +712,9 @@
             }
           },
           "subId": {
+            "type": "string"
+          },
+          "youtube_comments": {
             "type": "string"
           },
           "published_at": {

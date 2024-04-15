@@ -37,9 +37,6 @@ const useHandleLike = ({ like_users, dislike_users, refetch, user, id }) => {
         console.error("Error adding like: ", error)
       },
     })
-    if (isDisLikeAdded) {
-      removeLikeHandler(dislikeArr, "dislike_user", updateDislike)
-    }
   }
 
   const removeLikeHandler = (array, param, func) => {
@@ -55,30 +52,18 @@ const useHandleLike = ({ like_users, dislike_users, refetch, user, id }) => {
         console.error("Error removing like: ", error)
       },
     })
-
-    // if (isLikeAdded) {
-    //   console.log("일단 들옴")
-    //   const updatedArr = likeArr.filter((value) => value !== user.uid)
-    //   console.log(updatedArr)
-    //   updateLike({
-    //     variables: { id: id, [param]: updatedArr },
-    //     onCompleted: () => {
-    //       refetch()
-    //     },
-    //     onError: (error) => {
-    //       console.error("Error adding like: ", error)
-    //     },
-    //   })
-    // }
   }
 
   const clickLike = () => {
     console.log("likeArr", likeArr)
     console.log("isLikeAdded", isLikeAdded)
     if (isLikeAdded) {
-      removeLikeHandler(likeArr, "like_user", updateLike)
+      removeLikeHandler(likeArr, "like_users", updateLike)
     } else {
-      addLikeHandler(likeArr, "like_user", updateLike)
+      addLikeHandler(likeArr, "like_users", updateLike)
+      if (isDisLikeAdded) {
+        removeLikeHandler(dislikeArr, "dislike_user", updateDislike)
+      }
     }
   }
 
@@ -87,6 +72,9 @@ const useHandleLike = ({ like_users, dislike_users, refetch, user, id }) => {
       removeLikeHandler(dislikeArr, "dislike_user", updateDislike)
     } else {
       addLikeHandler(dislikeArr, "dislike_user", updateDislike)
+      if (isLikeAdded) {
+        removeLikeHandler(likeArr, "like_users", updateLike)
+      }
     }
   }
 

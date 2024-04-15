@@ -28,8 +28,8 @@ const style = {
   top: "45%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 800,
-  height: 750,
+  width: 850,
+  height: 800,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -47,6 +47,7 @@ export default function UploadModal() {
   const [open, setOpen] = useRecoilState(openUploadState)
   const [isPublic, setIsPublic] = React.useState(false)
   const [duration, setDuration] = React.useState()
+  const [sort, setSort] = React.useState()
   const handleOpen = () => setOpen(true)
   const handleClose = () => {
     setUploaded(false)
@@ -107,6 +108,13 @@ export default function UploadModal() {
   function handleSetDuration(duration) {
     if (duration) {
       setDuration(duration)
+      console.log("duration", duration)
+    }
+  }
+  const handleSort = (sort) => {
+    if (sort) {
+      setSort(sort)
+      console.log("sort", sort)
     }
   }
 
@@ -156,6 +164,7 @@ export default function UploadModal() {
         isPublic: isPublic,
         duration: duration + "",
         created_user: user.uid,
+        sort: sort,
       },
     })
       .then((res) => {
@@ -209,6 +218,9 @@ export default function UploadModal() {
                 inputText={inputText}
                 inputContents={inputContents}
                 handleSetDuration={handleSetDuration}
+                duration={duration}
+                handleSort={handleSort}
+                sort={sort}
               />
             )}
           </div>

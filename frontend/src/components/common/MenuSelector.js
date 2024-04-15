@@ -3,13 +3,37 @@ import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
 import Button from "@mui/material/Button"
 import Tooltip from "@mui/material/Tooltip"
+import { useSetRecoilState } from "recoil"
+import { menuState } from "atom/menuState"
 
 export const MenuSelector = ({ categories }) => {
   const [selectedButton, setSelectedButton] = useState(categories[0])
+  const setMenu = useSetRecoilState(menuState)
   const ClickedStyle = {
     backgroundColor: "black",
     color: "white",
     margin: "3px",
+  }
+  const menuHandler = (category) => {
+    setSelectedButton(category)
+
+    switch (category) {
+      case "전체":
+        setMenu("all")
+        break
+      case "게임":
+        setMenu("game")
+        break
+      case "음악":
+        setMenu("music")
+        break
+      case "영화":
+        setMenu("movie")
+        break
+      case "애니메이션":
+        setMenu("anime")
+        break
+    }
   }
 
   return (
@@ -19,7 +43,7 @@ export const MenuSelector = ({ categories }) => {
           <Tooltip key={key} title={category} placement="top-start">
             <Button
               size="small"
-              onClick={() => setSelectedButton(category)}
+              onClick={() => menuHandler(category)}
               style={
                 selectedButton === category
                   ? ClickedStyle

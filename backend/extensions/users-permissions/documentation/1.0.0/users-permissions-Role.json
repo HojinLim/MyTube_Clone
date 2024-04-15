@@ -582,9 +582,6 @@
                 "dislike_youtube": {
                   "type": "string"
                 },
-                "like_youtube": {
-                  "type": "string"
-                },
                 "youtubes": {
                   "type": "array",
                   "items": {
@@ -592,6 +589,12 @@
                   }
                 },
                 "created_youtubes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "like_youtubes": {
                   "type": "array",
                   "items": {
                     "type": "string"

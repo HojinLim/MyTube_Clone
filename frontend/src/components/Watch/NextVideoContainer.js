@@ -6,7 +6,7 @@ import { timeForBetween } from "functions/timeForBetween"
 import { MenuSelector } from "components/common/MenuSelector"
 
 export const NextVideoContainer = ({ data }) => {
-  const { id, thumbnail, title, createdBy, contents, duration, created_at } = data
+  const { id, thumbnail, views, title, createdBy, contents, duration, created_at } = data
   const [hover, setHover] = React.useState(false)
   const [playTime, setPlayTime] = useState(0)
   const navigate = useNavigate()
@@ -63,21 +63,23 @@ export const NextVideoContainer = ({ data }) => {
             flexDirection: "column",
           }}
         >
-          <Typography marginBottom={"4px"} variant="body1" gutterBottom>
-            {title}
-          </Typography>
+          <div style={{ marginLeft: "10px" }}>
+            <Typography marginBottom={"4px"} variant="body1" gutterBottom>
+              {title}
+            </Typography>
 
-          <div>{createdBy}</div>
-          <div style={{ display: "flex" }}>
-            <Typography variant="body2" gutterBottom color={"gray"}>
-              조회수 10회
-            </Typography>
-            <Typography variant="body2" gutterBottom color={"gray"}>
-              ⦁
-            </Typography>
-            <Typography variant="body2" gutterBottom color={"gray"}>
-              {timeForBetween(created_at)}
-            </Typography>
+            <div>{createdBy}</div>
+            <div style={{ display: "flex" }}>
+              <Typography variant="body2" gutterBottom color={"gray"}>
+                조회수 {views}회
+              </Typography>
+              <Typography variant="body2" gutterBottom color={"gray"}>
+                ⦁
+              </Typography>
+              <Typography variant="body2" gutterBottom color={"gray"}>
+                {timeForBetween(created_at)}
+              </Typography>
+            </div>
           </div>
         </div>
       </div>

@@ -59,32 +59,38 @@
       ]
     },
     "views": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0
     },
     "comment": {
       "model": "comments",
       "via": "youtube_medias"
     },
     "dislike_user": {
-      "via": "dislike_youtube",
-      "plugin": "users-permissions",
-      "collection": "user"
-    },
-    "like_user": {
-      "via": "like_youtube",
-      "plugin": "users-permissions",
-      "collection": "user"
-    },
-    "later_users": {
-      "via": "youtubes",
       "plugin": "users-permissions",
       "collection": "user",
+      "via": "dislike_youtube"
+    },
+    "later_users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "youtubes",
       "dominant": true
     },
     "created_user": {
-      "via": "created_youtubes",
       "plugin": "users-permissions",
-      "model": "user"
+      "model": "user",
+      "via": "created_youtubes"
+    },
+    "comments": {
+      "collection": "comments",
+      "via": "youtube_comments"
+    },
+    "like_users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "like_youtubes",
+      "dominant": true
     }
   }
 }

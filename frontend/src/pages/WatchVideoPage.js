@@ -45,6 +45,7 @@ import { useLazyQuery, useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"
 import { CommentInputContainer } from "components/Watch/CommentInputContainer"
 import { GET_COMMENTS_BY_ID } from "apollo/query"
+import { GET_IN_SITE } from "Constants/value"
 
 export const WatchVideoPage = () => {
   const params = useParams()
@@ -151,14 +152,17 @@ export const WatchVideoPage = () => {
 
     return () => {
       screenfull.off("change")
+      localStorage.setItem(GET_IN_SITE, "false")
     }
   }, [])
   const getComments = async () => {
     await getCommentsById({ variables: { subId: videoId } })
   }
 
-  const [getCommentsById, { loading: commentsLoading, error: commentError, data: commentData }] =
-    useLazyQuery(GET_COMMENTS_BY_ID)
+  const [
+    getCommentsById,
+    { loading: commentsLoading, error: commentError, data: commentData, refetch: refetchComments },
+  ] = useLazyQuery(GET_COMMENTS_BY_ID)
   useEffect(() => {
     if (!commentsLoading && !commentError && commentData) {
     }
@@ -373,6 +377,7 @@ export const WatchVideoPage = () => {
               <CommentInputContainer
                 subId={videoId}
                 numOfComments={commentData?.comments?.length}
+                refetchComments={refetchComments}
               />
             </div>
 
@@ -399,6 +404,7 @@ export const WatchVideoPage = () => {
                   commentsLoading={commentsLoading}
                   getComments={getComments}
                   comment={data}
+                  refetchComments={refetchComments}
                 />
               ))}
             </div>

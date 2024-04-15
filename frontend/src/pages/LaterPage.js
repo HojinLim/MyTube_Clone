@@ -17,7 +17,7 @@ export const LaterPage = () => {
 
   useEffect(() => {
     if (!called || loading) {
-      getLaterVideo({ variables: { id: "26" } })
+      getLaterVideo({ variables: { id: user?.uid } })
     }
     console.log(data?.youtubeMedias)
   }, [data])

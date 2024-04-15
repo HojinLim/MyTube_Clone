@@ -29,29 +29,7 @@ import { GET_ALL_VIDEOS } from "apollo/query"
 import { formatDate } from "functions/formatDate"
 import { DELETE_VIDEO } from "apollo/mutation"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
-import CustomMenu from "components/common/CustomMenu"
-
-function createData(id, name, thumbnail, date, isPublic, views, comments, likes) {
-  return {
-    id,
-    name,
-    thumbnail,
-    date,
-    isPublic,
-    views,
-    comments,
-    likes,
-  }
-}
-// const dummyThumb =
-//   "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
-// const rows_data = [
-//   createData(1, "제목1", dummyThumb, "2024.03.02", "공개", 67, 4.3, 3),
-//   createData(2, "제목2", dummyThumb, "2024.03.02", "비공개", 51, 4.9, 5),
-//   createData(3, "제목3", dummyThumb, "2024.03.02", "비공개", 24, 6.0, 3),
-//   createData(4, "제목4", dummyThumb, "2024.03.02", "공개", 24, 4.0, 7),
-//   createData(5, "제목5", dummyThumb, "2024.03.02", "비공개", 49, 3.9, 9),
-// ]
+import { UPDATE_ISPUBLIC } from "apollo/mutation"
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -200,11 +178,13 @@ ContentsTableToolbar.propTypes = {
 }
 export default function ContentsTable() {
   // 영상 모두 가져오기
-  const { loading, error, data } = useQuery(GET_ALL_VIDEOS)
+  const { loading, error, data, refetch } = useQuery(GET_ALL_VIDEOS)
 
   // 영상 제거
-  const [deleteVideo, { loading: deleteLoading, error: deleteError, data: deleteData }] =
-    useMutation(DELETE_VIDEO)
+  const [deleteVideo] = useMutation(DELETE_VIDEO)
+
+  // 공개/비공개 변경
+  const [changeIsPublic] = useMutation(UPDATE_ISPUBLIC)
 
   const [rows, setRows] = useState([])
 
@@ -217,27 +197,13 @@ export default function ContentsTable() {
 
   useEffect(() => {
     if (!loading && !error) {
-      const updatedRows = data.youtubeMedias.map((arr, idx) => {
-        const { id, title, description, isPublic, created_at, thumbnail, contents } = arr
-        // console.log(id)
-        // 영상링크
-
-        return createData(
-          id,
-          title,
-          process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail.url,
-          created_at,
-          isPublic,
-          0,
-          0,
-          0
-        )
-      })
+      const updatedRows = data.youtubeMedias
       setRows(updatedRows)
     }
   }, [loading, error, data])
 
   const handleRequestSort = (event, property) => {
+    console.log(property)
     const isAsc = orderBy === property && order === "asc"
     setOrder(isAsc ? "desc" : "asc")
     setOrderBy(property)
@@ -294,34 +260,22 @@ export default function ContentsTable() {
 
   const deleteHandler = () => {
     selected.map((select) => {
-      deleteVideo({ variables: { id: select } })
-        .then((res) => {
-          console.log(res)
-          alert(`" ${select} " 삭제 완료`)
-          // 결과를 처리하거나 다음 작업을 수행할 수 있음
-        })
-        .catch((error) => {
-          console.error(error)
-          // 에러 처리
-        })
+      deleteVideo({
+        variables: { id: select },
+        onCompleted: () => console.log(res),
+        onError: (err) => {
+          console.log(err)
+        },
+      })
     })
-
+    alert(`" ${selected} " 삭제 완료`)
+    refetch()
     // FE에서 제거
-    const filtered = rows.filter((row) => !selected.includes(row.id))
-    console.log("filterd", filtered)
-    setRows(filtered)
-    setSelected([])
-    console.log(rows)
-  }
-
-  const togglePublicStatus = (id) => {
-    const updatedRows = rows.map((row) => {
-      if (row.id === id) {
-        return { ...row, isPublic: row.isPublic === "공개" ? "비공개" : "공개" }
-      }
-      return row
-    })
-    setRows(updatedRows)
+    // const filtered = rows.filter((row) => !selected.includes(row.id))
+    // console.log("filterd", filtered)
+    // setRows(filtered)
+    // setSelected([])
+    // console.log(rows)
   }
 
   return (
@@ -340,7 +294,7 @@ export default function ContentsTable() {
             />
 
             <TableBody>
-              {rows.map((row, index) => {
+              {data?.youtubeMedias?.map((row, index) => {
                 const isItemSelected = isSelected(row.id)
                 const labelId = `enhanced-table-checkbox-${index}`
 
@@ -370,19 +324,19 @@ export default function ContentsTable() {
                         <img
                           width={"150px"}
                           height={"100px"}
-                          src={row.thumbnail}
+                          src={process.env.REACT_APP_BACKEND_URL_UPLOAD + row.thumbnail.url}
                           style={{
                             border: "1px solid black",
                             marginRight: "8px",
                             objectFit: "cover",
                           }}
                         />
-                        <div>{row.name}</div>
+                        <div>{row?.name}</div>
                       </div>
                     </TableCell>
                     {/* 공개 여부 */}
                     <TableCell align="left" style={{ minWidth: "100px" }}>
-                      {row.isPublic === "공개" ? <PublicIcon /> : <HttpsOutlinedIcon />}
+                      {row.isPublic === true ? <PublicIcon /> : <HttpsOutlinedIcon />}
                       {row.isPublic}
                       <Button
                         onClick={(e) => {
@@ -398,28 +352,41 @@ export default function ContentsTable() {
                               onClick: (e) => {
                                 e.stopPropagation()
                                 console.log("공개")
-                                togglePublicStatus()
-                                console.log(rows)
+                                if (row.isPublic == true) return
+                                changeIsPublic({
+                                  variables: { id: row.id, isPublic: true },
+                                  onCompleted: () => {
+                                    refetch()
+                                  },
+                                })
                               },
                             },
                             {
                               text: "비공개",
                               onClick: () => {
                                 console.log("비공개")
-                                togglePublicStatus()
-                                console.log(rows)
+                                if (row.isPublic == false) return
+                                changeIsPublic({
+                                  variables: { id: row.id, isPublic: false },
+                                  onCompleted: () => {
+                                    refetch()
+                                  },
+                                })
                               },
                             },
                           ]}
                         />
                       </Button>
                     </TableCell>
+                    {/* 만든 일자 */}
                     <TableCell align="right" style={{ minWidth: "200px" }}>
-                      {formatDate(row.date)}
+                      {formatDate(row.created_at)}
                     </TableCell>
                     <TableCell align="right">{row.views}</TableCell>
-                    <TableCell align="right">{row.comments}</TableCell>
-                    <TableCell align="right">{row.likes}</TableCell>
+                    {/* 댓글 수 */}
+                    <TableCell align="right">{row.comment}</TableCell>
+                    {/* 좋아요 수 */}
+                    <TableCell align="right">{row.like_users.length}</TableCell>
                   </TableRow>
                 )
               })}
