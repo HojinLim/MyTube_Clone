@@ -14,6 +14,10 @@ export const CustomIconMenu = ({ style, iconButton, menuItems }) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const menuItemClickHandler = (onClick) => {
+    onClick()
+    setAnchorEl(false)
+  }
 
   return (
     <div>
@@ -37,7 +41,11 @@ export const CustomIconMenu = ({ style, iconButton, menuItems }) => {
         }}
       >
         {menuItems.map((menuItem, index) => (
-          <MenuItem key={index} onClick={menuItem.onClick} style={{ gap: "12px" }}>
+          <MenuItem
+            key={index}
+            onClick={() => menuItemClickHandler(menuItem.onClick)}
+            style={{ gap: "12px" }}
+          >
             {menuItem?.icon} {menuItem.text}
           </MenuItem>
         ))}

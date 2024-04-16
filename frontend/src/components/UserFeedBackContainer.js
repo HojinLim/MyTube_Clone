@@ -19,29 +19,27 @@ import { CustomIconMenu } from "./common/CustomIconMenu"
 import { DELETE_COMMENT } from "apollo/mutation"
 import { useMutation } from "@apollo/client"
 import { USER_INFO } from "Constants/value"
-
 import { UPDATE_COMMENT } from "apollo/mutation"
-
-// import { EditOutlinedIcon } from "Constants/value"
-{
-  /* eslint-disable react/prop-types  */
-}
+import { useNavigate } from "react-router-dom"
+import { CommentInput } from "./Watch/CommentInput"
 
 export const UserFeedBackContainer = ({
   commentsLoading,
-  getComments,
   comment,
   refetchComments,
+  isRoot: isParent,
 }) => {
   const [isEdit, setIsEdit] = useState(false)
 
-  const { id, username, contents, profileImage, created_at } = comment
-
+  const { id, subId, commentId, created_user, contents, created_at } = comment
+  const { username, profileImage } = created_user ?? {}
+  console.log(created_user)
+  const navi = useNavigate()
   const user = JSON.parse(localStorage.getItem(USER_INFO))
   const [text, setText] = useState(contents ?? "")
-  const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] =
-    useMutation(DELETE_COMMENT)
+  const [deleteComment] = useMutation(DELETE_COMMENT)
   const [updateComment] = useMutation(UPDATE_COMMENT)
+  const [openInput, setOpenInput] = useState(false)
   const deleteCommentHandler = async () => {
     try {
       const res = await deleteComment({ variables: { id: id } })
@@ -55,19 +53,32 @@ export const UserFeedBackContainer = ({
   }
   useEffect(() => {
     setText(contents)
-    console.log(contents)
+    // console.log(contents)
   }, [refetchComments, contents, comment])
+  const movePage = () => {
+    navi(`/@${username}`)
+  }
   return (
     <Container
-      sx={{
-        flexGrow: 1,
-        flexDirection: "row",
-        display: "flex",
-        marginY: "15px",
-      }}
+      sx={
+        isParent
+          ? {
+              flexGrow: 1,
+              flexDirection: "row",
+              display: "flex",
+              marginY: "15px",
+            }
+          : {
+              flexGrow: 1,
+              flexDirection: "row",
+              display: "flex",
+              marginY: "15px",
+              marginLeft: "50px",
+            }
+      }
       className="user-comments-container"
     >
-      <Avatar alt="Remy Sharp" src={profileImage} />
+      <Avatar className="clickable" alt="Remy Sharp" src={profileImage} onClick={movePage} />
       <Container
         sx={{
           flexGrow: 1,
@@ -81,13 +92,18 @@ export const UserFeedBackContainer = ({
             justifyContent: "space-between",
           }}
         >
-          <div>
+          <div style={{ width: "100%" }}>
             <div
               style={{
                 display: "flex",
               }}
             >
-              <Typography variant="body2" sx={{ marginRight: "5px" }}>
+              <Typography
+                className="clickable"
+                variant="body2"
+                sx={{ marginRight: "5px" }}
+                onClick={movePage}
+              >
                 {`@${username}`}
               </Typography>
               {/* 댓글 시간 */}
@@ -149,19 +165,31 @@ export const UserFeedBackContainer = ({
           </Button>
           <Button
             onClick={() => {
-              updateComment({
-                variables: { id: id, contents: text },
-                onCompleted: () => {
-                  setIsEdit(false)
-
-                  refetchComments()
-                },
-              })
+              if (isEdit) {
+                updateComment({
+                  variables: { id: id, contents: text },
+                  onCompleted: () => {
+                    setIsEdit(false)
+                    refetchComments()
+                  },
+                })
+              } else {
+                setOpenInput((prev) => !prev)
+              }
             }}
           >
             {isEdit ? "수정" : "답글"}
           </Button>
         </div>
+        {/* 답글 위치 */}
+        {openInput && (
+          <CommentInput
+            keyword={"답글"}
+            subId={subId}
+            refetchComments={refetchComments}
+            setOpenInput={setOpenInput}
+          />
+        )}
       </Container>
     </Container>
   )

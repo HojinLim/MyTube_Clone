@@ -62,10 +62,6 @@
       "type": "integer",
       "default": 0
     },
-    "comment": {
-      "model": "comments",
-      "via": "youtube_medias"
-    },
     "dislike_user": {
       "plugin": "users-permissions",
       "collection": "user",
@@ -81,10 +77,6 @@
       "plugin": "users-permissions",
       "model": "user",
       "via": "created_youtubes"
-    },
-    "comments": {
-      "collection": "comments",
-      "via": "youtube_comments"
     },
     "like_users": {
       "plugin": "users-permissions",

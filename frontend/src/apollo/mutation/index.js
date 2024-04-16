@@ -160,27 +160,34 @@ export const DELETE_COMMENT = gql`
 // 댓글 작성
 export const CREATE_COMMENT = gql`
   mutation createComment(
-    $subId: String
-    $username: String
     $contents: String
-    $profileImage: String
+    $isParent: Boolean
+    $created_user: ID
+    $created_youtube: ID
   ) {
     createComment(
       input: {
         data: {
-          subId: $subId
-          username: $username
           contents: $contents
-          profileImage: $profileImage
+          isParent: $isParent
+          created_user: $created_user
+          created_youtube: $created_youtube
         }
       }
     ) {
       comment {
         id
-        username
-        profileImage
-        subId
+        contents
         created_at
+        isParent
+        created_user {
+          id
+          username
+          profileImage
+        }
+        created_youtube {
+          id
+        }
       }
     }
   }
@@ -255,6 +262,7 @@ export const UPDATE_COMMENT = gql`
     updateComment(input: { where: { id: $id }, data: { contents: $contents } }) {
       comment {
         id
+        contents
       }
     }
   }

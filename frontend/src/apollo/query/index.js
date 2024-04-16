@@ -75,10 +75,7 @@ export const GET_ALL_VIDEOS = gql`
       contents {
         url
       }
-      comment {
-        id
-        contents
-      }
+
       thumbnail {
         url
       }
@@ -142,14 +139,26 @@ export const GET_LATER_VIDEO_BY_ID = gql`
   }
 `
 export const GET_COMMENTS_BY_ID = gql`
-  query GetComments($subId: String) {
-    comments(where: { subId: $subId }) {
+  query GetComments($id: ID!) {
+    comments(where: { created_youtube: $id }) {
       id
-      subId
-      username
       contents
-      profileImage
+      commentId
+      created_user {
+        id
+        profileImage
+        username
+      }
       created_at
+      replies {
+        id
+        contents
+        created_user {
+          id
+          profileImage
+          username
+        }
+      }
     }
   }
 `

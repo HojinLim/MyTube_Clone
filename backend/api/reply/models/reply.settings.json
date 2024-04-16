@@ -1,8 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "comments",
+  "collectionName": "replies",
   "info": {
-    "name": "Comments",
+    "name": "Reply",
     "description": ""
   },
   "options": {
@@ -14,23 +14,17 @@
     "contents": {
       "type": "string"
     },
-    "commentId": {
-      "type": "string",
-      "default": "0"
-    },
-    "replies": {
-      "collection": "comments"
-    },
     "created_user": {
       "plugin": "users-permissions",
       "model": "user"
     },
-    "created_youtube": {
-      "model": "youtube-media"
+    "like_users": {
+      "plugin": "users-permissions",
+      "collection": "user"
     },
-    "isParent": {
-      "type": "boolean",
-      "default": true
+    "dislike_users": {
+      "plugin": "users-permissions",
+      "collection": "user"
     }
   }
 }

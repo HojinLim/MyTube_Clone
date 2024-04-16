@@ -22,7 +22,9 @@ import TextField from "@mui/material/TextField"
 import { useMutation } from "@apollo/client"
 import { CREATE_COMMENT } from "apollo/mutation"
 import { USER_INFO } from "Constants/value"
-export const CommentInput = ({ subId, refetchComments }) => {
+import { useRecoilValue } from "recoil"
+import { accountState } from "atom/accountState"
+export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput }) => {
   const [visibleText, setVisibleText] = useState("")
   const [realText, setRealText] = useState("")
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
@@ -32,38 +34,59 @@ export const CommentInput = ({ subId, refetchComments }) => {
     setIsEmojiPickerOpen((prev) => !prev) // 이전 상태의 반대 값을 설정하여 토글
   }
 
-  const [createComment, { data, error, loading }] = useMutation(CREATE_COMMENT)
+  const [createComment] = useMutation(CREATE_COMMENT)
 
   // 유저 정보 가져오기
 
-  const user = JSON.parse(localStorage.getItem(USER_INFO))
+  const user = useRecoilValue(accountState)
 
   const onCancelSubmit = () => {
     setVisibleText("")
+    if (keyword == "답글") setOpenInput(false)
   }
-  console.log(visibleText)
+
   const onSubmitComment = () => {
     console.log("submit")
-    createComment({
-      variables: {
-        subId: subId,
-        username: user.name,
-        contents: visibleText,
-        profileImage: user.picture,
-      },
-      onCompleted: () => {
-        // console.log(res)
-        alert("댓글 작성 완료!")
+    // 댓글
+    if (keyword == "댓글") {
+      createComment({
+        variables: {
+          created_user: user?.uid,
+          created_youtube: subId,
+          contents: visibleText,
+          isParent: true,
+        },
+        onCompleted: () => {
+          // console.log(res)
+          alert(`${keyword} 작성 완료!`)
 
-        refetchComments()
-        setVisibleText("")
-      },
-    })
+          refetchComments()
+          setVisibleText("")
+        },
+      })
+    } else if (keyword == "답글") {
+      createComment({
+        variables: {
+          created_user: user?.uid,
+          created_youtube: subId,
+          contents: visibleText,
+          isParent: false,
+        },
+        onCompleted: (res) => {
+          console.log(res)
+          alert(`${keyword} 작성 완료!`)
+          // res?.createComment?.comment?.id
+
+          refetchComments()
+          setVisibleText("")
+        },
+      })
+    }
   }
 
   return (
     <div style={{ display: "flex" }}>
-      <Avatar alt="Remy Sharp" src={user.picture} style={{ marginRight: "10px" }} />
+      <Avatar alt="Remy Sharp" src={user?.picture} style={{ marginRight: "10px" }} />
 
       <div
         style={{
@@ -79,7 +102,7 @@ export const CommentInput = ({ subId, refetchComments }) => {
             setVisibleText(e.target.value)
           }}
           id="standard-basic"
-          label="댓글 추가..."
+          label={`${keyword} 추가...`}
           variant="standard"
           fullWidth
           onFocus={() => setIsEmojiPickerOpen(false)}
@@ -104,8 +127,6 @@ export const CommentInput = ({ subId, refetchComments }) => {
                   onEmojiClick={(emoji, e) => {
                     console.log(typeof emoji.unified)
                     console.log(emoji.unified)
-                    // setVisibleText((prev) => prev + emoji.emoji)
-                    // setRealText((prev) => prev + emoji.unified)
                   }}
                 />
               </div>
@@ -130,7 +151,7 @@ export const CommentInput = ({ subId, refetchComments }) => {
                 backgroundColor: "#eee",
               }}
             >
-              댓글
+              {keyword}
             </Button>
           </div>
         </div>

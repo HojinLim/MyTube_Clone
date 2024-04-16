@@ -43,9 +43,11 @@ import { MenuSelector } from "components/common/MenuSelector"
 import { NextVideoContainer } from "components/Watch/NextVideoContainer"
 import { useLazyQuery, useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"
-import { CommentInputContainer } from "components/Watch/CommentInputContainer"
+
 import { GET_COMMENTS_BY_ID } from "apollo/query"
 import { GET_IN_SITE } from "Constants/value"
+import { IconButton } from "@mui/material"
+import { CommentInput } from "components/Watch/CommentInput"
 
 export const WatchVideoPage = () => {
   const params = useParams()
@@ -156,7 +158,7 @@ export const WatchVideoPage = () => {
     }
   }, [])
   const getComments = async () => {
-    await getCommentsById({ variables: { subId: videoId } })
+    await getCommentsById({ variables: { id: videoId } })
   }
 
   const [
@@ -372,13 +374,27 @@ export const WatchVideoPage = () => {
                 currentVideos={currentVideos ?? ""}
                 getData={getData}
               />
+              <Container>
+                <div className="comments-container">
+                  <div style={{ display: "flex", justifyItems: "center" }}>
+                    <Typography variant="h6" fontWeight={"700"}>
+                      댓글 {commentData?.comments?.length}개
+                    </Typography>
+                    <IconButton style={{ color: "black" }}>
+                      <SortIcon />
+                    </IconButton>
+                    <Typography>정렬 기준</Typography>
+                  </div>
+
+                  <CommentInput
+                    keyword={"댓글"}
+                    subId={videoId}
+                    refetchComments={refetchComments}
+                  />
+                </div>
+              </Container>
 
               {/* 댓글 작성 컨테이터 */}
-              <CommentInputContainer
-                subId={videoId}
-                numOfComments={commentData?.comments?.length}
-                refetchComments={refetchComments}
-              />
             </div>
 
             {/* 나머지 데이터 */}
@@ -398,14 +414,30 @@ export const WatchVideoPage = () => {
               className="screen_comment_container"
               style={isFullscreen ? { display: "none" } : {}}
             >
+              {console.log(commentData)}
               {commentData?.comments?.map((data, key) => (
-                <UserFeedBackContainer
-                  key={key}
-                  commentsLoading={commentsLoading}
-                  getComments={getComments}
-                  comment={data}
-                  refetchComments={refetchComments}
-                />
+                <>
+                  <UserFeedBackContainer
+                    key={key}
+                    comment={data}
+                    isRoot={true}
+                    commentsLoading={commentsLoading}
+                    getComments={getComments}
+                    refetchComments={refetchComments}
+                  />
+                  {console.log(commentData)}
+
+                  {data?.replies.map((value, subKey) => (
+                    <UserFeedBackContainer
+                      key={subKey}
+                      comment={value}
+                      isRoot={false}
+                      commentsLoading={commentsLoading}
+                      getComments={getComments}
+                      refetchComments={refetchComments}
+                    />
+                  ))}
+                </>
               ))}
             </div>
           </div>

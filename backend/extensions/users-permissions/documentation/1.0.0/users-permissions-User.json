@@ -1469,9 +1469,6 @@
               "views": {
                 "type": "integer"
               },
-              "comment": {
-                "type": "string"
-              },
               "dislike_user": {
                 "type": "array",
                 "items": {
@@ -1486,12 +1483,6 @@
               },
               "created_user": {
                 "type": "string"
-              },
-              "comments": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
               },
               "like_users": {
                 "type": "array",
@@ -1547,9 +1538,6 @@
                 "views": {
                   "type": "integer"
                 },
-                "comment": {
-                  "type": "string"
-                },
                 "dislike_user": {
                   "type": "array",
                   "items": {
@@ -1564,12 +1552,6 @@
                 },
                 "created_user": {
                   "type": "string"
-                },
-                "comments": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
                 },
                 "like_users": {
                   "type": "array",
@@ -1626,9 +1608,6 @@
                 "views": {
                   "type": "integer"
                 },
-                "comment": {
-                  "type": "string"
-                },
                 "dislike_user": {
                   "type": "array",
                   "items": {
@@ -1643,12 +1622,6 @@
                 },
                 "created_user": {
                   "type": "string"
-                },
-                "comments": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
                 },
                 "like_users": {
                   "type": "array",
@@ -1705,9 +1678,6 @@
                 "views": {
                   "type": "integer"
                 },
-                "comment": {
-                  "type": "string"
-                },
                 "dislike_user": {
                   "type": "array",
                   "items": {
@@ -1722,12 +1692,6 @@
                 },
                 "created_user": {
                   "type": "string"
-                },
-                "comments": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
                 },
                 "like_users": {
                   "type": "array",
