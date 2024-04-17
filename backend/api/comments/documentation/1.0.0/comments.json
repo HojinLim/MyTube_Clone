@@ -525,11 +525,65 @@
           "contents": {
             "type": "string"
           },
-          "commentId": {
-            "type": "string",
-            "default": "0"
-          },
           "replies": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "contents": {
+                  "type": "string"
+                },
+                "replies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "root_comment": {
+                  "type": "string"
+                },
+                "created_user": {
+                  "type": "string"
+                },
+                "created_youtube": {
+                  "type": "string"
+                },
+                "isParent": {
+                  "type": "boolean"
+                },
+                "ref_user": {
+                  "type": "string"
+                },
+                "like_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "dislike_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "published_at": {
+                  "type": "datetime"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "root_comment": {
             "required": [
               "id"
             ],
@@ -540,10 +594,13 @@
               "contents": {
                 "type": "string"
               },
-              "commentId": {
-                "type": "string"
-              },
               "replies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "root_comment": {
                 "type": "string"
               },
               "created_user": {
@@ -554,6 +611,21 @@
               },
               "isParent": {
                 "type": "boolean"
+              },
+              "ref_user": {
+                "type": "string"
+              },
+              "like_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "dislike_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               },
               "published_at": {
                 "type": "datetime"
@@ -621,9 +693,6 @@
                   "type": "string"
                 }
               },
-              "dislike_youtube": {
-                "type": "string"
-              },
               "youtubes": {
                 "type": "array",
                 "items": {
@@ -641,6 +710,12 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "comment": {
+                "type": "string"
+              },
+              "dislike_youtube": {
+                "type": "string"
               },
               "created_by": {
                 "type": "string"
@@ -685,7 +760,7 @@
               "views": {
                 "type": "integer"
               },
-              "dislike_user": {
+              "dislike_users": {
                 "type": "array",
                 "items": {
                   "type": "string"
@@ -721,6 +796,273 @@
             "type": "boolean",
             "default": true
           },
+          "ref_user": {
+            "required": [
+              "id",
+              "username",
+              "email"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "resetPasswordToken": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "blocked": {
+                "type": "boolean"
+              },
+              "role": {
+                "type": "string"
+              },
+              "try": {
+                "type": "integer"
+              },
+              "profileImage": {
+                "type": "string"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "sub_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "youtubes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "created_youtubes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "like_youtubes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "comment": {
+                "type": "string"
+              },
+              "dislike_youtube": {
+                "type": "string"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
+          },
+          "like_users": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id",
+                "username",
+                "email"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "provider": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "resetPasswordToken": {
+                  "type": "string"
+                },
+                "confirmed": {
+                  "type": "boolean"
+                },
+                "blocked": {
+                  "type": "boolean"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "try": {
+                  "type": "integer"
+                },
+                "profileImage": {
+                  "type": "string"
+                },
+                "locale": {
+                  "type": "string"
+                },
+                "sub_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "youtubes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "created_youtubes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "like_youtubes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "dislike_youtube": {
+                  "type": "string"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "dislike_users": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id",
+                "username",
+                "email"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "provider": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "resetPasswordToken": {
+                  "type": "string"
+                },
+                "confirmed": {
+                  "type": "boolean"
+                },
+                "blocked": {
+                  "type": "boolean"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "try": {
+                  "type": "integer"
+                },
+                "profileImage": {
+                  "type": "string"
+                },
+                "locale": {
+                  "type": "string"
+                },
+                "sub_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "youtubes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "created_youtubes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "like_youtubes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "dislike_youtube": {
+                  "type": "string"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -731,11 +1073,13 @@
           "contents": {
             "type": "string"
           },
-          "commentId": {
-            "type": "string",
-            "default": "0"
-          },
           "replies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "root_comment": {
             "type": "string"
           },
           "created_user": {
@@ -747,6 +1091,21 @@
           "isParent": {
             "type": "boolean",
             "default": true
+          },
+          "ref_user": {
+            "type": "string"
+          },
+          "like_users": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dislike_users": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "published_at": {
             "type": "datetime"

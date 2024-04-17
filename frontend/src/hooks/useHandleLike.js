@@ -1,11 +1,25 @@
 import { useMutation } from "@apollo/client"
+import { UPDATE_COMMENT_LIKE } from "apollo/mutation"
+import { UPDATE_COMMENT_DISLIKE } from "apollo/mutation"
 import { UPDATE_DISLIKE } from "apollo/mutation"
 import { UPDATE_LIKE } from "apollo/mutation"
 import React, { useEffect, useState } from "react"
 
-const useHandleLike = ({ like_users, dislike_users, refetch, user, id }) => {
+const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) => {
   const [updateLike] = useMutation(UPDATE_LIKE)
   const [updateDislike] = useMutation(UPDATE_DISLIKE)
+  const [updateCommentLike] = useMutation(UPDATE_COMMENT_LIKE)
+  const [updateCommentDislike] = useMutation(UPDATE_COMMENT_DISLIKE)
+
+  let updateLikeHandler
+  let updateDislikeHandler
+  if (type == "video") {
+    updateLikeHandler = updateLike
+    updateDislikeHandler = updateDislike
+  } else if (type == "comment") {
+    updateLikeHandler = updateCommentLike
+    updateDislikeHandler = updateCommentDislike
+  }
 
   const [likeArr, setLikeArr] = useState([])
   const [isLikeAdded, setLikeAdded] = useState(null)
@@ -58,22 +72,22 @@ const useHandleLike = ({ like_users, dislike_users, refetch, user, id }) => {
     console.log("likeArr", likeArr)
     console.log("isLikeAdded", isLikeAdded)
     if (isLikeAdded) {
-      removeLikeHandler(likeArr, "like_users", updateLike)
+      removeLikeHandler(likeArr, "like_users", updateLikeHandler)
     } else {
-      addLikeHandler(likeArr, "like_users", updateLike)
+      addLikeHandler(likeArr, "like_users", updateLikeHandler)
       if (isDisLikeAdded) {
-        removeLikeHandler(dislikeArr, "dislike_user", updateDislike)
+        removeLikeHandler(dislikeArr, "dislike_users", updateDislikeHandler)
       }
     }
   }
 
   const clickDislike = () => {
     if (isDisLikeAdded) {
-      removeLikeHandler(dislikeArr, "dislike_user", updateDislike)
+      removeLikeHandler(dislikeArr, "dislike_users", updateDislikeHandler)
     } else {
-      addLikeHandler(dislikeArr, "dislike_user", updateDislike)
+      addLikeHandler(dislikeArr, "dislike_users", updateDislikeHandler)
       if (isLikeAdded) {
-        removeLikeHandler(likeArr, "like_users", updateLike)
+        removeLikeHandler(likeArr, "like_users", updateLikeHandler)
       }
     }
   }

@@ -698,7 +698,7 @@
             "type": "integer",
             "default": 0
           },
-          "dislike_user": {
+          "dislike_users": {
             "type": "array",
             "items": {
               "required": [
@@ -755,9 +755,6 @@
                     "type": "string"
                   }
                 },
-                "dislike_youtube": {
-                  "type": "string"
-                },
                 "youtubes": {
                   "type": "array",
                   "items": {
@@ -775,6 +772,12 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "dislike_youtube": {
+                  "type": "string"
                 },
                 "created_by": {
                   "type": "string"
@@ -842,9 +845,6 @@
                     "type": "string"
                   }
                 },
-                "dislike_youtube": {
-                  "type": "string"
-                },
                 "youtubes": {
                   "type": "array",
                   "items": {
@@ -862,6 +862,12 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "dislike_youtube": {
+                  "type": "string"
                 },
                 "created_by": {
                   "type": "string"
@@ -927,9 +933,6 @@
                   "type": "string"
                 }
               },
-              "dislike_youtube": {
-                "type": "string"
-              },
               "youtubes": {
                 "type": "array",
                 "items": {
@@ -947,6 +950,12 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "comment": {
+                "type": "string"
+              },
+              "dislike_youtube": {
+                "type": "string"
               },
               "created_by": {
                 "type": "string"
@@ -1013,9 +1022,6 @@
                     "type": "string"
                   }
                 },
-                "dislike_youtube": {
-                  "type": "string"
-                },
                 "youtubes": {
                   "type": "array",
                   "items": {
@@ -1033,6 +1039,12 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "dislike_youtube": {
+                  "type": "string"
                 },
                 "created_by": {
                   "type": "string"
@@ -1079,7 +1091,7 @@
             "type": "integer",
             "default": 0
           },
-          "dislike_user": {
+          "dislike_users": {
             "type": "array",
             "items": {
               "type": "string"

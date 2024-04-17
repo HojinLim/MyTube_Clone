@@ -24,10 +24,15 @@ import { CREATE_COMMENT } from "apollo/mutation"
 import { USER_INFO } from "Constants/value"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
-export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput }) => {
+import { UPDATE_COMMENTS } from "apollo/mutation"
+export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput, parentData }) => {
   const [visibleText, setVisibleText] = useState("")
   const [realText, setRealText] = useState("")
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
+  const [textAdded, setTextAdded] = useState(false)
+  const { id, replies, isParent, username } = parentData ?? {}
+  // console.log(parentData)
+  // console.log(isParent)
   const toggleEmojiPicker = () => {
     // WARNING: 일단 막아둠..
     return
@@ -35,6 +40,7 @@ export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput }) 
   }
 
   const [createComment] = useMutation(CREATE_COMMENT)
+  const [updateComment] = useMutation(UPDATE_COMMENTS)
 
   // 유저 정보 가져오기
 
@@ -65,6 +71,11 @@ export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput }) 
         },
       })
     } else if (keyword == "답글") {
+      if (visibleText.startsWith(parentData?.created_user?.username) && !isParent) {
+        // 답글의 답변 - @username hi
+      } else {
+        // 댓글의 답글
+      }
       createComment({
         variables: {
           created_user: user?.uid,
@@ -74,14 +85,64 @@ export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput }) 
         },
         onCompleted: (res) => {
           console.log(res)
-          alert(`${keyword} 작성 완료!`)
-          // res?.createComment?.comment?.id
 
-          refetchComments()
-          setVisibleText("")
+          alert(`${keyword} 작성 완료!`)
+
+          if (isParent) {
+            const arr = []
+            replies?.map((value) => {
+              arr.push(value.id)
+            })
+
+            arr.push(res?.createComment?.comment?.id)
+
+            updateComment({
+              variables: { id: id, replies: arr },
+              onCompleted: () => {
+                alert("업데이트 완료")
+                refetchComments()
+                onCancelSubmit()
+              },
+            })
+
+            refetchComments()
+            setVisibleText("")
+          } else {
+            const arr = []
+            parentData?.root_comment?.replies?.map((value) => {
+              arr.push(value.id)
+            })
+
+            arr.push(res?.createComment?.comment?.id)
+
+            updateComment({
+              variables: { id: parentData?.root_comment?.id, replies: arr },
+              onCompleted: () => {
+                alert("업데이트 완료")
+                refetchComments()
+                onCancelSubmit()
+              },
+            })
+
+            refetchComments()
+            setVisibleText("")
+          }
         },
       })
     }
+  }
+  useEffect(() => {
+    if (!isParent && !textAdded && keyword == "답글") {
+      // 컴포넌트가 처음 렌더링될 때만 실행됩니다.
+      setVisibleText(`@${parentData?.created_user?.username} `)
+      setTextAdded(true)
+    }
+  }, [textAdded])
+  const handleChange = (e) => {
+    console.log(parentData)
+    const newText = e.target.value
+
+    setVisibleText(newText)
   }
 
   return (
@@ -98,9 +159,7 @@ export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput }) 
       >
         <TextField
           value={visibleText}
-          onChange={(e) => {
-            setVisibleText(e.target.value)
-          }}
+          onChange={handleChange}
           id="standard-basic"
           label={`${keyword} 추가...`}
           variant="standard"

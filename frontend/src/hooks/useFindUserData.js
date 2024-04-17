@@ -8,6 +8,7 @@ export const useFindUserData = ({ nickname }) => {
     const getUserData = async () => {
       try {
         findUser({ variables: { username: nickname } })
+        console.log("찾는중")
       } catch (error) {
         console.error("Error fetching user data:", error)
       }

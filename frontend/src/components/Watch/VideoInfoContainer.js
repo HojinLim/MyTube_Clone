@@ -34,15 +34,13 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
   const {
     id,
     title,
-    subtitle,
     views,
     created_at,
     created_user,
-    sub_users,
     createdBy,
     later_users,
     like_users,
-    dislike_user,
+    dislike_users,
   } = currentVideos
   const user = useRecoilValue(accountState)
 
@@ -55,8 +53,9 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
   })
 
   const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
+    type: "video",
     like_users,
-    dislike_users: dislike_user,
+    dislike_users,
     refetch: getData,
     user: user,
     id,

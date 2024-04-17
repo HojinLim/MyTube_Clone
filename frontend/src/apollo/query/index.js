@@ -86,7 +86,7 @@ export const GET_ALL_VIDEOS = gql`
       like_users {
         id
       }
-      dislike_user {
+      dislike_users {
         id
       }
       created_user {
@@ -129,6 +129,7 @@ export const GET_LATER_VIDEO_BY_ID = gql`
       createdBy
       created_at
       duration
+
       thumbnail {
         url
       }
@@ -143,7 +144,13 @@ export const GET_COMMENTS_BY_ID = gql`
     comments(where: { created_youtube: $id }) {
       id
       contents
-      commentId
+      isParent
+      like_users {
+        id
+      }
+      dislike_users {
+        id
+      }
       created_user {
         id
         profileImage
@@ -153,6 +160,15 @@ export const GET_COMMENTS_BY_ID = gql`
       replies {
         id
         contents
+        created_at
+        isParent
+
+        root_comment {
+          id
+          replies {
+            id
+          }
+        }
         created_user {
           id
           profileImage

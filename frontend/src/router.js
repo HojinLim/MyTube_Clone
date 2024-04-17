@@ -17,6 +17,7 @@ import { TestPage } from "pages/TestPage"
 import { NotFoundPage } from "pages/NotFoundPage"
 import { CreatorPage } from "pages/CreatorPage"
 import { PostPage } from "pages/PostPage"
+import { SearchPage } from "pages/SearchPage"
 
 const Router = () => {
   const isFull = useRecoilValue(fullScreenState)
@@ -35,6 +36,7 @@ const Router = () => {
         <Route path="/shorts" element={<ShortsPage />} />
         <Route path="/:nickname" element={<CreatorPage />} />
         <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/search/:keyword" element={<SearchPage />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

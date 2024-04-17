@@ -74,10 +74,6 @@
       "collection": "user",
       "via": "sub_users"
     },
-    "dislike_youtube": {
-      "via": "dislike_user",
-      "model": "youtube-media"
-    },
     "youtubes": {
       "via": "later_users",
       "collection": "youtube-media"
@@ -89,6 +85,14 @@
     "like_youtubes": {
       "via": "like_users",
       "collection": "youtube-media"
+    },
+    "comment": {
+      "via": "dislike_users",
+      "model": "comments"
+    },
+    "dislike_youtube": {
+      "via": "dislike_users",
+      "model": "youtube-media"
     }
   }
 }

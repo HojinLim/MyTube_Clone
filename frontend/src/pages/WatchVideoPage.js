@@ -158,6 +158,7 @@ export const WatchVideoPage = () => {
     }
   }, [])
   const getComments = async () => {
+    refetchComments()
     await getCommentsById({ variables: { id: videoId } })
   }
 
@@ -166,7 +167,7 @@ export const WatchVideoPage = () => {
     { loading: commentsLoading, error: commentError, data: commentData, refetch: refetchComments },
   ] = useLazyQuery(GET_COMMENTS_BY_ID)
   useEffect(() => {
-    if (!commentsLoading && !commentError && commentData) {
+    if (!commentsLoading && !commentError) {
     }
   }, [commentsLoading, commentError, commentData])
 
@@ -200,6 +201,8 @@ export const WatchVideoPage = () => {
     },
     "& .MuiSlider-valueLabel": {},
   })
+
+  const [handleToggle, setHandleToggle] = useState(false)
 
   return (
     <div className="detail_page_container">
@@ -414,31 +417,34 @@ export const WatchVideoPage = () => {
               className="screen_comment_container"
               style={isFullscreen ? { display: "none" } : {}}
             >
-              {console.log(commentData)}
-              {commentData?.comments?.map((data, key) => (
-                <>
-                  <UserFeedBackContainer
-                    key={key}
-                    comment={data}
-                    isRoot={true}
-                    commentsLoading={commentsLoading}
-                    getComments={getComments}
-                    refetchComments={refetchComments}
-                  />
-                  {console.log(commentData)}
-
-                  {data?.replies.map((value, subKey) => (
+              {commentData?.comments
+                ?.filter((value, key) => value.isParent)
+                .map((data, key) => (
+                  <React.Fragment key={key}>
                     <UserFeedBackContainer
-                      key={subKey}
-                      comment={value}
-                      isRoot={false}
+                      key={`parent-${key}`}
+                      comment={data}
+                      isParent={true}
                       commentsLoading={commentsLoading}
                       getComments={getComments}
                       refetchComments={refetchComments}
+                      handleToggle={handleToggle}
+                      setHandleToggle={setHandleToggle}
                     />
-                  ))}
-                </>
-              ))}
+
+                    {handleToggle &&
+                      data?.replies.map((value, subKey) => (
+                        <UserFeedBackContainer
+                          key={`child-${subKey}`}
+                          comment={value}
+                          isParent={false}
+                          commentsLoading={commentsLoading}
+                          getComments={getComments}
+                          refetchComments={refetchComments}
+                        />
+                      ))}
+                  </React.Fragment>
+                ))}
             </div>
           </div>
           {/* part2 */}

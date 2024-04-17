@@ -579,9 +579,6 @@
                     "type": "string"
                   }
                 },
-                "dislike_youtube": {
-                  "type": "string"
-                },
                 "youtubes": {
                   "type": "array",
                   "items": {
@@ -599,6 +596,12 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "dislike_youtube": {
+                  "type": "string"
                 },
                 "created_by": {
                   "type": "string"

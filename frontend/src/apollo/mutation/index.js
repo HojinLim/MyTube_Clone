@@ -235,11 +235,35 @@ export const UPDATE_LIKE = gql`
   }
 `
 export const UPDATE_DISLIKE = gql`
-  mutation updateDislike($id: ID!, $dislike_user: [ID]) {
-    updateYoutubeMedia(input: { where: { id: $id }, data: { dislike_user: $dislike_user } }) {
+  mutation updateDislike($id: ID!, $dislike_users: [ID]) {
+    updateYoutubeMedia(input: { where: { id: $id }, data: { dislike_users: $dislike_users } }) {
       youtubeMedia {
         id
-        dislike_user {
+        dislike_users {
+          id
+        }
+      }
+    }
+  }
+`
+export const UPDATE_COMMENT_LIKE = gql`
+  mutation updateLike($id: ID!, $like_users: [ID]) {
+    updateComment(input: { where: { id: $id }, data: { like_users: $like_users } }) {
+      comment {
+        id
+        like_users {
+          id
+        }
+      }
+    }
+  }
+`
+export const UPDATE_COMMENT_DISLIKE = gql`
+  mutation updateDislike($id: ID!, $dislike_users: [ID]) {
+    updateComment(input: { where: { id: $id }, data: { dislike_users: $dislike_users } }) {
+      comment {
+        id
+        dislike_users {
           id
         }
       }
@@ -263,6 +287,17 @@ export const UPDATE_COMMENT = gql`
       comment {
         id
         contents
+      }
+    }
+  }
+`
+export const UPDATE_COMMENTS = gql`
+  mutation updateComment($id: ID!, $replies: [ID]) {
+    updateComment(input: { where: { id: $id }, data: { replies: $replies } }) {
+      comment {
+        id
+        contents
+        created_at
       }
     }
   }

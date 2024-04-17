@@ -62,7 +62,7 @@
       "type": "integer",
       "default": 0
     },
-    "dislike_user": {
+    "dislike_users": {
       "plugin": "users-permissions",
       "collection": "user",
       "via": "dislike_youtube"

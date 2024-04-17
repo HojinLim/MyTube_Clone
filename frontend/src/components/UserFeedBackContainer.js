@@ -12,6 +12,8 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp"
 
 import Avatar from "@mui/material/Avatar"
 import { timeForToday } from "functions/timeForToday"
@@ -22,28 +24,45 @@ import { USER_INFO } from "Constants/value"
 import { UPDATE_COMMENT } from "apollo/mutation"
 import { useNavigate } from "react-router-dom"
 import { CommentInput } from "./Watch/CommentInput"
+import useHandleLike from "hooks/useHandleLike"
 
 export const UserFeedBackContainer = ({
   commentsLoading,
   comment,
   refetchComments,
-  isRoot: isParent,
+  isParent,
+  handleToggle,
+  setHandleToggle,
+  getComments,
 }) => {
   const [isEdit, setIsEdit] = useState(false)
 
-  const { id, subId, commentId, created_user, contents, created_at } = comment
+  const { id, subId, created_user, contents, created_at, like_users, dislike_users } = comment
   const { username, profileImage } = created_user ?? {}
-  console.log(created_user)
+  // console.log(created_user)
   const navi = useNavigate()
   const user = JSON.parse(localStorage.getItem(USER_INFO))
   const [text, setText] = useState(contents ?? "")
   const [deleteComment] = useMutation(DELETE_COMMENT)
   const [updateComment] = useMutation(UPDATE_COMMENT)
   const [openInput, setOpenInput] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
+  // if (refetchComments()) {
+  //   console.log("dd")
+  // }
+  // const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
+  //   type: "comment",
+  //   like_users,
+  //   dislike_users,
+  //   refetch: getComments,
+  //   user: user,
+  //   id,
+  // })
+  console.log(comment)
   const deleteCommentHandler = async () => {
     try {
       const res = await deleteComment({ variables: { id: id } })
-      console.log(res)
+
       refetchComments()
       // 성공적으로 삭제되었을 때 처리
     } catch (error) {
@@ -53,11 +72,11 @@ export const UserFeedBackContainer = ({
   }
   useEffect(() => {
     setText(contents)
-    // console.log(contents)
   }, [refetchComments, contents, comment])
   const movePage = () => {
     navi(`/@${username}`)
   }
+
   return (
     <Container
       sx={
@@ -151,6 +170,7 @@ export const UserFeedBackContainer = ({
             </div>
           )}
         </div>
+
         {/* 유저 피드백 상호 버튼 */}
         <div
           style={{
@@ -185,10 +205,34 @@ export const UserFeedBackContainer = ({
         {openInput && (
           <CommentInput
             keyword={"답글"}
+            parentData={comment}
+            parentId={id}
             subId={subId}
             refetchComments={refetchComments}
             setOpenInput={setOpenInput}
           />
+        )}
+        {comment?.replies?.length > 0 && isParent && (
+          <Button
+            onClick={() => {
+              setHandleToggle(!handleToggle)
+            }}
+            style={{
+              width: "10vw",
+              height: "100%",
+
+              borderRadius: "20px",
+              maxHeight: "40px",
+              margin: "10px 0px",
+              color: "#065fd4",
+
+              fontWeight: 700,
+            }}
+          >
+            {handleToggle ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+
+            {` 답글 ${comment?.replies?.length}개`}
+          </Button>
         )}
       </Container>
     </Container>

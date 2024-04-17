@@ -14,12 +14,13 @@
     "contents": {
       "type": "string"
     },
-    "commentId": {
-      "type": "string",
-      "default": "0"
-    },
     "replies": {
-      "collection": "comments"
+      "collection": "comments",
+      "via": "root_comment"
+    },
+    "root_comment": {
+      "model": "comments",
+      "via": "replies"
     },
     "created_user": {
       "plugin": "users-permissions",
@@ -31,6 +32,20 @@
     "isParent": {
       "type": "boolean",
       "default": true
+    },
+    "ref_user": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "like_users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "comment"
+    },
+    "dislike_users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "comment"
     }
   }
 }
