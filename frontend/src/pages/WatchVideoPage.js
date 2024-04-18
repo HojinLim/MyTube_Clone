@@ -68,7 +68,7 @@ export const WatchVideoPage = () => {
   // Volumn
   const [volumn, setVolumn] = React.useState(30)
   const [prevVolumn, setPrevVolumn] = React.useState(volumn)
-
+  const [get, setGet] = useState(false)
   const handleChange = (event, newValue) => {
     setVolumn(newValue)
   }
@@ -130,7 +130,7 @@ export const WatchVideoPage = () => {
     if (!loading && !error) {
       getData()
     }
-  }, [loading, error, videos])
+  }, [loading, error])
 
   useMemo(() => {
     setTimePercent((playTime / stringToSeconds(currentVideos?.duration ?? "1:00")) * 100)
@@ -158,8 +158,14 @@ export const WatchVideoPage = () => {
     }
   }, [])
   const getComments = async () => {
-    refetchComments()
-    await getCommentsById({ variables: { id: videoId } })
+    // refetchComments()
+    setGet(false)
+    await getCommentsById({
+      variables: { id: videoId },
+      onCompleted: () => {
+        setGet(true)
+      },
+    })
   }
 
   const [
@@ -167,10 +173,11 @@ export const WatchVideoPage = () => {
     { loading: commentsLoading, error: commentError, data: commentData, refetch: refetchComments },
   ] = useLazyQuery(GET_COMMENTS_BY_ID)
   useEffect(() => {
-    if (!commentsLoading && !commentError) {
+    if (!commentsLoading) {
+      setGet(false)
     }
-  }, [commentsLoading, commentError, commentData])
-
+  }, [commentsLoading])
+  console.log(commentData)
   useEffect(() => {
     getComments()
   }, [])
@@ -393,6 +400,7 @@ export const WatchVideoPage = () => {
                     keyword={"댓글"}
                     subId={videoId}
                     refetchComments={refetchComments}
+                    videoOwner={currentVideos?.created_user?.id}
                   />
                 </div>
               </Container>

@@ -48,8 +48,8 @@ function getComparator(order, orderBy) {
 }
 
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index])
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = array?.map((el, index) => [el, index])
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0])
     if (order !== 0) return order
     return a[1] - b[1]
@@ -194,13 +194,25 @@ export default function ContentsTable() {
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const [selected, setSelected] = useState([])
+  const [visibleRows, setVisibleRows] = useState(null)
 
   useEffect(() => {
-    if (!loading && !error) {
+    refetch()
+    console.log(data)
+    if (data) {
       const updatedRows = data.youtubeMedias
+
       setRows(updatedRows)
     }
-  }, [loading, error, data])
+  }, [loading, error, data, refetch])
+
+  useEffect(() => {
+    const arr = stableSort(rows, getComparator(order, orderBy)).slice(
+      page * rowsPerPage,
+      page * rowsPerPage + rowsPerPage
+    )
+    setVisibleRows(arr)
+  }, [rows, order, orderBy, page, rowsPerPage])
 
   const handleRequestSort = (event, property) => {
     console.log(property)
@@ -249,33 +261,31 @@ export default function ContentsTable() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
-  const visibleRows = React.useMemo(
-    () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
-      ),
-    [order, orderBy, page, rowsPerPage]
-  )
+  React.useEffect(() => {
+    console.log("삭제")
+
+    // const arr = stableSort(rows, getComparator(order, orderBy)).slice(
+    //   page * rowsPerPage,
+    //   page * rowsPerPage + rowsPerPage
+    // )
+    // setVisibleRows(arr)
+    // console.log(arr)
+  }, [order, orderBy, page, rowsPerPage, data, refetch, deleteVideo])
 
   const deleteHandler = () => {
-    selected.map((select) => {
+    selected.forEach((select) => {
       deleteVideo({
         variables: { id: select },
-        onCompleted: () => console.log(res),
+        onCompleted: () => {
+          console.log(`비디오 ${select} 삭제 완료`)
+          refetch()
+        },
         onError: (err) => {
-          console.log(err)
+          console.error(err)
         },
       })
     })
-    alert(`" ${selected} " 삭제 완료`)
-    refetch()
-    // FE에서 제거
-    // const filtered = rows.filter((row) => !selected.includes(row.id))
-    // console.log("filterd", filtered)
-    // setRows(filtered)
-    // setSelected([])
-    // console.log(rows)
+    setSelected([])
   }
 
   return (
@@ -290,18 +300,18 @@ export default function ContentsTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={rows?.length}
             />
 
             <TableBody>
-              {data?.youtubeMedias?.map((row, index) => {
-                const isItemSelected = isSelected(row.id)
+              {visibleRows?.map((row, index) => {
+                const isItemSelected = isSelected(row?.id)
                 const labelId = `enhanced-table-checkbox-${index}`
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => handleClick(event, row?.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -324,7 +334,7 @@ export default function ContentsTable() {
                         <img
                           width={"150px"}
                           height={"100px"}
-                          src={process.env.REACT_APP_BACKEND_URL_UPLOAD + row.thumbnail.url}
+                          src={process.env.REACT_APP_BACKEND_URL_UPLOAD + row?.thumbnail.url}
                           style={{
                             border: "1px solid black",
                             marginRight: "8px",
@@ -339,9 +349,7 @@ export default function ContentsTable() {
                       {row.isPublic === true ? <PublicIcon /> : <HttpsOutlinedIcon />}
                       {row.isPublic}
                       <Button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                        }}
+                        onClick={(e) => {}}
                         style={{ padding: 0, minWidth: 0, borderRadius: "25px" }}
                       >
                         <CustomIconMenu
@@ -350,7 +358,6 @@ export default function ContentsTable() {
                             {
                               text: "공개",
                               onClick: (e) => {
-                                e.stopPropagation()
                                 console.log("공개")
                                 if (row.isPublic == true) return
                                 changeIsPublic({
@@ -405,7 +412,7 @@ export default function ContentsTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={rows?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

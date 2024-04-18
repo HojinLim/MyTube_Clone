@@ -6,9 +6,11 @@ export const ShortsContainer = () => {
   return (
     <div className="slider-container">
       <div className="slide">
-        <ReactPlayer url={dummyData[0].sources[0]} playing width={"100%"} height={"100%"} />
+        {/* <div>dd</div> */}
+        {/* <ReactPlayer url={dummyData[0].sources[0]} playing={false} width={"100%"} height={"100%"} /> */}
+        {/* <div>hi</div> */}
       </div>
-      <div className="slide">
+      {/* <div className="slide">
         <ReactPlayer url={dummyData[1].sources[0]} playing width={"100%"} height={"100%"} />
       </div>
       <div className="slide">
@@ -19,7 +21,7 @@ export const ShortsContainer = () => {
       </div>
       <div className="slide">
         <div>ggg</div>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -14,6 +14,10 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp"
+import ThumbUpIcon from "@mui/icons-material/ThumbUp"
+import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined"
+
+import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded"
 
 import Avatar from "@mui/material/Avatar"
 import { timeForToday } from "functions/timeForToday"
@@ -33,7 +37,6 @@ export const UserFeedBackContainer = ({
   isParent,
   handleToggle,
   setHandleToggle,
-  getComments,
 }) => {
   const [isEdit, setIsEdit] = useState(false)
 
@@ -54,10 +57,11 @@ export const UserFeedBackContainer = ({
   //   type: "comment",
   //   like_users,
   //   dislike_users,
-  //   refetch: getComments,
+  //   refetch: refetchComments,
   //   user: user,
   //   id,
   // })
+
   console.log(comment)
   const deleteCommentHandler = async () => {
     try {
@@ -72,9 +76,15 @@ export const UserFeedBackContainer = ({
   }
   useEffect(() => {
     setText(contents)
-  }, [refetchComments, contents, comment])
+  }, [])
   const movePage = () => {
     navi(`/@${username}`)
+  }
+  const thumbUpHandler = () => {
+    // clickLike()
+  }
+  const thumbDownHandler = () => {
+    // clickDislike()
   }
 
   return (
@@ -88,11 +98,12 @@ export const UserFeedBackContainer = ({
               marginY: "15px",
             }
           : {
-              flexGrow: 1,
+              flexGrow: 2,
               flexDirection: "row",
               display: "flex",
               marginY: "15px",
-              marginLeft: "50px",
+              marginLeft: "100px",
+              // scale: 2,
             }
       }
       className="user-comments-container"
@@ -177,12 +188,16 @@ export const UserFeedBackContainer = ({
             display: "flex",
           }}
         >
-          <Button sx={{ borderRadius: "20px" }}>
-            <ThumbUpOffAltIcon sx={{ width: "20px" }} />
+          <Button onClick={thumbUpHandler} sx={{ borderRadius: "20px" }}>
+            <ThumbUpAltOutlinedIcon />
+            {/* {like_users?.length}
+            {isLikeAdded ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />} */}
           </Button>
-          <Button sx={{ borderRadius: "50px" }}>
-            <ThumbDownOffAltIcon sx={{ width: "20px" }} />
+          <Button onClick={thumbDownHandler} sx={{ borderRadius: "50px" }}>
+            {/* {isDisLikeAdded ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />} */}
+            <ThumbDownOffAltIcon />
           </Button>
+
           <Button
             onClick={() => {
               if (isEdit) {
@@ -220,6 +235,7 @@ export const UserFeedBackContainer = ({
             style={{
               width: "10vw",
               height: "100%",
+              minWidth: "120px",
 
               borderRadius: "20px",
               maxHeight: "40px",

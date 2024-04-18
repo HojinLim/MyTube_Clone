@@ -175,12 +175,7 @@ export default function UploadModal() {
       .catch((res) => {
         console.log(res)
       })
-      .finally((res) => {
-        // setUploaded(false)
-        // handleClose()
-        // setUploadedFile(null)
-        // setUploadThumbImage(null)
-      })
+      .finally((res) => {})
   }
 
   return (

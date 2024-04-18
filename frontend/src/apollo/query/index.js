@@ -104,6 +104,7 @@ export const GET_VIDEO_BY_ID = gql`
       title
       isPublic
       views
+      ownerId
       thumbnail {
         url
       }

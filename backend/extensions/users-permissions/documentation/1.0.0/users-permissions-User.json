@@ -1694,6 +1694,9 @@
                   "type": "string"
                 }
               },
+              "ownerId": {
+                "type": "string"
+              },
               "published_at": {
                 "type": "datetime"
               },

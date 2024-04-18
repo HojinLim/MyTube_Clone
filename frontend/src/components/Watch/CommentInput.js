@@ -25,13 +25,21 @@ import { USER_INFO } from "Constants/value"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import { UPDATE_COMMENTS } from "apollo/mutation"
-export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput, parentData }) => {
+export const CommentInput = ({
+  keyword,
+  subId,
+  refetchComments,
+  setOpenInput,
+  parentData,
+  videoOwner,
+}) => {
+  // console.log(videoOwner)
   const [visibleText, setVisibleText] = useState("")
   const [realText, setRealText] = useState("")
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
   const [textAdded, setTextAdded] = useState(false)
   const { id, replies, isParent, username } = parentData ?? {}
-  // console.log(parentData)
+  console.log(parentData)
   // console.log(isParent)
   const toggleEmojiPicker = () => {
     // WARNING: 일단 막아둠..
@@ -61,6 +69,7 @@ export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput, pa
           created_youtube: subId,
           contents: visibleText,
           isParent: true,
+          ownerId: videoOwner,
         },
         onCompleted: () => {
           // console.log(res)
@@ -131,6 +140,7 @@ export const CommentInput = ({ keyword, subId, refetchComments, setOpenInput, pa
       })
     }
   }
+
   useEffect(() => {
     if (!isParent && !textAdded && keyword == "답글") {
       // 컴포넌트가 처음 렌더링될 때만 실행됩니다.

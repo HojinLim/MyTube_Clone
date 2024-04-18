@@ -1,10 +1,11 @@
 import React from "react"
 import Typography from "@mui/material/Typography"
 import BoltIcon from "@mui/icons-material/Bolt"
-import { ShortsContainer } from "components/history.js/ShortsContainer"
+
 import Divider from "@mui/material/Divider"
 import { VideoItem } from "components/later/VideoItem"
 import { dummyData } from "dummy"
+import { ShortsContainer } from "components/shorts/ShortsContainer"
 export const HistoryPage = () => {
   return (
     <div

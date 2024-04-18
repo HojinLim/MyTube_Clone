@@ -1,9 +1,10 @@
-import { useMutation } from "@apollo/client"
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client"
 import { UPDATE_COMMENT_LIKE } from "apollo/mutation"
 import { UPDATE_COMMENT_DISLIKE } from "apollo/mutation"
 import { UPDATE_DISLIKE } from "apollo/mutation"
 import { UPDATE_LIKE } from "apollo/mutation"
-import React, { useEffect, useState } from "react"
+import { FIND_USER_BY_EMAIL } from "apollo/query"
+import React, { useEffect, useMemo, useState } from "react"
 
 const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) => {
   const [updateLike] = useMutation(UPDATE_LIKE)
@@ -25,7 +26,7 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
   const [isLikeAdded, setLikeAdded] = useState(null)
   const [dislikeArr, setDislikeArr] = useState([])
   const [isDisLikeAdded, setDisLikeAdded] = useState(null)
-
+  // console.log("hi")
   useEffect(() => {
     const tempLikeArr = like_users?.map((data) => data.id)
 
@@ -38,7 +39,7 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
     const isStoredDislike = dislike_users?.some((data) => data.id === user?.uid)
     setDisLikeAdded(isStoredDislike)
   }, [like_users, dislike_users, user, refetch])
-
+  //like_users, dislike_users, user, refetch
   const addLikeHandler = (array, param, func) => {
     const updatedArr = [...array, user.uid]
     console.log(id + "의" + "데이터를 추천누릅니다")
@@ -54,6 +55,7 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
   }
 
   const removeLikeHandler = (array, param, func) => {
+    console.log("hi")
     const updatedArr = array.filter((value) => value !== user.uid)
     console.log("in", updatedArr)
     console.log(id + "의" + "데이터를 비추천누릅니다")
@@ -82,6 +84,7 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
   }
 
   const clickDislike = () => {
+    console.log("hi")
     if (isDisLikeAdded) {
       removeLikeHandler(dislikeArr, "dislike_users", updateDislikeHandler)
     } else {

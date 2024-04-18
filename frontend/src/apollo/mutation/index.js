@@ -164,6 +164,7 @@ export const CREATE_COMMENT = gql`
     $isParent: Boolean
     $created_user: ID
     $created_youtube: ID
+    $ownerId: String
   ) {
     createComment(
       input: {
@@ -172,6 +173,7 @@ export const CREATE_COMMENT = gql`
           isParent: $isParent
           created_user: $created_user
           created_youtube: $created_youtube
+          ownerId: $ownerId
         }
       }
     ) {
