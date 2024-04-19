@@ -89,7 +89,6 @@ export const ShortsContainer = () => {
           <div className="slide">
             <span>150x150</span>
           </div>
-          {/* Add more slide elements here */}
         </div>
         <span onClick={slideLeft} className="btn"></span>
       </div>

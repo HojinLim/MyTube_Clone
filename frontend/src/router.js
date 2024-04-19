@@ -34,6 +34,7 @@ const Router = () => {
         <Route path="/like" element={<LikePage />} />
         <Route path="/later" element={<LaterPage />} />
         <Route path="/shorts" element={<ShortsPage />} />
+        <Route path="/shorts/:id" element={<ShortsPage />} />
         <Route path="/:nickname" element={<CreatorPage />} />
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/search/:keyword" element={<SearchPage />} />

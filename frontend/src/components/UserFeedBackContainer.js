@@ -34,15 +34,16 @@ export const UserFeedBackContainer = ({
   commentsLoading,
   comment,
   refetchComments,
-  isParent,
+  fixIsParent,
   handleToggle,
   setHandleToggle,
 }) => {
   const [isEdit, setIsEdit] = useState(false)
 
-  const { id, subId, created_user, contents, created_at, like_users, dislike_users } = comment
+  const { id, subId, created_user, contents, created_at, like_users, dislike_users, isParent } =
+    comment ?? {}
   const { username, profileImage } = created_user ?? {}
-  // console.log(created_user)
+  console.log(created_user)
   const navi = useNavigate()
   const user = JSON.parse(localStorage.getItem(USER_INFO))
   const [text, setText] = useState(contents ?? "")
@@ -50,19 +51,9 @@ export const UserFeedBackContainer = ({
   const [updateComment] = useMutation(UPDATE_COMMENT)
   const [openInput, setOpenInput] = useState(false)
   const [isOpen, setIsOpen] = useState(true)
-  // if (refetchComments()) {
-  //   console.log("dd")
-  // }
-  // const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
-  //   type: "comment",
-  //   like_users,
-  //   dislike_users,
-  //   refetch: refetchComments,
-  //   user: user,
-  //   id,
-  // })
 
   console.log(comment)
+  // console.log(created_user)
   const deleteCommentHandler = async () => {
     try {
       const res = await deleteComment({ variables: { id: id } })
@@ -90,7 +81,7 @@ export const UserFeedBackContainer = ({
   return (
     <Container
       sx={
-        isParent
+        fixIsParent ?? isParent
           ? {
               flexGrow: 1,
               flexDirection: "row",
@@ -102,8 +93,6 @@ export const UserFeedBackContainer = ({
               flexDirection: "row",
               display: "flex",
               marginY: "15px",
-              marginLeft: "100px",
-              // scale: 2,
             }
       }
       className="user-comments-container"
@@ -141,12 +130,11 @@ export const UserFeedBackContainer = ({
                 {timeForToday(created_at)}
               </Typography>
             </div>
-            {/* eslint-disable react/prop-types  */}
             {isEdit ? (
               <TextField
                 value={text}
                 onChange={(e) => {
-                  if (!commentsLoading) setText(e.target.value)
+                  setText(e.target.value)
                 }}
                 id="standard-basic"
                 label="댓글 추가..."
@@ -190,11 +178,8 @@ export const UserFeedBackContainer = ({
         >
           <Button onClick={thumbUpHandler} sx={{ borderRadius: "20px" }}>
             <ThumbUpAltOutlinedIcon />
-            {/* {like_users?.length}
-            {isLikeAdded ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />} */}
           </Button>
           <Button onClick={thumbDownHandler} sx={{ borderRadius: "50px" }}>
-            {/* {isDisLikeAdded ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />} */}
             <ThumbDownOffAltIcon />
           </Button>
 
@@ -227,10 +212,11 @@ export const UserFeedBackContainer = ({
             setOpenInput={setOpenInput}
           />
         )}
-        {comment?.replies?.length > 0 && isParent && (
+
+        {comment?.replies?.length > 0 && (fixIsParent ?? isParent) && (
           <Button
             onClick={() => {
-              setHandleToggle(!handleToggle)
+              setHandleToggle((prev) => !prev)
             }}
             style={{
               width: "10vw",

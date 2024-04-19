@@ -1,10 +1,21 @@
-import { ShortsContainer } from "components/shorts/ShortsContainer"
-import React from "react"
-import Divider from "@mui/material/Divider"
+import React, { useEffect, useState } from "react"
+
+import { ShortsItem } from "components/shorts/ShortsItem"
+
 export const ShortsPage = () => {
   return (
-    <>
-      <ShortsContainer />
-    </>
+    <div
+      style={{
+        maxHeight: "100vh",
+        overflow: "scroll",
+        scrollSnapType: "y mandatory",
+        justifyContent: "center",
+        marginTop: "140px",
+        display: "grid",
+      }}
+    >
+      <ShortsItem />
+      <ShortsItem />
+    </div>
   )
 }

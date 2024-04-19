@@ -48,10 +48,11 @@ import { GET_COMMENTS_BY_ID } from "apollo/query"
 import { GET_IN_SITE } from "Constants/value"
 import { IconButton } from "@mui/material"
 import { CommentInput } from "components/Watch/CommentInput"
+import { CenterPlayEffect } from "components/common/CenterPlayEffect"
 
 export const WatchVideoPage = () => {
   const params = useParams()
-  const [startVid, setStartVid] = useState("true")
+  const [onPlaying, setOnplaying] = useState("true")
 
   const matches = useMediaQuery("(min-width:1440px)")
 
@@ -138,7 +139,7 @@ export const WatchVideoPage = () => {
   }, [playTime])
 
   const clickSreen = () => {
-    setStartVid((prev) => !prev)
+    setOnplaying((prev) => !prev)
   }
 
   useEffect(() => {
@@ -237,36 +238,13 @@ export const WatchVideoPage = () => {
               url={process.env.REACT_APP_BACKEND_URL_UPLOAD + currentVideos.contents.url}
               width={matches && isMoviescreen && "85%"}
               height={"100%"}
-              playing={startVid}
+              playing={onPlaying}
               autoPlay={true}
               style={{ margin: "-10px 0px" }}
             />
           )}
-          {startVid ? (
-            <PlayCircleIcon
-              sx={{ fontSize: "70px" }}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                animation: "growAndFade 2s forwards",
-                animationPlayState: "initial",
-              }}
-            />
-          ) : (
-            <PauseCircleIcon
-              sx={{ fontSize: "70px" }}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                animation: "growAndFade 2s forwards",
-                animationPlayState: "initial",
-              }}
-            />
-          )}
+          {/* 중앙 플레이 이펙트 */}
+          <CenterPlayEffect onPlaying={onPlaying} />
 
           {/* 영상 상태바 */}
           <div
@@ -293,10 +271,10 @@ export const WatchVideoPage = () => {
               <div>
                 <Button
                   onClick={() => {
-                    setStartVid((prev) => !prev)
+                    setOnplaying((prev) => !prev)
                   }}
                 >
-                  {!startVid ? <PlayArrowIcon fontSize="large" /> : <PauseIcon fontSize="large" />}
+                  {!onPlaying ? <PlayArrowIcon fontSize="large" /> : <PauseIcon fontSize="large" />}
                 </Button>
                 <Button>
                   <SkipNextIcon fontSize="large" />
@@ -432,7 +410,7 @@ export const WatchVideoPage = () => {
                     <UserFeedBackContainer
                       key={`parent-${key}`}
                       comment={data}
-                      isParent={true}
+                      fixIsParent={true}
                       commentsLoading={commentsLoading}
                       getComments={getComments}
                       refetchComments={refetchComments}
@@ -445,7 +423,7 @@ export const WatchVideoPage = () => {
                         <UserFeedBackContainer
                           key={`child-${subKey}`}
                           comment={value}
-                          isParent={false}
+                          fixIsParent={false}
                           commentsLoading={commentsLoading}
                           getComments={getComments}
                           refetchComments={refetchComments}

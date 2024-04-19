@@ -26,7 +26,7 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
   const [isLikeAdded, setLikeAdded] = useState(null)
   const [dislikeArr, setDislikeArr] = useState([])
   const [isDisLikeAdded, setDisLikeAdded] = useState(null)
-  // console.log("hi")
+
   useEffect(() => {
     const tempLikeArr = like_users?.map((data) => data.id)
 

@@ -98,13 +98,21 @@ export const GET_ALL_VIDEOS = gql`
 `
 export const GET_VIDEO_BY_ID = gql`
   query YoutubeMediaById($id: ID!) {
-    youtubeMedias(id: $id) {
+    youtubeMedia(id: $id) {
       id
       description
       title
       isPublic
       views
-      ownerId
+      like_users {
+        id
+      }
+      dislike_users {
+        id
+      }
+      later_users {
+        id
+      }
       thumbnail {
         url
       }
