@@ -1,15 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import Box from "@mui/material/Box"
-import Container from "@mui/material/Container"
-import ReactPlayer from "react-player/lazy"
-import Typography from "@mui/material/Typography"
-import Crop75Icon from "@mui/icons-material/Crop75"
-import { useNavigate, useParams } from "react-router-dom"
+
 import Avatar from "@mui/material/Avatar"
-import PlayCircleIcon from "@mui/icons-material/PlayCircle"
-import { dummyData } from "dummy"
-import { UserFeedBackContainer } from "components/UserFeedBackContainer"
-import Grid from "@mui/material/Grid"
+
 import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import EmojiPicker from "emoji-picker-react"
@@ -38,6 +30,7 @@ export const CommentInput = ({
   const [realText, setRealText] = useState("")
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
   const [textAdded, setTextAdded] = useState(false)
+  const [input, setInput] = useState(false)
   const { id, replies, isParent, username } = parentData ?? {}
   console.log(parentData)
   // console.log(isParent)
@@ -56,6 +49,7 @@ export const CommentInput = ({
 
   const onCancelSubmit = () => {
     setVisibleText("")
+    setInput(false)
     if (keyword == "답글") setOpenInput(false)
   }
 
@@ -157,7 +151,11 @@ export const CommentInput = ({
 
   return (
     <div style={{ display: "flex" }}>
-      <Avatar alt="Remy Sharp" src={user?.picture} style={{ marginRight: "10px" }} />
+      <Avatar
+        alt="Remy Sharp"
+        src={user?.picture}
+        style={{ marginRight: "10px", width: "28px", height: "28px" }}
+      />
 
       <div
         style={{
@@ -174,56 +172,61 @@ export const CommentInput = ({
           label={`${keyword} 추가...`}
           variant="standard"
           fullWidth
-          onFocus={() => setIsEmojiPickerOpen(false)}
-        />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "18px",
+          onFocus={() => {
+            setIsEmojiPickerOpen(false)
+            setInput(true)
           }}
-        >
-          <div style={{ position: "relative" }}>
-            <IconButton style={{ color: "black" }} onClick={toggleEmojiPicker}>
-              <MoodIcon />
-            </IconButton>
-            {isEmojiPickerOpen && (
-              <div style={{ position: "absolute", top: "100%", zIndex: 10 }}>
-                <EmojiPicker
-                  open={true}
-                  previewConfig={{ defaultCaption: true }}
-                  height={300}
-                  onEmojiClick={(emoji, e) => {
-                    console.log(typeof emoji.unified)
-                    console.log(emoji.unified)
-                  }}
-                />
-              </div>
-            )}
+        />
+        {input && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "18px",
+            }}
+          >
+            <div style={{ position: "relative" }}>
+              <IconButton style={{ color: "black" }} onClick={toggleEmojiPicker}>
+                <MoodIcon />
+              </IconButton>
+              {isEmojiPickerOpen && (
+                <div style={{ position: "absolute", top: "100%", zIndex: 10 }}>
+                  <EmojiPicker
+                    open={true}
+                    previewConfig={{ defaultCaption: true }}
+                    height={300}
+                    onEmojiClick={(emoji, e) => {
+                      console.log(typeof emoji.unified)
+                      console.log(emoji.unified)
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+            <div style={{ display: "flex" }}>
+              <Button
+                onClick={onCancelSubmit}
+                sx={{
+                  borderRadius: "20px",
+                  maxHeight: "40px",
+                }}
+              >
+                취소
+              </Button>
+              <Button
+                onClick={onSubmitComment}
+                // variant="contained"
+                sx={{
+                  borderRadius: "20px",
+                  maxHeight: "40px",
+                  backgroundColor: "#eee",
+                }}
+              >
+                {keyword}
+              </Button>
+            </div>
           </div>
-          <div style={{ display: "flex" }}>
-            <Button
-              onClick={onCancelSubmit}
-              sx={{
-                borderRadius: "20px",
-                maxHeight: "40px",
-              }}
-            >
-              취소
-            </Button>
-            <Button
-              onClick={onSubmitComment}
-              variant="contained"
-              sx={{
-                borderRadius: "20px",
-                maxHeight: "40px",
-                backgroundColor: "#eee",
-              }}
-            >
-              {keyword}
-            </Button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )

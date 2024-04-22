@@ -83,21 +83,30 @@ export const UserFeedBackContainer = ({
       sx={
         fixIsParent ?? isParent
           ? {
-              flexGrow: 1,
+              // flexGrow: 1,
               flexDirection: "row",
               display: "flex",
               marginY: "15px",
             }
           : {
-              flexGrow: 2,
+              // flexGrow: 2,
               flexDirection: "row",
               display: "flex",
               marginY: "15px",
+              marginLeft: "10%",
+              // width: "80%",
+              // justifyItems: "flex-end",
+              // height: "50%",
             }
       }
-      className="user-comments-container"
     >
-      <Avatar className="clickable" alt="Remy Sharp" src={profileImage} onClick={movePage} />
+      <Avatar
+        className="clickable"
+        alt="Remy Sharp"
+        src={profileImage}
+        onClick={movePage}
+        sx={!fixIsParent ?? !isParent ? { width: 28, height: 28 } : {}}
+      />
       <Container
         sx={{
           flexGrow: 1,
@@ -118,15 +127,20 @@ export const UserFeedBackContainer = ({
               }}
             >
               <Typography
+                // fontSize={"12px"}
                 className="clickable"
-                variant="body2"
+                variant={fixIsParent ?? isParent ? "body1" : "body2"}
                 sx={{ marginRight: "5px" }}
                 onClick={movePage}
               >
                 {`@${username}`}
               </Typography>
               {/* 댓글 시간 */}
-              <Typography variant="body2" gutterBottom color={"gray"}>
+              <Typography
+                variant={fixIsParent ?? isParent ? "body1" : "body2"}
+                gutterBottom
+                color={"gray"}
+              >
                 {timeForToday(created_at)}
               </Typography>
             </div>
@@ -142,7 +156,7 @@ export const UserFeedBackContainer = ({
                 fullWidth
               />
             ) : (
-              <Typography variant="h6" gutterBottom>
+              <Typography variant={fixIsParent ?? isParent ? "h6" : "h7"} gutterBottom>
                 {contents}
               </Typography>
             )}
@@ -179,7 +193,7 @@ export const UserFeedBackContainer = ({
           <Button onClick={thumbUpHandler} sx={{ borderRadius: "20px" }}>
             <ThumbUpAltOutlinedIcon />
           </Button>
-          <Button onClick={thumbDownHandler} sx={{ borderRadius: "50px" }}>
+          <Button onClick={thumbDownHandler} sx={{ borderRadius: "20px" }}>
             <ThumbDownOffAltIcon />
           </Button>
 
@@ -219,9 +233,9 @@ export const UserFeedBackContainer = ({
               setHandleToggle((prev) => !prev)
             }}
             style={{
-              width: "10vw",
+              width: "100%",
               height: "100%",
-              minWidth: "120px",
+              maxWidth: "100px",
 
               borderRadius: "20px",
               maxHeight: "40px",

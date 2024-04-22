@@ -20,7 +20,20 @@ import useHandleLike from "hooks/useHandleLike"
 import useUpdateLater from "hooks/useUpdateLater"
 
 export const ShortsButtonContainer = (props) => {
-  const { id, comments, good, setGood, bad, setBad, setOpenComment, video, refetch } = props
+  const {
+    id,
+    comments,
+    good,
+    setGood,
+    bad,
+    setBad,
+    setOpenComment,
+    video,
+    refetch,
+    setDesMode,
+    openComment,
+    desMode,
+  } = props
   const { like_users, dislike_users, later_users } = video ?? {}
   const user = useRecoilValue(accountState)
   const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
@@ -95,7 +108,18 @@ export const ShortsButtonContainer = (props) => {
           alignItems: "center",
         }}
       >
-        <CommonIconButton onClick={() => setOpenComment((prev) => !prev)} icon={<CommentIcon />} />
+        <CommonIconButton
+          onClick={() => {
+            if (!openComment) {
+              setOpenComment(true)
+              setDesMode(false)
+            } else {
+              setDesMode(false)
+              if (!desMode) setOpenComment(false)
+            }
+          }}
+          icon={<CommentIcon />}
+        />
         <div>{comments?.length}</div>
       </div>
       <div
@@ -125,7 +149,10 @@ export const ShortsButtonContainer = (props) => {
               icon: <NotesIcon />,
               text: "설명",
               onClick: () => {
-                setOpenComment(true)
+                if (!openComment) setOpenComment(true)
+                if (!desMode) {
+                  setDesMode(true)
+                }
               },
             },
             {

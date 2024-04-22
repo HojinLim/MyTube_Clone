@@ -12,6 +12,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useLazyQuery } from "@apollo/client"
 import { GET_VIDEO_BY_ID } from "apollo/query"
 import { GET_COMMENTS_BY_ID } from "apollo/query"
+import { ShortsDesContainer } from "./ShortsDesContainer"
 
 export const ShortsItem = () => {
   console.log(dummyData[0].sources[0])
@@ -25,6 +26,7 @@ export const ShortsItem = () => {
   const params = useParams()
   const [video, setVideo] = useState(null)
   const [comments, setComments] = useState(null)
+  const [desMode, setDesMode] = useState(false)
   const navi = useNavigate()
   const handleChange = (event, newValue) => {
     setVolumn(newValue)
@@ -78,86 +80,87 @@ export const ShortsItem = () => {
     setOnPlaying((prev) => !prev)
   }
   return (
-    <div style={{ position: "relative", display: "flex" }}>
-      {/* 상위 요소를 position: relative로 설정 */}
-      <div
-        style={{
-          scrollSnapAlign: "start",
-          width: "400px",
-          height: "700px",
-          border: "1px solid #e0e0e0",
-          borderRadius: "20px",
-          objectFit: "cover",
-          backgroundColor: "black",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <ShortsVolumnController
-              muteHandler={muteHandler}
-              volumn={volumn}
-              onPlaying={onPlaying}
-              handleChange={handleChange}
-              showVolumeControl={showVolumeControl}
-              setShowVolumeControl={setShowVolumeControl}
-              handlePause={handlePause}
-            />
-          </div>
-          {/* 하단 영상 정보 */}
-          <ShortsInfoContainer video={video} sub={sub} setSub={setSub} refetch={refetch} />
-        </div>
-
+    <section className="new-slider-section">
+      <div style={{ display: "flex" }}>
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "65%",
-            margin: "80px 0px",
-            color: "wheat",
-            position: "relative",
+            margin: "auto",
+            width: "400px",
+            height: "700px",
+            border: "1px solid #e0e0e0",
+            borderRadius: "20px",
+            objectFit: "cover",
+            backgroundColor: "black",
           }}
         >
-          {/* 영상 */}
-          <ReactPlayer
-            onClick={handlePause}
-            // REACT_APP_BACKEND_URL_UPLOAD
-            // url={dummyData[0].sources[0]}
-            url={process.env.REACT_APP_BACKEND_URL_UPLOAD + contents?.url}
-            width={"100%"}
-            height={"100%"}
-            playing={onPlaying}
-          />
+          <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+            {/* 볼륨 */}
+            <div style={{ display: "flex", justifyContent: "space-between", height: "10%" }}>
+              <ShortsVolumnController
+                muteHandler={muteHandler}
+                volumn={volumn}
+                onPlaying={onPlaying}
+                handleChange={handleChange}
+                showVolumeControl={showVolumeControl}
+                setShowVolumeControl={setShowVolumeControl}
+                handlePause={handlePause}
+              />
+            </div>
+            {/* 영상 */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "auto",
+                color: "wheat",
+                minHeight: "70%",
+              }}
+            >
+              <ReactPlayer
+                onClick={handlePause}
+                url={process.env.REACT_APP_BACKEND_URL_UPLOAD + contents?.url}
+                width="100%"
+                height="100%"
+                playing={onPlaying}
+              />
+            </div>
+            {/* 영상 주인 정보 */}
+            <CenterPlayEffect onPlaying={onPlaying} />
 
-          {/* 중앙 아이콘 애니메이션 */}
-          <CenterPlayEffect onPlaying={onPlaying} />
+            <ShortsInfoContainer video={video} sub={sub} setSub={setSub} refetch={refetch} />
+          </div>
         </div>
-      </div>
-      {/* 상호작용 버튼 컨테이너 */}
-      <ShortsButtonContainer
-        id={id}
-        video={video}
-        comments={comments}
-        setGood={setGood}
-        good={good}
-        bad={bad}
-        setBad={setBad}
-        setOpenComment={setOpenComment}
-        refetch={refetch}
-      />
 
-      {/* 댓글 컨테이너 */}
-      {openComment && (
-        <ShortsCommentContainer
+        {/* 상호작용 버튼 컨테이너 */}
+        <ShortsButtonContainer
+          id={id}
           video={video}
           comments={comments}
-          commentRefetch={commentRefetch}
+          setGood={setGood}
+          good={good}
+          bad={bad}
+          setBad={setBad}
+          openComment={openComment}
           setOpenComment={setOpenComment}
-          setOpenInput={setOpenInput}
-          openInput={openInput}
+          refetch={refetch}
+          desMode={desMode}
+          setDesMode={setDesMode}
         />
-      )}
-    </div>
+        {/* 댓글 컨테이너 */}
+        {openComment && (
+          <ShortsCommentContainer
+            video={video}
+            comments={comments}
+            commentRefetch={commentRefetch}
+            setOpenComment={setOpenComment}
+            setOpenInput={setOpenInput}
+            openInput={openInput}
+            setDesMode={setDesMode}
+            desMode={desMode}
+          />
+        )}
+      </div>
+    </section>
   )
 }

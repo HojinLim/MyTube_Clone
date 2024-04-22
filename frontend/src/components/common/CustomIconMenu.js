@@ -20,7 +20,7 @@ export const CustomIconMenu = ({ background, style, iconButton, menuItems }) => 
   }
 
   return (
-    <div>
+    <>
       <IconButton
         style={style ? { ...style, color: "black" } : { color: "black" }}
         id="custom-menu-button"
@@ -50,6 +50,6 @@ export const CustomIconMenu = ({ background, style, iconButton, menuItems }) => 
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </>
   )
 }

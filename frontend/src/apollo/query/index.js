@@ -104,6 +104,7 @@ export const GET_VIDEO_BY_ID = gql`
       title
       isPublic
       views
+      created_at
       like_users {
         id
       }
