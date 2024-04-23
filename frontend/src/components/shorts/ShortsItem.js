@@ -12,14 +12,12 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useLazyQuery } from "@apollo/client"
 import { GET_VIDEO_BY_ID } from "apollo/query"
 import { GET_COMMENTS_BY_ID } from "apollo/query"
-import { ShortsDesContainer } from "./ShortsDesContainer"
 
-export const ShortsItem = () => {
+export const ShortsItem = ({ identify }) => {
   console.log(dummyData[0].sources[0])
   const [volumn, setVolumn] = useState(30)
   const [showVolumeControl, setShowVolumeControl] = useState(false)
-  const [good, setGood] = useState(false)
-  const [bad, setBad] = useState(false)
+
   const [openComment, setOpenComment] = useState(false)
   const [openInput, setOpenInput] = useState(false)
   const [sub, setSub] = useState(false)
@@ -36,6 +34,7 @@ export const ShortsItem = () => {
     useLazyQuery(GET_COMMENTS_BY_ID)
 
   const { id, contents } = video ?? {}
+  console.log(identify)
 
   useEffect(() => {
     getVideoById({
@@ -68,7 +67,7 @@ export const ShortsItem = () => {
   const [onPlaying, setOnPlaying] = useState(true)
 
   const [prevVolumn, setPrevVolumn] = useState(volumn)
-  const [get, setGet] = useState(false)
+
   const muteHandler = () => {
     if (volumn !== 0) {
       setPrevVolumn(volumn)
@@ -91,6 +90,7 @@ export const ShortsItem = () => {
             borderRadius: "20px",
             objectFit: "cover",
             backgroundColor: "black",
+            overflow: "auto",
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -115,6 +115,7 @@ export const ShortsItem = () => {
                 margin: "auto",
                 color: "wheat",
                 minHeight: "70%",
+                overflow: "auto",
               }}
             >
               <ReactPlayer
@@ -137,10 +138,6 @@ export const ShortsItem = () => {
           id={id}
           video={video}
           comments={comments}
-          setGood={setGood}
-          good={good}
-          bad={bad}
-          setBad={setBad}
           openComment={openComment}
           setOpenComment={setOpenComment}
           refetch={refetch}

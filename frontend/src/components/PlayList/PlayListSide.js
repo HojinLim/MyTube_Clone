@@ -13,6 +13,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert"
 import { timeForBetween } from "functions/timeForBetween"
 import { getAverageRGBFromJpgUrl } from "functions/getAverageRGBFromJpgUrl"
 import { rgbToHex } from "functions/rbgToHex"
+import { CustomIconMenu } from "components/common/CustomIconMenu"
 
 export const PlayListSide = ({ datas, length, sideTitle }) => {
   const navigate = useNavigate()
@@ -44,98 +45,103 @@ export const PlayListSide = ({ datas, length, sideTitle }) => {
         backgroundColor: color && rgbToHex(color?.r, color?.g, color?.b),
       }}
     >
-      <div className="later_inner_outer">
-        <div
-          component="section"
-          style={{
-            padding: "20px",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            className="pointerlable"
-            onClick={() => {
-              navigate(`/watch/${id}`)
-              window.location.reload()
-            }}
-            src={process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail?.url}
+      <div style={{ width: "100%", height: "100%" }}>
+        <div className="later_inner_outer">
+          <div
+            component="section"
             style={{
-              backgroundColor: "wheat",
+              padding: "20px",
               width: "100%",
-              maxWidth: "336px",
-              maxHeight: "200px",
-
-              borderRadius: "20px",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
             }}
-          />
-        </div>
-        <div
-          component="section"
-          style={{
-            p: 2,
-            width: "100%",
-            height: "100%",
-            borderRadius: "20px",
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
-          }}
-        >
-          <Typography color={"white"} variant="h6" fontWeight={"800"} marginBottom={"15px"}>
-            {sideTitle}
-          </Typography>
-          <div style={{ display: "flex" }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                maxHeight: "40px",
-
-                overflow: "auto",
+          >
+            <img
+              className="pointerlable"
+              onClick={() => {
+                navigate(`/watch/${id}`)
+                window.location.reload()
               }}
-            >
-              <Typography color={"white"} variant="body2">
-                {createdBy}
-              </Typography>
-              <Box display={"flex"} flexDirection={"column"}>
-                <div style={{ display: "flex", textOverflow: "ellipsis", overflow: "auto" }}>
-                  <Typography color={"white"} variant="caption">
-                    동영상 {length}개
-                  </Typography>
-                  <Typography color={"white"} margin={"0px 5px"} variant="caption">
-                    조회수 없음
-                  </Typography>
-                  <Typography color={"white"} variant="caption" textOverflow={"ellipsis"}>
-                    {timeForBetween(created_at)}에 업데이트됨
-                  </Typography>
-                </div>
-              </Box>
-            </div>
-            <IconButton
+              src={process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail?.url}
               style={{
-                backgroundColor: "lightgray",
-                opacity: 0.75,
+                backgroundColor: "wheat",
+                width: "100%",
+                maxWidth: "336px",
+                maxHeight: "200px",
+
+                borderRadius: "20px",
+              }}
+            />
+          </div>
+          <div
+            // component="section"
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              marginLeft: "40px",
+              margin: "20px 0px",
+            }}
+          >
+            <Typography color={"white"} variant="h6" fontWeight={"800"} marginBottom={"15px"}>
+              {sideTitle}
+            </Typography>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                  maxHeight: "40px",
+
+                  overflow: "auto",
+                }}
+              >
+                <Typography color={"white"} variant="body2">
+                  {createdBy}
+                </Typography>
+                <Box display={"flex"} flexDirection={"column"}>
+                  <div style={{ display: "flex", textOverflow: "ellipsis", overflow: "auto" }}>
+                    <Typography color={"white"} variant="caption">
+                      동영상 {length}개
+                    </Typography>
+                    <Typography color={"white"} margin={"0px 5px"} variant="caption">
+                      조회수 없음
+                    </Typography>
+                    <Typography color={"white"} variant="caption" textOverflow={"ellipsis"}>
+                      {timeForBetween(created_at)}에 업데이트됨
+                    </Typography>
+                  </div>
+                </Box>
+              </div>
+            </div>
+
+            <CustomIconMenu
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "20px",
                 maxWidth: "30px",
                 maxHeight: "30px",
-                marginRight: "10px",
+                color: "white",
               }}
-            >
-              <MoreVertIcon style={{ color: "white" }} />
-            </IconButton>
+              iconButton={<MoreVertIcon />}
+              menuItems={[
+                {
+                  icon: <MoreVertIcon />,
+                  text: "나중에 보기 삭제",
+                  onClick: () => {},
+                },
+              ]}
+            />
           </div>
         </div>
-
         {/* 모두재생, 셔플 */}
         <div
-          className="later-button-container"
           component="section"
           style={{
-            p: 2,
-
             width: "100%",
             height: "100%",
             borderRadius: "20px",

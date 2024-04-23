@@ -23,13 +23,13 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
   }
 
   const [likeArr, setLikeArr] = useState([])
-  const [isLikeAdded, setLikeAdded] = useState(null)
+  const [isLikeAdded, setLikeAdded] = useState(false)
   const [dislikeArr, setDislikeArr] = useState([])
-  const [isDisLikeAdded, setDisLikeAdded] = useState(null)
+  const [isDisLikeAdded, setDisLikeAdded] = useState(false)
 
   useEffect(() => {
     const tempLikeArr = like_users?.map((data) => data.id)
-
+    console.log(tempLikeArr)
     setLikeArr(tempLikeArr)
     const isStoredLike = like_users?.some((data) => data.id === user?.uid)
     setLikeAdded(isStoredLike)
@@ -38,8 +38,9 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
     setDislikeArr(tempDislikeArr)
     const isStoredDislike = dislike_users?.some((data) => data.id === user?.uid)
     setDisLikeAdded(isStoredDislike)
-  }, [like_users, dislike_users, user, refetch])
-  //like_users, dislike_users, user, refetch
+  }, [likeArr, isLikeAdded, dislikeArr, isDisLikeAdded])
+  // }, [like_users, dislike_users, user, refetch])
+
   const addLikeHandler = (array, param, func) => {
     const updatedArr = [...array, user.uid]
     console.log(id + "의" + "데이터를 추천누릅니다")

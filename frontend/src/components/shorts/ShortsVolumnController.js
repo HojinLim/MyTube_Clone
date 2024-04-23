@@ -22,11 +22,11 @@ export const ShortsVolumnController = (props) => {
   } = props
 
   return (
-    <div style={{ display: "flex", margin: "5px" }}>
+    <div style={{ display: "flex", margin: "5px", alignItems: "center" }}>
       <CommonIconButton
         onClick={handlePause}
-        background={"#00ff0000"}
-        color={"white"}
+        background="#00ff0000"
+        color="white"
         icon={onPlaying ? <PauseIcon /> : <PlayArrowIcon />}
       />
 
@@ -36,8 +36,8 @@ export const ShortsVolumnController = (props) => {
       >
         <CommonIconButton
           onClick={muteHandler}
-          background={"#00ff0000"}
-          color={"white"}
+          background="#00ff0000"
+          color="white"
           icon={
             volumn === 0 ? (
               <VolumeOffIcon />
@@ -63,12 +63,12 @@ export const ShortsVolumnController = (props) => {
         }}
       >
         <Slider
-          className="volunn_slider"
+          className="volumn_slider"
           aria-label="Volume"
           value={volumn}
           onChange={handleChange}
           sx={{
-            margin: "0px 10px",
+            margin: "5px 10px",
             color: "white",
             width: "200px",
             padding: "3px 0px",

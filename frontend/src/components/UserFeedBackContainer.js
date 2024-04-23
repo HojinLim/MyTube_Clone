@@ -29,6 +29,8 @@ import { UPDATE_COMMENT } from "apollo/mutation"
 import { useNavigate } from "react-router-dom"
 import { CommentInput } from "./Watch/CommentInput"
 import useHandleLike from "hooks/useHandleLike"
+import { UPDATE_COMMENT_LIKE } from "apollo/mutation"
+import { UPDATE_COMMENT_DISLIKE } from "apollo/mutation"
 
 export const UserFeedBackContainer = ({
   commentsLoading,
@@ -37,6 +39,7 @@ export const UserFeedBackContainer = ({
   fixIsParent,
   handleToggle,
   setHandleToggle,
+  identify,
 }) => {
   const [isEdit, setIsEdit] = useState(false)
 
@@ -51,6 +54,23 @@ export const UserFeedBackContainer = ({
   const [updateComment] = useMutation(UPDATE_COMMENT)
   const [openInput, setOpenInput] = useState(false)
   const [isOpen, setIsOpen] = useState(true)
+
+  // const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
+  //   type: "comment",
+  //   like_users,
+  //   dislike_users,
+  //   refetch: refetchComments,
+  //   user: user,
+  //   id: id,
+  // })
+
+  const [updateCommentLike, { called }] = useMutation(UPDATE_COMMENT_LIKE)
+  const [updateCommentDisLike, { called: disLikeCall }] = useMutation(UPDATE_COMMENT_DISLIKE)
+  useEffect(() => {
+    updateCommentDisLike({ variables: { id: "968", like_users: ["26"] } })
+  }, [called, disLikeCall])
+  // updateCommentLike({ variables: { id: "968", like_users: [] } })
+  // const [updateCommentDislike] = useMutation(UPDATE_COMMENT_DISLIKE)
 
   console.log(comment)
   // console.log(created_user)
@@ -72,10 +92,10 @@ export const UserFeedBackContainer = ({
     navi(`/@${username}`)
   }
   const thumbUpHandler = () => {
-    // clickLike()
+    clickLike()
   }
   const thumbDownHandler = () => {
-    // clickDislike()
+    clickDislike()
   }
 
   return (
@@ -83,7 +103,6 @@ export const UserFeedBackContainer = ({
       sx={
         fixIsParent ?? isParent
           ? {
-              // flexGrow: 1,
               flexDirection: "row",
               display: "flex",
               marginY: "15px",
@@ -94,9 +113,6 @@ export const UserFeedBackContainer = ({
               display: "flex",
               marginY: "15px",
               marginLeft: "10%",
-              // width: "80%",
-              // justifyItems: "flex-end",
-              // height: "50%",
             }
       }
     >
@@ -230,7 +246,13 @@ export const UserFeedBackContainer = ({
         {comment?.replies?.length > 0 && (fixIsParent ?? isParent) && (
           <Button
             onClick={() => {
-              setHandleToggle((prev) => !prev)
+              setHandleToggle((prev) => {
+                if (prev.includes(identify)) {
+                  return prev.filter((value) => value !== identify)
+                } else {
+                  return [...prev, identify] // 새로운 배열을 반환하여 이전 상태를 수정하지 않습니다.
+                }
+              })
             }}
             style={{
               width: "100%",
@@ -245,7 +267,7 @@ export const UserFeedBackContainer = ({
               fontWeight: 700,
             }}
           >
-            {handleToggle ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            {handleToggle?.includes(identify) ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
 
             {` 답글 ${comment?.replies?.length}개`}
           </Button>

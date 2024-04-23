@@ -18,22 +18,10 @@ import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import useHandleLike from "hooks/useHandleLike"
 import useUpdateLater from "hooks/useUpdateLater"
+import { copyCurrentUrl } from "functions/copyCurrentUrl"
 
 export const ShortsButtonContainer = (props) => {
-  const {
-    id,
-    comments,
-    good,
-    setGood,
-    bad,
-    setBad,
-    setOpenComment,
-    video,
-    refetch,
-    setDesMode,
-    openComment,
-    desMode,
-  } = props
+  const { id, comments, setOpenComment, video, refetch, setDesMode, openComment, desMode } = props
   const { like_users, dislike_users, later_users } = video ?? {}
   const user = useRecoilValue(accountState)
   const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
@@ -51,9 +39,6 @@ export const ShortsButtonContainer = (props) => {
     id: id,
   })
 
-  console.log(video)
-  console.log(comments)
-  // console.log(isLikeAdded)
   return (
     <div
       style={{
@@ -62,6 +47,7 @@ export const ShortsButtonContainer = (props) => {
         justifyContent: "end",
         margin: "15px",
         gap: "15px",
+        overflow: "auto",
       }}
     >
       {/* 아이템 */}
@@ -69,7 +55,6 @@ export const ShortsButtonContainer = (props) => {
         style={{
           display: "flex",
           flexDirection: "column",
-
           alignItems: "center",
           gap: "5px",
         }}
@@ -130,7 +115,7 @@ export const ShortsButtonContainer = (props) => {
           alignItems: "center",
         }}
       >
-        <CommonIconButton icon={<ShareIcon />} />
+        <CommonIconButton onClick={() => copyCurrentUrl()} icon={<ShareIcon />} />
         <div>공유</div>
       </div>
       <div

@@ -597,10 +597,16 @@
                     "type": "string"
                   }
                 },
-                "comment": {
+                "dislike_youtube": {
                   "type": "string"
                 },
-                "dislike_youtube": {
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "comment": {
                   "type": "string"
                 },
                 "created_by": {

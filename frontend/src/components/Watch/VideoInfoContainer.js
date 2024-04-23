@@ -29,8 +29,9 @@ import { INCREMENT_VIEWS } from "apollo/mutation"
 
 import { useHandleSub } from "hooks/useHandleSub"
 import { GET_IN_SITE } from "Constants/value"
+import { copyCurrentUrl } from "functions/copyCurrentUrl"
 
-export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, getData }) => {
+export const VideoInfoContainer = (props) => {
   const {
     id,
     title,
@@ -41,13 +42,15 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
     later_users,
     like_users,
     dislike_users,
-  } = currentVideos
+  } = props.video
+  const { error: err, loading: load, video, refetch } = props
+  console.log(video)
   const user = useRecoilValue(accountState)
 
   const navigate = useNavigate()
   const { isAdded, addLaterVideoHandler } = useUpdateLater({
     later_users: later_users,
-    refetch: getData,
+    refetch: refetch,
     user: user,
     id: id,
   })
@@ -56,9 +59,9 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
     type: "video",
     like_users,
     dislike_users,
-    refetch: getData,
+    refetch: refetch,
     user: user,
-    id,
+    id: id,
   })
 
   const { subArr, subed, changeSubHandler, isYours, data } = useHandleSub({
@@ -137,17 +140,17 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
                 disabled={isYours ? true : false}
                 onClick={changeSubHandler}
                 variant="contained"
-                sx={
+                style={
                   subed
                     ? {
-                        backgroundColor: "black",
+                        backgroundColor: "lightgray",
                         borderRadius: "20px",
                         maxHeight: "40px",
                         maxWidth: "150px",
                         color: "white",
                       }
                     : {
-                        backgroundColor: "lightgray",
+                        backgroundColor: "#eee",
                         borderRadius: "20px",
                         maxHeight: "40px",
                         maxWidth: "150px",
@@ -169,40 +172,58 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
               <Stack
                 direction="row"
                 spacing={1}
-                borderRadius={"20px"}
+                borderRadius="20px"
                 padding={"0px 15px"}
-                backgroundColor={"lightgray"}
+                backgroundColor="#eee"
                 className="hover"
-                height={"40px"}
-                alignItems={"center"}
+                height="40px"
+                alignItems="center"
               >
                 <div
                   onClick={thumbUpHandler}
-                  style={{ justifyContent: "center", alignItems: "center", display: "flex" }}
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+
+                    height: "100%",
+                  }}
                 >
                   {like_users?.length}
                   {isLikeAdded ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />}
                 </div>
                 <Divider orientation="vertical" />
-                <div onClick={thumbDownHandler}>
+                <div
+                  onClick={thumbDownHandler}
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+
+                    height: "100%",
+                  }}
+                >
                   {isDisLikeAdded ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />}
                 </div>
               </Stack>
               <IconButton
                 size="small"
                 style={{
-                  backgroundColor: "lightgray",
+                  backgroundColor: "#eee",
                   borderRadius: "100px",
                   height: "40px",
                   width: "40px",
                   margin: "0px 5px",
                   color: "black",
                 }}
+                onClick={() => {
+                  copyCurrentUrl()
+                }}
               >
                 <ShareIcon />
               </IconButton>
               <CustomIconMenu
-                style={{ backgroundColor: "lightgray", borderRadius: "20px" }}
+                style={{ backgroundColor: "#eee", borderRadius: "20px" }}
                 iconButton={<MoreHorizIcon />}
                 menuItems={[
                   {
@@ -230,7 +251,7 @@ export const VideoInfoContainer = ({ error: err, loading: load, currentVideos, g
             {`조회수 ${viewCount}회 ${timeForBetween(created_at)}`}
           </Typography>
           <Typography variant="caption" gutterBottom>
-            {currentVideos?.description}
+            {video?.description}
           </Typography>
         </Box>
       </Container>

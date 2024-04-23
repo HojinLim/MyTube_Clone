@@ -20,9 +20,8 @@ export const LaterPage = () => {
       getLaterVideo({ variables: { id: user?.uid } })
     }
     console.log(data?.youtubeMedias)
-  }, [data])
+  }, [data, user, called])
 
-  // console.log(data?.youtube_medias)
   return (
     <div>
       <PlayListSide

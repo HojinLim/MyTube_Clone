@@ -40,7 +40,8 @@
     "like_users": {
       "plugin": "users-permissions",
       "collection": "user",
-      "via": "comment"
+      "via": "comments",
+      "dominant": true
     },
     "dislike_users": {
       "plugin": "users-permissions",

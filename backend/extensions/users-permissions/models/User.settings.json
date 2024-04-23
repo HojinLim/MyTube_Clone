@@ -86,13 +86,17 @@
       "via": "like_users",
       "collection": "youtube-media"
     },
-    "comment": {
-      "via": "dislike_users",
-      "model": "comments"
-    },
     "dislike_youtube": {
       "via": "dislike_users",
       "model": "youtube-media"
+    },
+    "comments": {
+      "via": "like_users",
+      "collection": "comments"
+    },
+    "comment": {
+      "via": "dislike_users",
+      "model": "comments"
     }
   }
 }

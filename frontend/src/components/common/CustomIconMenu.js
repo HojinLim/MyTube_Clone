@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 
-export const CustomIconMenu = ({ background, style, iconButton, menuItems }) => {
+export const CustomIconMenu = ({ background, style, iconButton, menuItems, color }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 

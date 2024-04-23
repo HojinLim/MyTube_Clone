@@ -29,7 +29,7 @@ export const ShortsCommentContainer = (props) => {
     setDesMode,
   } = props
   const [comment, setComment] = useState(null)
-  const [handleToggle, setHandleToggle] = useState(false)
+  const [handleToggle, setHandleToggle] = useState([])
   const [text, setText] = useState("")
 
   useEffect(() => {
@@ -107,6 +107,7 @@ export const ShortsCommentContainer = (props) => {
                 <div key={key}>
                   <UserFeedBackContainer
                     key={`parent-${key}`}
+                    identify={key}
                     comment={data}
                     fixIsParent={true}
                     refetchComments={commentRefetch}
@@ -114,7 +115,7 @@ export const ShortsCommentContainer = (props) => {
                     setHandleToggle={setHandleToggle}
                   />
                   {console.log(data?.replies)}
-                  {handleToggle &&
+                  {handleToggle?.includes(key) &&
                     data?.replies.map((value, subKey) => (
                       <UserFeedBackContainer
                         key={`child-${subKey}`}

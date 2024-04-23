@@ -59,6 +59,20 @@ export const FIND_USER_ID_BY_ID = gql`
     }
   }
 `
+export const FIND_USERS_ID_BY_SORT = gql`
+  query YoutubeMediaById($sort: String!) {
+    youtubeMedias(where: { sort: $sort }) {
+      id
+    }
+  }
+`
+// export const FIND_USERS_ID_BY_SORT = gql`
+//   query YoutubeMediaById($sort: String!, $start: Int!, $limit: Int!) {
+//     youtubeMedias(where: { sort: $sort }, start: $start, limit: $limit) {
+//       id
+//     }
+//   }
+// `
 
 export const GET_ALL_VIDEOS = gql`
   query AllYoutube($id: ID) {
@@ -105,6 +119,7 @@ export const GET_VIDEO_BY_ID = gql`
       isPublic
       views
       created_at
+      duration
       like_users {
         id
       }

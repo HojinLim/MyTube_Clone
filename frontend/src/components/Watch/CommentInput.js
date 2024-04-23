@@ -150,7 +150,7 @@ export const CommentInput = ({
   }
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", marginBottom: "30px" }}>
       <Avatar
         alt="Remy Sharp"
         src={user?.picture}

@@ -49,6 +49,8 @@ import { GET_IN_SITE } from "Constants/value"
 import { IconButton } from "@mui/material"
 import { CommentInput } from "components/Watch/CommentInput"
 import { CenterPlayEffect } from "components/common/CenterPlayEffect"
+import { GET_VIDEO_BY_ID } from "apollo/query"
+import useHandleLike from "hooks/useHandleLike"
 
 export const WatchVideoPage = () => {
   const params = useParams()
@@ -79,13 +81,13 @@ export const WatchVideoPage = () => {
   const playerRef = React.useRef()
 
   const goToThere = (seconds) => {
-    playerRef.current.seekTo(seconds, "seconds")
+    playerRef?.current.seekTo(seconds, "seconds")
   }
 
   const handleVideoChange = (event, newValue) => {
-    if (currentVideos && currentVideos.duration) {
+    if (video && video?.duration) {
       setTimePercent(newValue)
-      const time = (newValue / 100) * stringToSeconds(currentVideos.duration)
+      const time = (newValue / 100) * stringToSeconds(video?.duration)
       goToThere(time)
     }
   }
@@ -113,53 +115,44 @@ export const WatchVideoPage = () => {
 
   const [currentVideos, setCurrentVideos] = useState()
   const [restVideos, setRestVideos] = useState()
+  const [video, setVideo] = useState(null)
+  const videoId = params?.id
 
-  const videoId = params.id
+  // 쿼리
+  const [getVideoById, { data, refetch: refetchVideo }] = useLazyQuery(GET_VIDEO_BY_ID)
+  const [getAllVideos, { loading, error, data: videos, refetch }] = useLazyQuery(GET_ALL_VIDEOS)
 
-  const getData = async () => {
-    refetch()
-    const video = await videos.youtubeMedias.find((video) => video.id === videoId)
-    const restVideos = await videos.youtubeMedias.filter((video) => video.id !== videoId)
-
-    setCurrentVideos(video)
-    setRestVideos(restVideos)
-  }
-
-  const { loading, error, data: videos, refetch } = useQuery(GET_ALL_VIDEOS)
+  const { id, contents } = video ?? {}
 
   useEffect(() => {
-    if (!loading && !error) {
-      getData()
-    }
-  }, [loading, error])
-
-  useMemo(() => {
-    setTimePercent((playTime / stringToSeconds(currentVideos?.duration ?? "1:00")) * 100)
-    setPlayedTime(secondsToTime(Math.trunc(playTime)))
-  }, [playTime])
-
-  const clickSreen = () => {
-    setOnplaying((prev) => !prev)
-  }
-
-  useEffect(() => {
-    screenfull.on("change", () => {
-      if (screenfull.isFullscreen) {
-        setIsFullscreen(true)
-        setRecoFull(true)
-      } else {
-        setIsFullscreen(false)
-        setRecoFull(false)
-      }
+    getVideoById({
+      variables: { id: params?.id },
+      onCompleted: () => {
+        console.log("hi")
+      },
+      onError: (e) => {
+        console.log(e)
+      },
     })
 
-    return () => {
-      screenfull.off("change")
-      localStorage.setItem(GET_IN_SITE, "false")
-    }
-  }, [])
+    getAllVideos({
+      variables: {},
+      onCompleted: () => {},
+      onError: (e) => {
+        console.log(e)
+      },
+    })
+  }, [params?.id])
+  useEffect(() => {
+    refetch()
+    setVideo(data?.youtubeMedia)
+    console.log(videos?.youtubeMedias)
+    const restVideos = videos?.youtubeMedias?.filter((video) => video?.id !== videoId)
+    setRestVideos(restVideos)
+    // console.log(restVideos)
+  }, [data, videos])
+
   const getComments = async () => {
-    // refetchComments()
     setGet(false)
     await getCommentsById({
       variables: { id: videoId },
@@ -182,6 +175,42 @@ export const WatchVideoPage = () => {
   useEffect(() => {
     getComments()
   }, [])
+
+  useEffect(() => {
+    setTimePercent((playTime / stringToSeconds(video?.duration ?? "1:00")) * 100)
+    setPlayedTime(secondsToTime(Math.trunc(playTime)))
+  }, [playTime])
+  console.log(video)
+
+  const clickSreen = () => {
+    setOnplaying((prev) => !prev)
+  }
+
+  useEffect(() => {
+    screenfull.on("change", () => {
+      if (screenfull.isFullscreen) {
+        setIsFullscreen(true)
+        setRecoFull(true)
+      } else {
+        setIsFullscreen(false)
+        setRecoFull(false)
+      }
+    })
+
+    return () => {
+      screenfull.off("change")
+      localStorage.setItem(GET_IN_SITE, "false")
+    }
+  }, [])
+
+  // const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
+  //   type: "video",
+  //   like_users: [],
+  //   dislike_users: [],
+  //   refetch: refetch,
+  //   user: {},
+  //   id: id,
+  // })
 
   const VideoPlaySlider = styled(Slider)({
     color: "#eb4034",
@@ -210,8 +239,8 @@ export const WatchVideoPage = () => {
     "& .MuiSlider-valueLabel": {},
   })
 
-  const [handleToggle, setHandleToggle] = useState(false)
-
+  const [handleToggle, setHandleToggle] = useState([])
+  const sliderRef = useRef(null)
   return (
     <div className="detail_page_container">
       <div className="left_container">
@@ -227,7 +256,7 @@ export const WatchVideoPage = () => {
           }
         >
           {loading && <div>loadding..</div>}
-          {currentVideos && (
+          {video && (
             <ReactPlayer
               ref={playerRef}
               onClick={clickSreen}
@@ -235,9 +264,9 @@ export const WatchVideoPage = () => {
               onProgress={(progress) => {
                 setPlayTime(progress.playedSeconds)
               }}
-              url={process.env.REACT_APP_BACKEND_URL_UPLOAD + currentVideos.contents.url}
+              url={process.env.REACT_APP_BACKEND_URL_UPLOAD + video?.contents?.url}
               width={matches && isMoviescreen && "85%"}
-              height={"100%"}
+              height="100%"
               playing={onPlaying}
               autoPlay={true}
               style={{ margin: "-10px 0px" }}
@@ -259,7 +288,7 @@ export const WatchVideoPage = () => {
               flexDirection: "column",
             }}
           >
-            <VideoPlaySlider value={timePercent} onChange={handleVideoChange} />
+            <VideoPlaySlider ref={sliderRef} value={timePercent} onChange={handleVideoChange} />
 
             <div
               style={{
@@ -314,7 +343,7 @@ export const WatchVideoPage = () => {
                 />
                 {/* 영상 길이 , 남은 시간 */}
                 <Typography variant="caption" gutterBottom style={{ margin: "0px 15px" }}>
-                  {`${playedTime} / ${currentVideos?.duration}`}
+                  {`${playedTime} / ${video?.duration}`}
                 </Typography>
               </div>
 
@@ -357,15 +386,16 @@ export const WatchVideoPage = () => {
 
             <div className="screen_info_container" style={isFullscreen ? { display: "none" } : {}}>
               <VideoInfoContainer
+                id={id}
                 loading={loading}
                 error={error}
-                currentVideos={currentVideos ?? ""}
-                getData={getData}
+                video={video ?? {}}
+                refetch={refetchVideo}
               />
               <Container>
                 <div className="comments-container">
                   <div style={{ display: "flex", justifyItems: "center" }}>
-                    <Typography variant="h6" fontWeight={"700"}>
+                    <Typography variant="h6" fontWeight="700">
                       댓글 {commentData?.comments?.length}개
                     </Typography>
                     <IconButton style={{ color: "black" }}>
@@ -408,9 +438,9 @@ export const WatchVideoPage = () => {
                 .map((data, key) => (
                   <React.Fragment key={key}>
                     <UserFeedBackContainer
-                      key={`parent-${key}`}
+                      identify={key}
                       comment={data}
-                      fixIsParent={true}
+                      fixIsParent
                       commentsLoading={commentsLoading}
                       getComments={getComments}
                       refetchComments={refetchComments}
@@ -418,7 +448,7 @@ export const WatchVideoPage = () => {
                       setHandleToggle={setHandleToggle}
                     />
 
-                    {handleToggle &&
+                    {handleToggle?.includes(key) &&
                       data?.replies.map((value, subKey) => (
                         <UserFeedBackContainer
                           key={`child-${subKey}`}
