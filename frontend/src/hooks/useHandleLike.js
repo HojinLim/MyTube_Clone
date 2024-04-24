@@ -3,14 +3,16 @@ import { UPDATE_COMMENT_LIKE } from "apollo/mutation"
 import { UPDATE_COMMENT_DISLIKE } from "apollo/mutation"
 import { UPDATE_DISLIKE } from "apollo/mutation"
 import { UPDATE_LIKE } from "apollo/mutation"
-import { FIND_USER_BY_EMAIL } from "apollo/query"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) => {
-  const [updateLike] = useMutation(UPDATE_LIKE)
-  const [updateDislike] = useMutation(UPDATE_DISLIKE)
-  const [updateCommentLike] = useMutation(UPDATE_COMMENT_LIKE)
-  const [updateCommentDislike] = useMutation(UPDATE_COMMENT_DISLIKE)
+  const [updateLike, { loading: likeLoading, called: likeCalled }] = useMutation(UPDATE_LIKE)
+  const [updateDislike, { loading: dislikeLoading, called: dislikeCalled }] =
+    useMutation(UPDATE_DISLIKE)
+  const [updateCommentLike, { loading: commentLikeLoading, called: commentLikeCalled }] =
+    useMutation(UPDATE_COMMENT_LIKE)
+  const [updateCommentDislike, { loading: commentDislikeLoading, called: commentDislikeCalled }] =
+    useMutation(UPDATE_COMMENT_DISLIKE)
 
   let updateLikeHandler
   let updateDislikeHandler
@@ -26,8 +28,8 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
   const [isLikeAdded, setLikeAdded] = useState(false)
   const [dislikeArr, setDislikeArr] = useState([])
   const [isDisLikeAdded, setDisLikeAdded] = useState(false)
-
   useEffect(() => {
+    console.log(like_users)
     const tempLikeArr = like_users?.map((data) => data.id)
     console.log(tempLikeArr)
     setLikeArr(tempLikeArr)
@@ -38,11 +40,31 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
     setDislikeArr(tempDislikeArr)
     const isStoredDislike = dislike_users?.some((data) => data.id === user?.uid)
     setDisLikeAdded(isStoredDislike)
-  }, [likeArr, isLikeAdded, dislikeArr, isDisLikeAdded])
-  // }, [like_users, dislike_users, user, refetch])
+  }, [like_users, dislike_users])
+  useEffect(() => {
+    if (
+      (commentLikeCalled && !commentLikeLoading) ||
+      (likeCalled && !likeLoading) ||
+      (dislikeCalled && !dislikeLoading) ||
+      (commentDislikeCalled && !commentDislikeLoading)
+    ) {
+      const tempLikeArr = like_users?.map((data) => data.id)
+      console.log(tempLikeArr)
+      setLikeArr(tempLikeArr)
+      const isStoredLike = like_users?.some((data) => data.id === user?.uid)
+      setLikeAdded(isStoredLike)
+
+      const tempDislikeArr = dislike_users?.map((data) => data.id)
+      setDislikeArr(tempDislikeArr)
+      const isStoredDislike = dislike_users?.some((data) => data.id === user?.uid)
+      setDisLikeAdded(isStoredDislike)
+    }
+    console.log("hi")
+  }, [like_users, dislike_users, refetch])
 
   const addLikeHandler = (array, param, func) => {
     const updatedArr = [...array, user.uid]
+    console.log(array)
     console.log(id + "의" + "데이터를 추천누릅니다")
     func({
       variables: { id: id, [param]: updatedArr },

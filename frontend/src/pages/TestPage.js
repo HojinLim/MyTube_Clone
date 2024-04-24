@@ -3,15 +3,16 @@ import { dummyData } from "dummy"
 import { getAverageRGBFromJpgUrl } from "functions/getAverageRGBFromJpgUrl"
 import person from "assets/images/person.png"
 import logo from "assets/images/logos/logo.png"
-import React from "react"
-
+import React, { useEffect } from "react"
+import Skeleton from "@mui/material/Skeleton"
+import Stack from "@mui/material/Stack"
+import toast, { Toaster } from "react-hot-toast"
 export const TestPage = () => {
-  const dummy = dummyData
-  console.log(dummy[0].thumb)
-  console.log(getAverageRGBFromJpgUrl(dummy[0].thumb))
-  const getData = async () => {
-    console.log(await getAverageRGBFromJpgUrl(dummy[0].thumb))
-  }
-  getData()
-  return <div>ss</div>
+  const notify = () => toast("Here is your toast.")
+  return (
+    <div>
+      <button onClick={notify}>Make me a toast</button>
+      <Toaster />
+    </div>
+  )
 }

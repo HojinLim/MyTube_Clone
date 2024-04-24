@@ -23,7 +23,7 @@ export const LaterPage = () => {
   }, [data, user, called])
 
   return (
-    <div>
+    <div style={{ width: "100%", height: "100%" }}>
       <PlayListSide
         datas={data?.youtubeMedias[0]}
         length={data?.youtubeMedias?.length}

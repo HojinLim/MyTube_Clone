@@ -54,7 +54,7 @@ export const VideoInfoContainer = (props) => {
     user: user,
     id: id,
   })
-
+  // console.log(like_users)
   const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
     type: "video",
     like_users,
@@ -121,7 +121,7 @@ export const VideoInfoContainer = (props) => {
           {title}
         </Typography>
 
-        <div style={{ display: "flex", marginBottom: "15px" }}>
+        <div style={{ display: "flex", marginBottom: "15px", alignItems: "center" }}>
           <IconButton sx={{ padding: 0 }} onClick={moveCreaterPage}>
             <Avatar alt="Remy Sharp" src={created_user?.profileImage} />
           </IconButton>
@@ -134,7 +134,13 @@ export const VideoInfoContainer = (props) => {
             </Typography>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
             <div style={{ display: "flex" }}>
               <Button
                 disabled={isYours ? true : false}

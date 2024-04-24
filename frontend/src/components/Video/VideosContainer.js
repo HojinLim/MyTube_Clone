@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 
 import { dummyData } from "dummy"
 
@@ -8,10 +8,10 @@ import { GET_ALL_VIDEOS } from "apollo/query"
 import VideoContainer from "./VideoContainer"
 import { useRecoilValue } from "recoil"
 import { menuState } from "atom/menuState"
+import { VideoSkeleton } from "components/skeleton/VideoSkeleton"
 
 export default function VideosContainer() {
   const [dummy, setDummy] = React.useState()
-  const [videoDatas, setVideoDatas] = React.useState()
 
   const { loading, error, data: videos, refetch } = useQuery(GET_ALL_VIDEOS)
   console.log(videos)
@@ -24,18 +24,23 @@ export default function VideosContainer() {
     setDummy(dummyData)
   }, [dummyData])
   console.log(menu)
-  history
+
   return (
     <>
       <StyledGrid>
-        {!error &&
-          !loading &&
-          videos.youtubeMedias
-            .filter((data) => data?.isPublic == true)
-            .filter((data) => menu === "all" || data?.sort === menu) // menu가 '전체'면 필터링을 하지 않음
-            .map((data, key) => (
-              <VideoContainer key={key} data={data} refetch={refetch} loading={loading} />
+        {videos?.youtubeMedias
+          .filter((data) => data?.isPublic === true)
+          .filter((data) => menu === "all" || data?.sort === menu) // menu가 '전체'면 필터링을 하지 않음
+          .map((data, key) => (
+            <VideoContainer key={key} data={data} refetch={refetch} loading={loading} />
+          ))}
+        {loading && (
+          <>
+            {[...Array(8)].map((_, index) => (
+              <VideoSkeleton key={index} />
             ))}
+          </>
+        )}
       </StyledGrid>
     </>
   )

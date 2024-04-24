@@ -49,9 +49,10 @@ export const CreatorPage = () => {
     <div style={{ padding: "50px" }}>
       {/* 앱 헤더 컨테이너 */}
       <div className="creator-app-header-container">
-        <div className="creator-app-header">
+        {/* 로고 이미지 */}
+        {/* <div className="creator-app-header">
           <img className="creator-app-header" src={logo} style={{ position: "relative" }} />
-        </div>
+        </div> */}
         <div className="creator-inform-container">
           <img
             style={{

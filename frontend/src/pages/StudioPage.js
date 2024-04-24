@@ -16,10 +16,6 @@ export const StudioPage = () => {
   const [selectedItem, setSelectedItem] = useState(null)
   const [studioState, setStudioState] = useRecoilState(studioMenuState)
 
-  const handleItemClick = (item) => {
-    setSelectedItem(item)
-  }
-
   return (
     <div style={{ display: "flex", position: "relative", width: "100%" }}>
       <Sidebar />

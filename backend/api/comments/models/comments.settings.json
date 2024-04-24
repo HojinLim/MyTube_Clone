@@ -46,7 +46,8 @@
     "dislike_users": {
       "plugin": "users-permissions",
       "collection": "user",
-      "via": "comment"
+      "via": "comment",
+      "dominant": true
     },
     "ownerId": {
       "type": "string"

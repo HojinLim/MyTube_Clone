@@ -9,7 +9,7 @@ import CloseIcon from "@mui/icons-material/Close"
 
 const style = {
   position: "absolute",
-  top: "22.5%",
+  top: "25.5%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 550,

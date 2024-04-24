@@ -39,6 +39,7 @@ export const AfterUploadContainer = ({
 }) => {
   const { size, name, type } = uploadedFile
   const videoRef = React.useRef(null)
+  const [isShorts, setIsShorts] = React.useState(false)
 
   // useRef를 이용해 input태그에 접근
   const thumbInput = React.useRef()
@@ -54,6 +55,11 @@ export const AfterUploadContainer = ({
         console.log(formatTime(videoRef?.current.duration))
         const duration = formatTime(videoRef?.current.duration)
         handleSetDuration(duration)
+
+        if (videoRef?.current.duration < 30) {
+          handleSort("shorts")
+          setIsShorts(true)
+        }
       })
     }
 
@@ -146,16 +152,22 @@ export const AfterUploadContainer = ({
           <Typography id="modal-modal-description" fontSize={"15px"} sx={{ mt: 1 }}>
             카테고리
           </Typography>
-          <CustomIconMenu
-            iconButton={<ArrowDropDownIcon />}
-            menuItems={[
-              { text: "movie", onClick: () => handleSort("movie") },
-              { text: "game", onClick: () => handleSort("game") },
-              { text: "anime", onClick: () => handleSort("anime") },
-              { text: "music", onClick: () => handleSort("music") },
-            ]}
-          />
-          <Typography fontSize={"15px"} sx={{ mt: 1, borderBottom: "1px solid black" }}>
+          {!isShorts && (
+            <CustomIconMenu
+              iconButton={<ArrowDropDownIcon />}
+              menuItems={[
+                { text: "movie", onClick: () => handleSort("movie") },
+                { text: "game", onClick: () => handleSort("game") },
+                { text: "anime", onClick: () => handleSort("anime") },
+                { text: "music", onClick: () => handleSort("music") },
+              ]}
+            />
+          )}
+
+          <Typography
+            fontSize={"15px"}
+            sx={{ mt: 1, borderBottom: "1px solid black", ...(isShorts && { marginLeft: "10px" }) }}
+          >
             {sort}
           </Typography>
         </div>

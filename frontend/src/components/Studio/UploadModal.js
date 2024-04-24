@@ -25,7 +25,7 @@ import { USER_INFO } from "Constants/value"
 
 const style = {
   position: "absolute",
-  top: "45%",
+  top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 850,
@@ -45,7 +45,7 @@ export default function UploadModal() {
   const [uploadThumbImage, setUploadThumbImage] = React.useState(null)
   const [uploadedThumb, setUploadedThumb] = React.useState(null)
   const [open, setOpen] = useRecoilState(openUploadState)
-  const [isPublic, setIsPublic] = React.useState(false)
+  const [isPublic, setIsPublic] = React.useState(true)
   const [duration, setDuration] = React.useState()
   const [sort, setSort] = React.useState()
   const handleOpen = () => setOpen(true)
@@ -118,6 +118,7 @@ export default function UploadModal() {
     }
   }
 
+  // 업로드
   function upload() {
     console.log(uploadedFile)
     return new Promise((resolve, reject) => {
@@ -126,6 +127,9 @@ export default function UploadModal() {
         return
       } else if (!inputText) {
         alert("제목이 비어있습니다!!")
+        return
+      } else if (!sort) {
+        alert("카테고리를 지정해주세요!")
         return
       }
       // const { size, name, type } = uploadedFile

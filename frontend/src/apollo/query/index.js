@@ -89,11 +89,9 @@ export const GET_ALL_VIDEOS = gql`
       contents {
         url
       }
-
       thumbnail {
         url
       }
-
       later_users {
         id
       }
@@ -187,6 +185,13 @@ export const GET_COMMENTS_BY_ID = gql`
         contents
         created_at
         isParent
+
+        like_users {
+          id
+        }
+        dislike_users {
+          id
+        }
 
         root_comment {
           id

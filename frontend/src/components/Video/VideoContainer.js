@@ -115,7 +115,7 @@ const VideoContainer = ({ data, refetch }) => {
               height="100%"
               playing={startVideo}
               autoPlay={true}
-              style={{ borderRadius: "20px" }}
+              style={{ borderRadius: "20px", overflow: "hidden" }}
               onProgress={(progress) => {
                 setPlayTime(progress.playedSeconds)
               }}
@@ -137,7 +137,7 @@ const VideoContainer = ({ data, refetch }) => {
             color: "white",
             backgroundColor: "black",
             padding: "1px",
-            margin: "10px",
+            margin: "15px",
             borderRadius: "2px",
           }}
           variant="body2"

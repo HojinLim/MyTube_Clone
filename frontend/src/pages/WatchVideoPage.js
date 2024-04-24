@@ -51,12 +51,17 @@ import { CommentInput } from "components/Watch/CommentInput"
 import { CenterPlayEffect } from "components/common/CenterPlayEffect"
 import { GET_VIDEO_BY_ID } from "apollo/query"
 import useHandleLike from "hooks/useHandleLike"
+import { CustomIconMenu } from "components/common/CustomIconMenu"
+import { watchCommentsSortState } from "atom/watchCommentsSortState"
+import { StyledGrid } from "styles/globalStyle"
 
 export const WatchVideoPage = () => {
   const params = useParams()
   const [onPlaying, setOnplaying] = useState("true")
 
   const matches = useMediaQuery("(min-width:1440px)")
+
+  const [sortState, setSortState] = useState(false)
 
   // Time
   const [playTime, setPlayTime] = useState(0)
@@ -144,7 +149,7 @@ export const WatchVideoPage = () => {
     })
   }, [params?.id])
   useEffect(() => {
-    refetch()
+    // refetch()
     setVideo(data?.youtubeMedia)
     console.log(videos?.youtubeMedias)
     const restVideos = videos?.youtubeMedias?.filter((video) => video?.id !== videoId)
@@ -203,15 +208,6 @@ export const WatchVideoPage = () => {
     }
   }, [])
 
-  // const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
-  //   type: "video",
-  //   like_users: [],
-  //   dislike_users: [],
-  //   refetch: refetch,
-  //   user: {},
-  //   id: id,
-  // })
-
   const VideoPlaySlider = styled(Slider)({
     color: "#eb4034",
     height: 5,
@@ -269,7 +265,7 @@ export const WatchVideoPage = () => {
               height="100%"
               playing={onPlaying}
               autoPlay={true}
-              style={{ margin: "-10px 0px" }}
+              style={{ margin: "-10px 0px", overflow: "hidden" }}
             />
           )}
           {/* 중앙 플레이 이펙트 */}
@@ -394,14 +390,29 @@ export const WatchVideoPage = () => {
               />
               <Container>
                 <div className="comments-container">
-                  <div style={{ display: "flex", justifyItems: "center" }}>
+                  <div style={{ display: "flex", placeItems: "center" }}>
                     <Typography variant="h6" fontWeight="700">
                       댓글 {commentData?.comments?.length}개
                     </Typography>
-                    <IconButton style={{ color: "black" }}>
-                      <SortIcon />
-                    </IconButton>
-                    <Typography>정렬 기준</Typography>
+
+                    <div style={{ display: "flex", placeItems: "center" }} onClick={() => {}}>
+                      <CustomIconMenu
+                        iconButton={<SortIcon />}
+                        menuItems={[
+                          {
+                            text: "인기 댓글순",
+                            onClick: () => {},
+                          },
+                          {
+                            text: "최신순",
+                            onClick: () => {
+                              setSortState((prev) => !prev)
+                            },
+                          },
+                        ]}
+                      />
+                      <Typography variant="body1">정렬 기준</Typography>
+                    </div>
                   </div>
 
                   <CommentInput
@@ -433,34 +444,64 @@ export const WatchVideoPage = () => {
               className="screen_comment_container"
               style={isFullscreen ? { display: "none" } : {}}
             >
-              {commentData?.comments
-                ?.filter((value, key) => value.isParent)
-                .map((data, key) => (
-                  <React.Fragment key={key}>
-                    <UserFeedBackContainer
-                      identify={key}
-                      comment={data}
-                      fixIsParent
-                      commentsLoading={commentsLoading}
-                      getComments={getComments}
-                      refetchComments={refetchComments}
-                      handleToggle={handleToggle}
-                      setHandleToggle={setHandleToggle}
-                    />
-
-                    {handleToggle?.includes(key) &&
-                      data?.replies.map((value, subKey) => (
+              {sortState
+                ? commentData?.comments
+                    ?.slice()
+                    ?.reverse()
+                    ?.map((data, key) => (
+                      <React.Fragment key={key}>
                         <UserFeedBackContainer
-                          key={`child-${subKey}`}
-                          comment={value}
-                          fixIsParent={false}
+                          identify={key}
+                          comment={data}
+                          fixIsParent
                           commentsLoading={commentsLoading}
                           getComments={getComments}
                           refetchComments={refetchComments}
+                          handleToggle={handleToggle}
+                          setHandleToggle={setHandleToggle}
                         />
-                      ))}
-                  </React.Fragment>
-                ))}
+
+                        {handleToggle?.includes(key) &&
+                          data?.replies.map((value, subKey) => (
+                            <UserFeedBackContainer
+                              key={`child-${subKey}`}
+                              comment={value}
+                              fixIsParent={false}
+                              commentsLoading={commentsLoading}
+                              getComments={getComments}
+                              refetchComments={refetchComments}
+                            />
+                          ))}
+                      </React.Fragment>
+                    ))
+                : commentData?.comments
+                    ?.filter((value) => value.isParent) // isParent가 true인 것만 필터링
+                    .map((data, key) => (
+                      <React.Fragment key={key}>
+                        <UserFeedBackContainer
+                          identify={key}
+                          comment={data}
+                          fixIsParent
+                          commentsLoading={commentsLoading}
+                          getComments={getComments}
+                          refetchComments={refetchComments}
+                          handleToggle={handleToggle}
+                          setHandleToggle={setHandleToggle}
+                        />
+
+                        {handleToggle?.includes(key) &&
+                          data?.replies.map((value, subKey) => (
+                            <UserFeedBackContainer
+                              key={`child-${subKey}`}
+                              comment={value}
+                              fixIsParent={false}
+                              commentsLoading={commentsLoading}
+                              getComments={getComments}
+                              refetchComments={refetchComments}
+                            />
+                          ))}
+                      </React.Fragment>
+                    ))}
             </div>
           </div>
           {/* part2 */}
@@ -481,9 +522,11 @@ export const WatchVideoPage = () => {
           <MenuSelector
             categories={["모두", "주인장 제공", "최근에 업로드된 동영상", "감상한 동영상"]}
           />
-          {restVideos?.map((video, key) => (
-            <NextVideoContainer key={key} data={video} />
-          ))}
+          <div style={{ display: "flex", flexDirection: "column", height: "100%", width: "100%" }}>
+            {restVideos?.map((video, key) => (
+              <NextVideoContainer key={key} data={video} />
+            ))}
+          </div>
         </div>
       )}
     </div>

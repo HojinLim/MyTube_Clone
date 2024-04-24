@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField"
 
 // Icons
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt"
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt"
+
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
@@ -16,9 +16,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp"
 import ThumbUpIcon from "@mui/icons-material/ThumbUp"
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined"
-
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt"
 import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded"
-
 import Avatar from "@mui/material/Avatar"
 import { timeForToday } from "functions/timeForToday"
 import { CustomIconMenu } from "./common/CustomIconMenu"
@@ -55,22 +54,17 @@ export const UserFeedBackContainer = ({
   const [openInput, setOpenInput] = useState(false)
   const [isOpen, setIsOpen] = useState(true)
 
-  // const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
-  //   type: "comment",
-  //   like_users,
-  //   dislike_users,
-  //   refetch: refetchComments,
-  //   user: user,
-  //   id: id,
-  // })
+  const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
+    type: "comment",
+    like_users,
+    dislike_users,
+    refetch: refetchComments,
+    user: user,
+    id: id,
+  })
 
-  const [updateCommentLike, { called }] = useMutation(UPDATE_COMMENT_LIKE)
-  const [updateCommentDisLike, { called: disLikeCall }] = useMutation(UPDATE_COMMENT_DISLIKE)
-  useEffect(() => {
-    updateCommentDisLike({ variables: { id: "968", like_users: ["26"] } })
-  }, [called, disLikeCall])
-  // updateCommentLike({ variables: { id: "968", like_users: [] } })
-  // const [updateCommentDislike] = useMutation(UPDATE_COMMENT_DISLIKE)
+  console.log(isLikeAdded)
+  if (!parent) console.log(like_users)
 
   console.log(comment)
   // console.log(created_user)
@@ -206,11 +200,18 @@ export const UserFeedBackContainer = ({
             display: "flex",
           }}
         >
-          <Button onClick={thumbUpHandler} sx={{ borderRadius: "20px" }}>
-            <ThumbUpAltOutlinedIcon />
+          <Button
+            onClick={thumbUpHandler}
+            style={{
+              borderRadius: "20px",
+              gap: "2px",
+            }}
+          >
+            {like_users?.length}
+            {isLikeAdded ? <ThumbUpIcon /> : <ThumbUpAltOutlinedIcon />}
           </Button>
           <Button onClick={thumbDownHandler} sx={{ borderRadius: "20px" }}>
-            <ThumbDownOffAltIcon />
+            {isDisLikeAdded ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />}
           </Button>
 
           <Button

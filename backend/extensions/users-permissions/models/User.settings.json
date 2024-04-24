@@ -88,7 +88,7 @@
     },
     "dislike_youtube": {
       "via": "dislike_users",
-      "model": "youtube-media"
+      "collection": "youtube-media"
     },
     "comments": {
       "via": "like_users",
@@ -96,7 +96,7 @@
     },
     "comment": {
       "via": "dislike_users",
-      "model": "comments"
+      "collection": "comments"
     }
   }
 }

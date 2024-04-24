@@ -55,7 +55,8 @@
         "movie",
         "anime",
         "music",
-        "game"
+        "game",
+        "shorts"
       ]
     },
     "views": {
@@ -65,7 +66,8 @@
     "dislike_users": {
       "plugin": "users-permissions",
       "collection": "user",
-      "via": "dislike_youtube"
+      "via": "dislike_youtube",
+      "dominant": true
     },
     "later_users": {
       "plugin": "users-permissions",
