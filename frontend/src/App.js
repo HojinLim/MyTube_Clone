@@ -8,6 +8,7 @@ import Router from "router"
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
 import { createHttpLink } from "apollo-link-http"
 
+import toast, { Toaster } from "react-hot-toast"
 // 새로운 테마 생성
 
 const theme = createTheme({
@@ -61,6 +62,26 @@ const App = () => {
           <Router />
         </ThemeProvider>
       </GoogleOAuthProvider>
+      {/* 팝업 라이브러리 */}
+      <Toaster
+        containerStyle={{
+          top: 100,
+          left: 20,
+          bottom: 20,
+          right: 20,
+        }}
+        gutter={8}
+        position="bottom-left"
+        reverseOrder={false}
+        toastOptions={{
+          className: "",
+          duration: 5000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+        }}
+      />
     </ApolloProvider>
   )
 }

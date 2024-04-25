@@ -23,13 +23,16 @@ import { timeForToday } from "functions/timeForToday"
 import { CustomIconMenu } from "./common/CustomIconMenu"
 import { DELETE_COMMENT } from "apollo/mutation"
 import { useMutation } from "@apollo/client"
-import { USER_INFO } from "Constants/value"
+
 import { UPDATE_COMMENT } from "apollo/mutation"
 import { useNavigate } from "react-router-dom"
 import { CommentInput } from "./Watch/CommentInput"
 import useHandleLike from "hooks/useHandleLike"
 import { UPDATE_COMMENT_LIKE } from "apollo/mutation"
 import { UPDATE_COMMENT_DISLIKE } from "apollo/mutation"
+import { USER_INFO } from "config/constants"
+
+import { COLOR_BLUE_700 } from "config/constants"
 
 export const UserFeedBackContainer = ({
   commentsLoading,
@@ -263,7 +266,7 @@ export const UserFeedBackContainer = ({
               borderRadius: "20px",
               maxHeight: "40px",
               margin: "10px 0px",
-              color: "#065fd4",
+              color: COLOR_BLUE_700,
 
               fontWeight: 700,
             }}

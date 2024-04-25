@@ -13,10 +13,11 @@ import SortIcon from "@mui/icons-material/Sort"
 import TextField from "@mui/material/TextField"
 import { useMutation } from "@apollo/client"
 import { CREATE_COMMENT } from "apollo/mutation"
-import { USER_INFO } from "Constants/value"
+
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import { UPDATE_COMMENTS } from "apollo/mutation"
+import toast from "react-hot-toast"
 export const CommentInput = ({
   keyword,
   subId,
@@ -67,7 +68,7 @@ export const CommentInput = ({
         },
         onCompleted: () => {
           // console.log(res)
-          alert(`${keyword} 작성 완료!`)
+          toast.success(`${keyword} 작성 완료!`)
 
           refetchComments()
           setVisibleText("")
@@ -89,7 +90,7 @@ export const CommentInput = ({
         onCompleted: (res) => {
           console.log(res)
 
-          alert(`${keyword} 작성 완료!`)
+          toast.success(`${keyword} 작성 완료!`)
 
           if (isParent) {
             const arr = []
@@ -102,7 +103,7 @@ export const CommentInput = ({
             updateComment({
               variables: { id: id, replies: arr },
               onCompleted: () => {
-                alert("업데이트 완료")
+                toast.success("업데이트 완료")
                 refetchComments()
                 onCancelSubmit()
               },
@@ -121,7 +122,7 @@ export const CommentInput = ({
             updateComment({
               variables: { id: parentData?.root_comment?.id, replies: arr },
               onCompleted: () => {
-                alert("업데이트 완료")
+                toast.success("업데이트 완료")
                 refetchComments()
                 onCancelSubmit()
               },

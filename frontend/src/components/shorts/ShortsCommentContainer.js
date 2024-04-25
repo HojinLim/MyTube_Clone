@@ -49,7 +49,8 @@ export const ShortsCommentContainer = (props) => {
         overflow: "scroll",
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", padding: "5px" }}>
+      <div style={{ display: "flex", flexDirection: "column", padding: "5px", height: "100%" }}>
+        {/* 상단  */}
         <div
           style={{
             display: "flex",
@@ -99,7 +100,8 @@ export const ShortsCommentContainer = (props) => {
         </div>
 
         {console.log(comments)}
-        <div style={{ maxHeight: "70%" }}>
+        {/* 댓글란 */}
+        <div style={{ height: "80%", overflow: "scroll" }}>
           {!desMode &&
             comments
               ?.filter((value) => value?.isParent)
@@ -128,30 +130,24 @@ export const ShortsCommentContainer = (props) => {
               ))}
         </div>
 
+        {/* 댓글 입력란 */}
         {!desMode && (
           <div
             style={{
               display: "flex",
+              flexDirection: "column",
+              borderTop: "1px solid #eee",
               width: "100%",
-              height: "20%",
+              padding: "10px 5px",
+              height: "15%",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                borderTop: "1px solid #eee",
-                width: "100%",
-                padding: "10px 5px",
-              }}
-            >
-              <CommentInput
-                keyword={"댓글"}
-                subId={video?.id}
-                refetchComments={commentRefetch}
-                videoOwner={video?.created_user?.id}
-              />
-            </div>
+            <CommentInput
+              keyword={"댓글"}
+              subId={video?.id}
+              refetchComments={commentRefetch}
+              videoOwner={video?.created_user?.id}
+            />
           </div>
         )}
         {desMode && (

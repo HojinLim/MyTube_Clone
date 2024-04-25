@@ -28,8 +28,10 @@ import useHandleLike from "hooks/useHandleLike"
 import { INCREMENT_VIEWS } from "apollo/mutation"
 
 import { useHandleSub } from "hooks/useHandleSub"
-import { GET_IN_SITE } from "Constants/value"
+
 import { copyCurrentUrl } from "functions/copyCurrentUrl"
+import { GET_IN_SITE } from "config/constants"
+import SimpleDialog from "components/common/SimpleDialog"
 
 export const VideoInfoContainer = (props) => {
   const {
@@ -100,6 +102,7 @@ export const VideoInfoContainer = (props) => {
   const moveCreaterPage = () => {
     navigate(`/@${createdBy}`)
   }
+  const [clickCancel, setClickCancel] = useState(false)
 
   return (
     <Container
@@ -141,11 +144,31 @@ export const VideoInfoContainer = (props) => {
               width: "100%",
             }}
           >
+            {clickCancel && (
+              <SimpleDialog
+                initState
+                title={`@${created_user?.username} 구독을 취소하시겠습니까?`}
+                cancelText="취소"
+                confirmText="구독 취소"
+                execute={() => {
+                  setClickCancel(false)
+                  changeSubHandler()
+                }}
+                cancel={() => {
+                  setClickCancel(false)
+                }}
+              />
+            )}
             <div style={{ display: "flex" }}>
               <Button
                 disabled={isYours ? true : false}
-                onClick={changeSubHandler}
-                variant="contained"
+                onClick={() => {
+                  if (!subed) {
+                    changeSubHandler()
+                  } else {
+                    setClickCancel(true)
+                  }
+                }}
                 style={
                   subed
                     ? {

@@ -16,12 +16,9 @@ import ReplyIcon from "@mui/icons-material/Reply"
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
 
-import { USER_INFO } from "Constants/value"
 import { useLazyQuery, useMutation } from "@apollo/client"
 import { CREATE_LATER } from "apollo/mutation"
 
-import { UPDATE_LATER } from "apollo/mutation"
-import { AlertContainer } from "components/common/AlertContainer"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import DoDisturbIcon from "@mui/icons-material/DoDisturb"
@@ -87,8 +84,6 @@ const VideoContainer = ({ data, refetch }) => {
         padding: "auto",
       }}
     >
-      {/* {isAdded && <AlertContainer type={"success"} message={"저장완료!"} onClose={() => {}} />} */}
-
       <Box
         sx={{
           position: "relative",

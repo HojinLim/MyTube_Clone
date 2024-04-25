@@ -24,6 +24,7 @@ import { MenuSelector } from "./MenuSelector"
 
 import { useLocation } from "react-router-dom"
 function Header() {
+  const [searchText, setSearchText] = useState("")
   const [user, setUser] = useRecoilState(accountState)
   const matches = useMediaQuery("(min-width:650px)")
   const navigate = useNavigate()
@@ -98,9 +99,20 @@ function Header() {
               placeholder="검색"
               inputProps={{ "aria-label": "search" }}
               style={{ width: "100%" }}
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value)
+              }}
             />
             <Divider orientation="vertical" flexItem />
-            <IconButton aria-label="logo">
+            <IconButton
+              aria-label="logo"
+              onClick={() => {
+                // navigate(`/search/${searchText}`)
+                window.location.href = `/search/${searchText}`
+                setSearchText("")
+              }}
+            >
               <SearchIcon />
             </IconButton>
           </div>

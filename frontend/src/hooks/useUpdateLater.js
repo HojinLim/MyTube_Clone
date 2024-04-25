@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
 import { useMutation } from "@apollo/client"
 import { UPDATE_LATER } from "apollo/mutation"
-
+import toast, { Toaster } from "react-hot-toast"
+import { IconButton, Button } from "@mui/material"
+import { COLOR_LIGHT_BLACK } from "config/constants"
+import { COLOR_TRANSPARENT } from "config/constants"
+import { COLOR_BLUE_600 } from "config/constants"
 const useUpdateLater = ({ later_users, refetch, user, id }) => {
   const [updateLater] = useMutation(UPDATE_LATER)
   const [globalArr, setGlobalArr] = useState([])
@@ -22,11 +26,31 @@ const useUpdateLater = ({ later_users, refetch, user, id }) => {
     updateLater({
       variables: { id: id, later_users: arr },
       onCompleted: () => {
-        alert("재생목록 추가 완료!")
+        toast((t) => (
+          <span>
+            나중에 볼 동영상에 저장됨
+            <Button
+              style={{ color: COLOR_BLUE_600, background: "#00ff0000" }}
+              onClick={() => toast.dismiss(t.id)}
+            >
+              닫기
+            </Button>
+          </span>
+        ))
         refetch()
       },
       onError: (error) => {
-        alert("재생목록 추가 실패!")
+        toast((t) => (
+          <span>
+            나중에 볼 동영상 해제
+            <Button
+              style={{ color: COLOR_BLUE_600, background: COLOR_TRANSPARENT }}
+              onClick={() => toast.dismiss(t.id)}
+            >
+              닫기
+            </Button>
+          </span>
+        ))
       },
     })
   }
@@ -36,7 +60,18 @@ const useUpdateLater = ({ later_users, refetch, user, id }) => {
     updateLater({
       variables: { id: id, later_users: arr },
       onCompleted: () => {
-        alert("재생목록 삭제 완료!")
+        toast((t) => (
+          <span>
+            나중에 볼 동영상 삭제 완료
+            <Button
+              style={{ color: "#30a9d9", background: "#00ff0000" }}
+              onClick={() => toast.dismiss(t.id)}
+            >
+              닫기
+            </Button>
+          </span>
+        ))
+
         refetch()
       },
       onError: (error) => {

@@ -13,48 +13,54 @@ import { useLazyQuery } from "@apollo/client"
 import { GET_VIDEO_BY_ID } from "apollo/query"
 import { GET_COMMENTS_BY_ID } from "apollo/query"
 
-export const ShortsItem = ({ identify }) => {
+export const ShortsItem = (props) => {
+  const { identify, shorts, refetch } = props
+  const { id, contents } = shorts ?? {}
+  console.log(id)
   console.log(dummyData[0].sources[0])
   const [volumn, setVolumn] = useState(30)
   const [showVolumeControl, setShowVolumeControl] = useState(false)
 
   const [openComment, setOpenComment] = useState(false)
   const [openInput, setOpenInput] = useState(false)
-  const [sub, setSub] = useState(false)
+
   const params = useParams()
   const [video, setVideo] = useState(null)
   const [comments, setComments] = useState(null)
   const [desMode, setDesMode] = useState(false)
-  const navi = useNavigate()
+
   const handleChange = (event, newValue) => {
     setVolumn(newValue)
   }
-  const [getVideoById, { data, refetch }] = useLazyQuery(GET_VIDEO_BY_ID)
+  // const [getVideoById, { data, refetch }] = useLazyQuery(GET_VIDEO_BY_ID)
   const [getCommentsById, { data: commentData, refetch: commentRefetch }] =
     useLazyQuery(GET_COMMENTS_BY_ID)
 
-  const { id, contents } = video ?? {}
+  // const { id, contents } = video ?? {}
   console.log(identify)
+  useEffect(() => {
+    console.log(identify)
+  }, [])
+
+  // useEffect(() => {
+  //   getVideoById({
+  //     variables: { id: params?.id },
+  //     onCompleted: () => {
+  //       console.log("hi")
+  //     },
+  //     onError: (e) => {
+  //       console.log(e)
+  //     },
+  //   })
+  // }, [params?.id])
+  // useEffect(() => {
+  //   console.log(data)
+  //   setVideo(data?.youtubeMedia)
+  //   console.log(id)
+  // }, [data])
 
   useEffect(() => {
-    getVideoById({
-      variables: { id: params?.id },
-      onCompleted: () => {
-        console.log("hi")
-      },
-      onError: (e) => {
-        console.log(e)
-      },
-    })
-  }, [params?.id])
-  useEffect(() => {
-    console.log(data)
-    setVideo(data?.youtubeMedia)
-    console.log(id)
-  }, [data])
-
-  useEffect(() => {
-    getCommentsById({ variables: { id: params?.id } })
+    getCommentsById({ variables: { id: id } })
   }, [openComment])
 
   useEffect(() => {
@@ -86,7 +92,6 @@ export const ShortsItem = ({ identify }) => {
             margin: "auto",
             width: "400px",
             height: "700px",
-            border: "1px solid #e0e0e0",
             borderRadius: "20px",
             objectFit: "cover",
             backgroundColor: "black",
@@ -115,7 +120,7 @@ export const ShortsItem = ({ identify }) => {
                 margin: "auto",
                 color: "wheat",
                 minHeight: "70%",
-                overflow: "auto",
+                overflow: "hidden",
               }}
             >
               <ReactPlayer
@@ -124,19 +129,22 @@ export const ShortsItem = ({ identify }) => {
                 width="100%"
                 height="100%"
                 playing={onPlaying}
+                // style={{ overflow: "hidden" }}
               />
             </div>
-            {/* 영상 주인 정보 */}
-            <CenterPlayEffect onPlaying={onPlaying} />
+            {/* ERROR: 위치-  재생 버튼 이펙트  */}
+            {/* <CenterPlayEffect onPlaying={onPlaying} /> */}
 
-            <ShortsInfoContainer video={video} sub={sub} setSub={setSub} refetch={refetch} />
+            {/* 영상 주인 정보 */}
+
+            <ShortsInfoContainer video={shorts} refetch={refetch} />
           </div>
         </div>
 
         {/* 상호작용 버튼 컨테이너 */}
         <ShortsButtonContainer
           id={id}
-          video={video}
+          video={shorts}
           comments={comments}
           openComment={openComment}
           setOpenComment={setOpenComment}
@@ -147,7 +155,7 @@ export const ShortsItem = ({ identify }) => {
         {/* 댓글 컨테이너 */}
         {openComment && (
           <ShortsCommentContainer
-            video={video}
+            video={shorts}
             comments={comments}
             commentRefetch={commentRefetch}
             setOpenComment={setOpenComment}

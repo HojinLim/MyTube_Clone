@@ -4,7 +4,7 @@ import { accountState } from "atom/accountState"
 import { MenuSelector } from "components/common/MenuSelector"
 import { VideoItem } from "components/later/VideoItem"
 import { PlayListSide } from "components/PlayList/PlayListSide"
-import { USER_INFO } from "Constants/value"
+
 import { dummyData } from "dummy"
 import React, { useEffect } from "react"
 import { useRecoilValue } from "recoil"

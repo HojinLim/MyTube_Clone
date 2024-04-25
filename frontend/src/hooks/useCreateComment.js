@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client"
 import { CREATE_COMMENT } from "apollo/mutation"
 import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
 
 export const useCreateComment = ({
   uid,
@@ -23,7 +24,8 @@ export const useCreateComment = ({
         isParent: isParent,
       },
       onCompleted: (result) => {
-        alert(`${keyword} 작성 완료!`)
+        toast.success(`${keyword} 작성 완료!`)
+        // alert(`${keyword} 작성 완료!`)
         setResult(result)
         refetchComments()
         setVisibleText("")

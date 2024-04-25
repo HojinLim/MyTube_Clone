@@ -45,7 +45,7 @@ import { accountState } from "atom/accountState"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { GET_ALL_VIDEOS } from "apollo/query"
 import { useLazyQuery, useQuery } from "@apollo/client"
-import { USER_INFO } from "Constants/value"
+
 import { FIND_USER_ID_BY_ID } from "apollo/query"
 import { useMySubArr } from "hooks/useMySubArr"
 import { clickTermState } from "atom/clickTermState"

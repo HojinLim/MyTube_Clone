@@ -141,6 +141,42 @@ export const GET_VIDEO_BY_ID = gql`
     }
   }
 `
+export const GET_ALL_SHORTS = gql`
+  query GET_ALL_SHORTS($sort: String) {
+    youtubeMedias(where: { sort: $sort }) {
+      id
+      description
+      title
+      isPublic
+      createdBy
+      created_at
+      duration
+      sort
+      views
+      contents {
+        url
+      }
+      thumbnail {
+        url
+      }
+      later_users {
+        id
+      }
+      like_users {
+        id
+      }
+      dislike_users {
+        id
+      }
+      created_user {
+        id
+        profileImage
+        username
+      }
+    }
+  }
+`
+
 export const GET_LATER_VIDEO_BY_ID = gql`
   query YoutubeMediaById($id: ID!) {
     youtubeMedias(where: { later_users: { id: $id } }) {
@@ -226,6 +262,32 @@ export const GET_LIKES_BY_UID = gql`
       duration
       thumbnail {
         url
+      }
+    }
+  }
+`
+export const GET_SEARCH_VIDEOS = gql`
+  query GET_SEARCH_VIDEOS($title: String) {
+    youtubeMedias(where: { title_contains: $title }) {
+      id
+      description
+      title
+      isPublic
+      createdBy
+      created_at
+      duration
+      sort
+      views
+      contents {
+        url
+      }
+      thumbnail {
+        url
+      }
+      created_user {
+        id
+        profileImage
+        username
       }
     }
   }

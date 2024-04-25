@@ -1,5 +1,33 @@
 import { Margin } from "@mui/icons-material"
+import { Slider } from "@mui/material"
 import { styled } from "@mui/material/styles"
+
+const VideoPlaySlider = styled(Slider)({
+  color: "#eb4034",
+  height: 5,
+  "& .MuiSlider-track": {
+    border: "none",
+  },
+  "& .MuiSlider-thumb": {
+    height: 12,
+    width: 12,
+    backgroundColor: "#eb4034",
+    border: "2px solid currentColor",
+    "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
+      boxShadow: "inherit",
+    },
+    "&::before": {
+      display: "none",
+    },
+  },
+  "&.MuiSlider-dragging": {
+    "& .MuiSlider-thumb": {
+      height: 20,
+      width: 20,
+    },
+  },
+  "& .MuiSlider-valueLabel": {},
+})
 
 const StyledGrid = styled("div")(({ theme }) => ({
   padding: theme.spacing(0.5),
@@ -52,4 +80,4 @@ const flex_column = {
   textAlign: "center",
 }
 
-export { StyledGrid, flex_space_between, flex_column }
+export { VideoPlaySlider, StyledGrid, flex_space_between, flex_column }

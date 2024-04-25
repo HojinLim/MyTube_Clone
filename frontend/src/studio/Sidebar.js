@@ -22,7 +22,7 @@ import LiveHelpIcon from "@mui/icons-material/LiveHelp"
 
 import { useSetRecoilState } from "recoil"
 import { studioMenuState } from "atom/studioMenuState"
-import { USER_INFO } from "Constants/value"
+import { USER_INFO } from "config/constants"
 
 export const Sidebar = () => {
   const [selectedItem, setSelectedItem] = useState("dashboard")

@@ -45,23 +45,20 @@ import { useLazyQuery, useQuery } from "@apollo/client"
 import { GET_ALL_VIDEOS } from "apollo/query"
 
 import { GET_COMMENTS_BY_ID } from "apollo/query"
-import { GET_IN_SITE } from "Constants/value"
-import { IconButton } from "@mui/material"
+
 import { CommentInput } from "components/Watch/CommentInput"
 import { CenterPlayEffect } from "components/common/CenterPlayEffect"
 import { GET_VIDEO_BY_ID } from "apollo/query"
-import useHandleLike from "hooks/useHandleLike"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
-import { watchCommentsSortState } from "atom/watchCommentsSortState"
-import { StyledGrid } from "styles/globalStyle"
+
+import { GET_IN_SITE } from "config/constants"
+import { VideoPlaySlider } from "styles/globalStyle"
 
 export const WatchVideoPage = () => {
   const params = useParams()
   const [onPlaying, setOnplaying] = useState("true")
 
   const matches = useMediaQuery("(min-width:1440px)")
-
-  const [sortState, setSortState] = useState(false)
 
   // Time
   const [playTime, setPlayTime] = useState(0)
@@ -172,13 +169,14 @@ export const WatchVideoPage = () => {
     { loading: commentsLoading, error: commentError, data: commentData, refetch: refetchComments },
   ] = useLazyQuery(GET_COMMENTS_BY_ID)
   useEffect(() => {
-    if (!commentsLoading) {
-      setGet(false)
+    if (commentData && commentData.comments) {
+      setComments(commentData.comments)
     }
-  }, [commentsLoading])
+  }, [commentData])
   console.log(commentData)
   useEffect(() => {
     getComments()
+    setComments(commentData)
   }, [])
 
   useEffect(() => {
@@ -208,35 +206,23 @@ export const WatchVideoPage = () => {
     }
   }, [])
 
-  const VideoPlaySlider = styled(Slider)({
-    color: "#eb4034",
-    height: 5,
-    "& .MuiSlider-track": {
-      border: "none",
-    },
-    "& .MuiSlider-thumb": {
-      height: 12,
-      width: 12,
-      backgroundColor: "#eb4034",
-      border: "2px solid currentColor",
-      "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
-        boxShadow: "inherit",
-      },
-      "&::before": {
-        display: "none",
-      },
-    },
-    "&.MuiSlider-dragging": {
-      "& .MuiSlider-thumb": {
-        height: 20,
-        width: 20,
-      },
-    },
-    "& .MuiSlider-valueLabel": {},
-  })
-
   const [handleToggle, setHandleToggle] = useState([])
   const sliderRef = useRef(null)
+
+  // comments, 정렬 관련
+  const [comments, setComments] = useState([])
+  const [sortState, setSortState] = useState(false)
+  const [popularState, setPopularState] = useState(false)
+
+  // 최신순 정렬
+  const sortHandler = () => {
+    setComments(commentData?.comments?.slice()?.reverse())
+  }
+  // 인기순- 내림차순 정렬
+  const popularHandler = () => {
+    const sorted = commentData?.comments?.sort((a, b) => b?.like_users.length - a.like_users.length)
+    setComments(sorted)
+  }
   return (
     <div className="detail_page_container">
       <div className="left_container">
@@ -251,8 +237,8 @@ export const WatchVideoPage = () => {
               : { borderRadius: "20px" }
           }
         >
-          {loading && <div>loadding..</div>}
-          {video && (
+          {/* {loading && <div style={{ height: "70vh" }}>loadding..</div>} */}
+          {!loading && video && (
             <ReactPlayer
               ref={playerRef}
               onClick={clickSreen}
@@ -265,7 +251,7 @@ export const WatchVideoPage = () => {
               height="100%"
               playing={onPlaying}
               autoPlay={true}
-              style={{ margin: "-10px 0px", overflow: "hidden" }}
+              style={{ margin: "-10px 0px" }}
             />
           )}
           {/* 중앙 플레이 이펙트 */}
@@ -327,7 +313,6 @@ export const WatchVideoPage = () => {
                   onMouseOut={() => setHoverVolumn("none")}
                   onMouseOver={() => setHoverVolumn("")}
                   className="volunn_slider"
-                  aria-label="Volume"
                   value={volumn}
                   onChange={handleChange}
                   marks={false}
@@ -401,13 +386,11 @@ export const WatchVideoPage = () => {
                         menuItems={[
                           {
                             text: "인기 댓글순",
-                            onClick: () => {},
+                            onClick: popularHandler,
                           },
                           {
                             text: "최신순",
-                            onClick: () => {
-                              setSortState((prev) => !prev)
-                            },
+                            onClick: sortHandler,
                           },
                         ]}
                       />
@@ -444,64 +427,36 @@ export const WatchVideoPage = () => {
               className="screen_comment_container"
               style={isFullscreen ? { display: "none" } : {}}
             >
-              {sortState
-                ? commentData?.comments
-                    ?.slice()
-                    ?.reverse()
-                    ?.map((data, key) => (
-                      <React.Fragment key={key}>
+              {console.log(comments)}
+              {!loading &&
+                commentData &&
+                comments &&
+                comments?.map((data, key) => (
+                  <React.Fragment key={key}>
+                    <UserFeedBackContainer
+                      identify={key}
+                      comment={data}
+                      fixIsParent
+                      commentsLoading={commentsLoading}
+                      getComments={getComments}
+                      refetchComments={refetchComments}
+                      handleToggle={handleToggle}
+                      setHandleToggle={setHandleToggle}
+                    />
+
+                    {handleToggle?.includes(key) &&
+                      data?.replies.map((value, subKey) => (
                         <UserFeedBackContainer
-                          identify={key}
-                          comment={data}
-                          fixIsParent
+                          key={`child-${subKey}`}
+                          comment={value}
+                          fixIsParent={false}
                           commentsLoading={commentsLoading}
                           getComments={getComments}
                           refetchComments={refetchComments}
-                          handleToggle={handleToggle}
-                          setHandleToggle={setHandleToggle}
                         />
-
-                        {handleToggle?.includes(key) &&
-                          data?.replies.map((value, subKey) => (
-                            <UserFeedBackContainer
-                              key={`child-${subKey}`}
-                              comment={value}
-                              fixIsParent={false}
-                              commentsLoading={commentsLoading}
-                              getComments={getComments}
-                              refetchComments={refetchComments}
-                            />
-                          ))}
-                      </React.Fragment>
-                    ))
-                : commentData?.comments
-                    ?.filter((value) => value.isParent) // isParent가 true인 것만 필터링
-                    .map((data, key) => (
-                      <React.Fragment key={key}>
-                        <UserFeedBackContainer
-                          identify={key}
-                          comment={data}
-                          fixIsParent
-                          commentsLoading={commentsLoading}
-                          getComments={getComments}
-                          refetchComments={refetchComments}
-                          handleToggle={handleToggle}
-                          setHandleToggle={setHandleToggle}
-                        />
-
-                        {handleToggle?.includes(key) &&
-                          data?.replies.map((value, subKey) => (
-                            <UserFeedBackContainer
-                              key={`child-${subKey}`}
-                              comment={value}
-                              fixIsParent={false}
-                              commentsLoading={commentsLoading}
-                              getComments={getComments}
-                              refetchComments={refetchComments}
-                            />
-                          ))}
-                      </React.Fragment>
-                    ))}
+                      ))}
+                  </React.Fragment>
+                ))}
             </div>
           </div>
           {/* part2 */}

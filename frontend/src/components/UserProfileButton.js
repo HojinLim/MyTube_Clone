@@ -21,7 +21,9 @@ import { useRecoilState } from "recoil"
 import { Link } from "react-router-dom"
 import OpinionDrawer from "./opinion/OpinionDrawer"
 import { useNavigate } from "react-router-dom"
-import { STRAPI_TOKEN } from "Constants/value"
+import { STRAPI_TOKEN } from "config/constants"
+import toast from "react-hot-toast"
+
 // onCompleted: setFollow(true)
 export const UserProfileButton = () => {
   const navi = useNavigate()
@@ -44,7 +46,7 @@ export const UserProfileButton = () => {
     setUser(null)
     navi("/")
     window.location.reload()
-    alert("로그아웃 되었습니다.")
+    toast.success("로그아웃 되었습니다.")
   }
   const handleFeedbackClick = () => {
     setAnchorEl(null) // 메뉴를 닫습니다.

@@ -37,6 +37,7 @@ const Router = () => {
         <Route path="/shorts/:id" element={<ShortsPage />} />
         <Route path="/:nickname" element={<CreatorPage />} />
         <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/search/:keyword" element={<SearchPage />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="*" element={<NotFoundPage />} />

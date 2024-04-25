@@ -11,8 +11,8 @@ import { useMutation } from "@apollo/client"
 import { CREATE_USER } from "apollo/mutation"
 import { LOGIN_USER } from "apollo/mutation"
 import { REGISTER_USER } from "apollo/mutation"
-import { STRAPI_TOKEN } from "Constants/value"
-import { USER_INFO } from "Constants/value"
+import { USER_INFO } from "config/constants"
+import { STRAPI_TOKEN } from "config/constants"
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(1),

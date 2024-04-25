@@ -21,7 +21,8 @@ import { UPLOAD_VIDEO } from "apollo/mutation"
 
 import { BeforeUploadContainer } from "./BeforeUploadContainer"
 import { AfterUploadContainer } from "./AfterUploadContainer"
-import { USER_INFO } from "Constants/value"
+import { USER_INFO } from "config/constants"
+import toast from "react-hot-toast"
 
 const style = {
   position: "absolute",
@@ -74,7 +75,8 @@ export default function UploadModal() {
     if (data !== null) {
       if (!data.type.startsWith("video/")) {
         // 파일이 동영상이 아닌 경우
-        alert("동영상 파일이 아닙니다!")
+
+        toast.error("동영상 파일이 아닙니다!")
         return
       }
       // 파일이 존재하는 경우
@@ -83,7 +85,8 @@ export default function UploadModal() {
       setUploaded(true)
     } else {
       // 파일이 존재하지 않는 경우
-      alert("파일이 선택되지 않았습니다!")
+
+      toast.error("파일이 선택되지 않았습니다!")
     }
   }
   const handleIsChangeHandler = (e) => {
@@ -123,13 +126,14 @@ export default function UploadModal() {
     console.log(uploadedFile)
     return new Promise((resolve, reject) => {
       if (!uploadThumbImage) {
-        alert("썸네일이 비어있습니다!!")
+        toast.error("썸네일이 비어있습니다!!")
         return
       } else if (!inputText) {
-        alert("제목이 비어있습니다!!")
+        toast.error("제목이 비어있습니다!!")
+
         return
       } else if (!sort) {
-        alert("카테고리를 지정해주세요!")
+        toast.error("카테고리를 지정해주세요!")
         return
       }
       // const { size, name, type } = uploadedFile
@@ -173,7 +177,7 @@ export default function UploadModal() {
     })
       .then((res) => {
         console.log("uploaded in strapi", res)
-        alert("업로드 성공!")
+        toast.success("업로드 성공!")
         location.href = location.href
       })
       .catch((res) => {

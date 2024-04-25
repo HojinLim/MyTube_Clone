@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal"
 // Icon
 import MicIcon from "@mui/icons-material/Mic"
 import CloseIcon from "@mui/icons-material/Close"
+import { useMicPermission } from "hooks/useMicPermission"
 
 const style = {
   position: "absolute",
@@ -22,8 +23,22 @@ const style = {
 
 export default function MicModal() {
   const [open, setOpen] = React.useState(false)
+  const [title, setTitle] = React.useState("")
+  const [contents, setContents] = React.useState("")
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+
+  const { hasPermission, getHasMicPermission, getMicPermission } = useMicPermission()
+  console.log(hasPermission)
+
+  React.useEffect(() => {
+    if (open) {
+      getHasMicPermission()
+      if (hasPermission !== "granted") {
+        getMicPermission()
+      }
+    }
+  }, [open, hasPermission])
 
   return (
     <div>
@@ -43,14 +58,15 @@ export default function MicModal() {
         <Box sx={style}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Typography id="modal-modal-title" variant="h5" component="h2">
-              음성으로 검색
+              {hasPermission == "granted" ? "듣는 중..." : "승인 대기 중"}
             </Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon sx={{ color: "black" }} />
             </IconButton>
           </div>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            음성으로 검색하려면 브라우저 설정으로 이동해 마이크에 대한 액세스를 허용하세요.
+            {hasPermission !== "granted" &&
+              "음성으로 검색하려면 브라우저 설정으로 이동해 마이크에 대한 액세스를 허용하세요."}
           </Typography>
 
           <div
