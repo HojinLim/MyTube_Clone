@@ -22,6 +22,7 @@ import { useHandleSub } from "hooks/useHandleSub"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import { useFindUserData } from "hooks/useFindUserData"
+import SimpleDialog from "components/common/SimpleDialog"
 export const CreatorPage = () => {
   const params = useParams()
   const [value, setValue] = useState(0)
@@ -44,7 +45,14 @@ export const CreatorPage = () => {
     owner_id: owner_id,
     my_id: user?.uid,
   })
-
+  const [clickCancel, setClickCancel] = useState(false)
+  const clickSubHandler = () => {
+    if (!subed) {
+      changeSubHandler()
+    } else {
+      setClickCancel(true)
+    }
+  }
   return (
     <div style={{ padding: "50px" }}>
       {/* 앱 헤더 컨테이너 */}
@@ -78,8 +86,7 @@ export const CreatorPage = () => {
             <Link href="#">example.com</Link>
             <Button
               disabled={isYours ? true : false}
-              onClick={changeSubHandler}
-              variant="contained"
+              onClick={clickSubHandler}
               sx={{
                 backgroundColor: "lightgray",
                 borderRadius: "20px",
@@ -92,6 +99,21 @@ export const CreatorPage = () => {
               {!isYours && !subed && "구독"}
               {isYours && "당신 채널"}
             </Button>
+            {clickCancel && (
+              <SimpleDialog
+                initState
+                title={`@${nickname[1]} 구독을 취소하시겠습니까?`}
+                cancelText="취소"
+                confirmText="구독 취소"
+                execute={() => {
+                  setClickCancel(false)
+                  changeSubHandler()
+                }}
+                cancel={() => {
+                  setClickCancel(false)
+                }}
+              />
+            )}
           </div>
         </div>
       </div>

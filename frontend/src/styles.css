@@ -198,9 +198,9 @@ display: none;
   /* padding: 0 50px; */
 }
 /* new slider */
-.new-slider-container{
+/* .new-slider-container{
   scroll-snap-type: y mandatory;
-}
+} */
 
 .new-slider-section{
   block-size: 100vh;

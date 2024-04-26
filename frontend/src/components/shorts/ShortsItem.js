@@ -23,6 +23,7 @@ export const ShortsItem = (props) => {
 
   const [openComment, setOpenComment] = useState(false)
   const [openInput, setOpenInput] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(null)
 
   const params = useParams()
   const [video, setVideo] = useState(null)

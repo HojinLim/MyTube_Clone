@@ -33,6 +33,8 @@ import { UPDATE_COMMENT_DISLIKE } from "apollo/mutation"
 import { USER_INFO } from "config/constants"
 
 import { COLOR_BLUE_700 } from "config/constants"
+import { useRecoilValue } from "recoil"
+import { accountState } from "atom/accountState"
 
 export const UserFeedBackContainer = ({
   commentsLoading,
@@ -50,12 +52,14 @@ export const UserFeedBackContainer = ({
   const { username, profileImage } = created_user ?? {}
   console.log(created_user)
   const navi = useNavigate()
-  const user = JSON.parse(localStorage.getItem(USER_INFO))
+
+  const user = useRecoilValue(accountState)
   const [text, setText] = useState(contents ?? "")
   const [deleteComment] = useMutation(DELETE_COMMENT)
   const [updateComment] = useMutation(UPDATE_COMMENT)
   const [openInput, setOpenInput] = useState(false)
   const [isOpen, setIsOpen] = useState(true)
+  const [owner, setOwner] = useState(false)
 
   const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
     type: "comment",
@@ -65,6 +69,10 @@ export const UserFeedBackContainer = ({
     user: user,
     id: id,
   })
+
+  useEffect(() => {
+    if (user.name == username) setOwner(true)
+  }, [user, username])
 
   console.log(isLikeAdded)
   if (!parent) console.log(like_users)
@@ -137,19 +145,30 @@ export const UserFeedBackContainer = ({
             <div
               style={{
                 display: "flex",
+                alignItems: "center",
+                placeItems: "center",
               }}
             >
-              <Typography
-                // fontSize={"12px"}
-                className="clickable"
-                variant={fixIsParent ?? isParent ? "body1" : "body2"}
-                sx={{ marginRight: "5px" }}
-                onClick={movePage}
+              <div
+                style={
+                  owner ? { borderRadius: "15px", backgroundColor: "#888888", padding: "2px" } : {}
+                }
               >
-                {`@${username}`}
-              </Typography>
+                <Typography
+                  className="clickable"
+                  variant={fixIsParent ?? isParent ? "body1" : "body2"}
+                  sx={!owner ? {} : { color: "white" }}
+                  onClick={movePage}
+                >
+                  {`@${username}`}
+                </Typography>
+              </div>
               {/* 댓글 시간 */}
               <Typography
+                style={{
+                  marginLeft: "10px",
+                  paddingTop: "5px",
+                }}
                 variant={fixIsParent ?? isParent ? "body1" : "body2"}
                 gutterBottom
                 color={"gray"}

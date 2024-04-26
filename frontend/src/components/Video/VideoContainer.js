@@ -22,6 +22,7 @@ import { CREATE_LATER } from "apollo/mutation"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import DoDisturbIcon from "@mui/icons-material/DoDisturb"
+import { stringToSeconds } from "functions/stringToSeconds"
 const VideoContainer = ({ data, refetch }) => {
   const {
     title,
@@ -49,9 +50,11 @@ const VideoContainer = ({ data, refetch }) => {
   const [hover, setHover] = useState(false)
   const [startVideo, setStartVideo] = useState(false)
   const [playTime, setPlayTime] = useState(0)
+  const [leftTime, setLeftTime] = useState("0:00")
 
   useMemo(() => {
-    setPlayedTime(secondsToTime(Math.trunc(playTime)))
+    const remainingTime = Math.trunc(stringToSeconds(duration) - playTime)
+    setLeftTime(secondsToTime(remainingTime > 0 ? remainingTime : 0))
   }, [playTime])
   const mouseHoverOver = () => {
     setHover(true)
@@ -138,7 +141,7 @@ const VideoContainer = ({ data, refetch }) => {
           variant="body2"
           gutterBottom
         >
-          {hover ? `${playedTime} / ${duration}` : `${duration ?? "00:00"}`}
+          {hover ? `${leftTime}` : `${duration ?? "00:00"}`}
         </Typography>
       </Box>
 

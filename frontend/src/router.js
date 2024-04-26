@@ -18,12 +18,15 @@ import { NotFoundPage } from "pages/NotFoundPage"
 import { CreatorPage } from "pages/CreatorPage"
 import { PostPage } from "pages/PostPage"
 import { SearchPage } from "pages/SearchPage"
+import { studioPageState } from "atom/studioPageState"
+import { StudioHeader } from "components/Studio/StudioHeader"
 
 const Router = () => {
   const isFull = useRecoilValue(fullScreenState)
+  const isStudio = useRecoilValue(studioPageState)
   return (
     <BrowserRouter>
-      {!isFull && <Header />}
+      {!isStudio && !isFull ? <Header /> : <StudioHeader />}
       <Common />
       <Routes>
         <Route path="/" element={<HomePage />} />

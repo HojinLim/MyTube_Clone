@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
 import Box from "@mui/material/Box"
 import Avatar from "@mui/material/Avatar"
@@ -16,20 +16,23 @@ import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined"
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline"
 
 import { accountState } from "atom/accountState"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
 import { Link } from "react-router-dom"
 import OpinionDrawer from "./opinion/OpinionDrawer"
 import { useNavigate } from "react-router-dom"
 import { STRAPI_TOKEN } from "config/constants"
 import toast from "react-hot-toast"
+import { openOpinionState } from "atom/openOpinionState"
+import { studioPageState } from "atom/studioPageState"
 
 // onCompleted: setFollow(true)
 export const UserProfileButton = () => {
   const navi = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null)
-
   const [user, setUser] = useRecoilState(accountState)
+
+  const setOpenOpinion = useSetRecoilState(openOpinionState)
 
   useEffect(() => {}, [user])
   const open = Boolean(anchorEl)
@@ -49,9 +52,9 @@ export const UserProfileButton = () => {
     toast.success("로그아웃 되었습니다.")
   }
   const handleFeedbackClick = () => {
-    setAnchorEl(null) // 메뉴를 닫습니다.
-    OpinionDrawer.toggleDrawer("right", true) // OpinionDrawer를 엽니다.
+    setOpenOpinion(true)
   }
+  const isStudio = useRecoilValue(studioPageState)
 
   return (
     <React.Fragment>
@@ -65,7 +68,7 @@ export const UserProfileButton = () => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 48, height: 48 }} src={user?.picture}>
+            <Avatar sx={{ width: 32, height: 32 }} src={user?.picture}>
               {user?.picture ? "" : user?.email.slice(0, 2).toUpperCase()}
             </Avatar>
           </IconButton>
@@ -109,7 +112,7 @@ export const UserProfileButton = () => {
       >
         <div style={{ display: "flex", margin: "auto", flexDirection: "column", gap: "8px" }}>
           <MenuItem onClick={handleClose}>
-            <Avatar /> 닉네임
+            <Avatar src={user?.picture} /> {user?.name}
           </MenuItem>
           <MenuItem>
             <Link className="channel-link" to="/studio">
@@ -128,13 +131,14 @@ export const UserProfileButton = () => {
         <Divider />
         <MenuItem
           onClick={() => {
-            navi("/studio")
+            isStudio ? navi("/") : navi("/studio")
+            // navi(`${isStudio} ? {"/"} : "/studio"`)
           }}
         >
           <ListItemIcon>
             <PlayCircleOutlineIcon fontSize="small" />
           </ListItemIcon>
-          YouTube스튜디오
+          {!isStudio ? "YouTube스튜디오" : "YouTube"}
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
@@ -144,10 +148,11 @@ export const UserProfileButton = () => {
           설정
         </MenuItem>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={handleFeedbackClick}>
           <ListItemIcon>
             <FeedbackOutlinedIcon />
           </ListItemIcon>
+          의견 보내기
         </MenuItem>
       </Menu>
     </React.Fragment>

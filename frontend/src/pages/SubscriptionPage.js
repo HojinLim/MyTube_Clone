@@ -12,6 +12,7 @@ export const SubscriptionPage = () => {
       <Typography variant="h6" marginLeft={"50px"} fontWeight={"700"}>
         Shorts
       </Typography>
+      <VideosContainer />
     </div>
   )
 }

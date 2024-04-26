@@ -7,6 +7,7 @@ import Modal from "@mui/material/Modal"
 import MicIcon from "@mui/icons-material/Mic"
 import CloseIcon from "@mui/icons-material/Close"
 import { useMicPermission } from "hooks/useMicPermission"
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition"
 
 const style = {
   position: "absolute",
@@ -28,6 +29,8 @@ export default function MicModal() {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } =
+    useSpeechRecognition()
   const { hasPermission, getHasMicPermission, getMicPermission } = useMicPermission()
   console.log(hasPermission)
 
@@ -38,7 +41,7 @@ export default function MicModal() {
         getMicPermission()
       }
     }
-  }, [open, hasPermission])
+  }, [open, hasPermission, getHasMicPermission])
 
   return (
     <div>
@@ -76,9 +79,23 @@ export default function MicModal() {
               marginTop: "150px",
             }}
           >
-            <IconButton sx={{ backgroundColor: "lightgray", marginLeft: "10px" }}>
-              <MicIcon sx={{ color: "black" }} fontSize="large" />
+            <IconButton
+              sx={
+                hasPermission !== "granted"
+                  ? { backgroundColor: "lightgray", marginLeft: "10px" }
+                  : { backgroundColor: "#CC0000" }
+              }
+            >
+              <MicIcon
+                sx={{ color: hasPermission !== "granted" ? "black" : "white" }}
+                fontSize="large"
+              />
             </IconButton>
+            <button onClick={SpeechRecognition.startListening}>Start</button>
+            <button onClick={SpeechRecognition.stopListening}>Stop</button>
+            <button onClick={resetTranscript}>Reset</button>
+            <p>{transcript}</p>
+            {console.log(transcript)}
           </div>
         </Box>
       </Modal>

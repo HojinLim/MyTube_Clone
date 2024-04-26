@@ -23,9 +23,12 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 import { MenuSelector } from "./MenuSelector"
 
 import { useLocation } from "react-router-dom"
+import OpinionDrawer from "components/opinion/OpinionDrawer"
+import { openOpinionState } from "atom/openOpinionState"
 function Header() {
   const [searchText, setSearchText] = useState("")
   const [user, setUser] = useRecoilState(accountState)
+  const openOpinion = useRecoilValue(openOpinionState)
   const matches = useMediaQuery("(min-width:650px)")
   const navigate = useNavigate()
   useEffect(() => {
@@ -38,7 +41,7 @@ function Header() {
 
   return (
     //  헤더 컨테이너
-    <div
+    <header
       id="container"
       style={{
         position: "fixed",
@@ -149,7 +152,8 @@ function Header() {
           />
         )}
       </div>
-    </div>
+      {openOpinion && <OpinionDrawer />}
+    </header>
   )
 }
 

@@ -42,18 +42,21 @@ import { GoogleLoginButton } from "./GoogleLoginButton"
 import youtuber1 from "assets/images/logos/youtuber_logo_1.jpg"
 import youtuber2 from "assets/images/logos/youtuber_logo_2.png"
 import { accountState } from "atom/accountState"
-import { useRecoilState, useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import { GET_ALL_VIDEOS } from "apollo/query"
 import { useLazyQuery, useQuery } from "@apollo/client"
 
 import { FIND_USER_ID_BY_ID } from "apollo/query"
 import { useMySubArr } from "hooks/useMySubArr"
 import { clickTermState } from "atom/clickTermState"
+import OpinionDrawer from "./opinion/OpinionDrawer"
+import { openOpinionState } from "atom/openOpinionState"
 
 export default function SideBar() {
   const navigate = useNavigate()
 
   const user = useRecoilValue(accountState)
+  const setOpenOpinion = useSetRecoilState(openOpinionState)
   const [clickTerm, setClickTerm] = useRecoilState(clickTermState)
   const { data, refetch: sub_refetch } = useMySubArr({ my_id: user?.uid })
   const { sub_users } = data?.users[0] || {}
@@ -260,7 +263,13 @@ export default function SideBar() {
       <List>
         {["설정", "신고 기록", "고객센터", "의견 보내기"].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                if (index === 3) {
+                  setOpenOpinion(true)
+                }
+              }}
+            >
               <ListItemIcon>
                 {index === 0 && <SettingIcon style={commonStyle} />}
                 {index === 1 && <FlagIcon style={commonStyle} />}
@@ -272,6 +281,7 @@ export default function SideBar() {
           </ListItem>
         ))}
       </List>
+
       <Divider />
       <Typography variant="caption" display="block" gutterBottom>
         정보보도자료저작권문의하기크리에이터광고개발자

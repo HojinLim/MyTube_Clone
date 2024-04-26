@@ -20,6 +20,9 @@ export const ShortsPage = () => {
     })
   }, [])
   console.log(shorts)
+  window.addEventListener("wheel", (e) => {
+    console.log(e.deltaY)
+  })
   return (
     <div>
       {shorts?.youtubeMedias?.map((item, index) => (

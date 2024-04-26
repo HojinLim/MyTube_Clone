@@ -30,6 +30,7 @@ import { formatDate } from "functions/formatDate"
 import { DELETE_VIDEO } from "apollo/mutation"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
 import { UPDATE_ISPUBLIC } from "apollo/mutation"
+import toast from "react-hot-toast"
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -278,6 +279,7 @@ export default function ContentsTable() {
         variables: { id: select },
         onCompleted: () => {
           console.log(`비디오 ${select} 삭제 완료`)
+          toast.success(`${select}번 비디오 삭제 완료`)
           refetch()
         },
         onError: (err) => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import TextField from "@mui/material/TextField"
 
-function MultilineTextField({ label, initialText, onTextChange }) {
+function MultilineTextField({ label, initialText, onTextChange, rows }) {
   const [text, setText] = useState(initialText)
 
   const handleTextChange = (event) => {
@@ -16,7 +16,7 @@ function MultilineTextField({ label, initialText, onTextChange }) {
       onChange={handleTextChange}
       label={label}
       multiline
-      maxRows={4}
+      maxRows={rows ?? 4}
       fullWidth={true}
       placeholder="내용"
       value={text}
