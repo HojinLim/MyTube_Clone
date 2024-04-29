@@ -21,12 +21,7 @@ export const BeforeUploadContainer = ({ handleChange }) => {
     <>
       <div style={{ ...flex_column, marginTop: "200px" }}>
         <IconButton
-          sx={{
-            width: "70px",
-            height: "70px",
-            backgroundColor: "lightgray",
-            alignSelf: "center",
-          }}
+          sx={{ width: "70px", height: "70px", backgroundColor: "lightgray", alignSelf: "center" }}
         >
           <UploadIcon sx={{ width: "60px", height: "60px" }} />
         </IconButton>
@@ -50,7 +45,7 @@ export const BeforeUploadContainer = ({ handleChange }) => {
           파일 선택
         </Button>
         {/* 파일 업로드 태그 */}
-        <input ref={imageInput} type="file" style={{ display: "none" }} onChange={handleChange} />
+        <input className="hidden-input" ref={imageInput} type="file" onChange={handleChange} />
       </div>
       <Typography
         id="modal-modal-description"

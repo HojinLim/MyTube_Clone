@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider"
 import CloseIcon from "@mui/icons-material/Close"
 
 // global state
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 
 import { openUploadState } from "atom/openUploadState"
 import { flex_space_between } from "styles/globalStyle"
@@ -23,6 +23,7 @@ import { BeforeUploadContainer } from "./BeforeUploadContainer"
 import { AfterUploadContainer } from "./AfterUploadContainer"
 import { USER_INFO } from "config/constants"
 import toast from "react-hot-toast"
+import { accountState } from "atom/accountState"
 
 const style = {
   position: "absolute",
@@ -38,7 +39,8 @@ const style = {
 }
 
 export default function UploadModal() {
-  const [uploadVideo, { uploadData, uploadLoading, uploadError }] = useMutation(UPLOAD_VIDEO)
+  const user = useRecoilValue(accountState)
+  const [uploadVideo] = useMutation(UPLOAD_VIDEO)
 
   const [uploaded, setUploaded] = React.useState(false)
   const [modalTitle, setModalTitle] = React.useState("동영상 업로드")
@@ -136,9 +138,9 @@ export default function UploadModal() {
         toast.error("카테고리를 지정해주세요!")
         return
       }
-      // const { size, name, type } = uploadedFile
-      var formData = new FormData()
-      // uploadedFile.type
+
+      let formData = new FormData()
+
       formData.append("files", uploadedFile)
       formData.append("files", uploadThumbImage)
 
@@ -154,10 +156,9 @@ export default function UploadModal() {
         })
     })
   }
-  // strapi 올라갈 데이터
 
+  // strapi 올라갈 데이터
   function uploadVideoToStrapi({ data }) {
-    const user = JSON.parse(localStorage.getItem(USER_INFO))
     console.log(data)
     // 0- 동영상 1- 썸네일
     const { name, id: videoID } = data[0]

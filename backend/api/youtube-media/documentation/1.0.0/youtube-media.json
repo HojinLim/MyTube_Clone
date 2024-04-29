@@ -792,6 +792,12 @@
                     "type": "string"
                   }
                 },
+                "communities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "created_by": {
                   "type": "string"
                 },
@@ -889,6 +895,12 @@
                   }
                 },
                 "comment": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "communities": {
                   "type": "array",
                   "items": {
                     "type": "string"
@@ -994,6 +1006,12 @@
                   "type": "string"
                 }
               },
+              "communities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
               "created_by": {
                 "type": "string"
               },
@@ -1090,6 +1108,12 @@
                   }
                 },
                 "comment": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "communities": {
                   "type": "array",
                   "items": {
                     "type": "string"

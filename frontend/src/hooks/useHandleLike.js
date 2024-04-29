@@ -1,5 +1,7 @@
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client"
 import { UPDATE_COMMENT_LIKE } from "apollo/mutation"
+import { UPDATE_COMMUNITY_LIKE } from "apollo/mutation"
+import { UPDATE_COMMUNITY_DISLIKE } from "apollo/mutation"
 import { UPDATE_COMMENT_DISLIKE } from "apollo/mutation"
 import { UPDATE_DISLIKE } from "apollo/mutation"
 import { UPDATE_LIKE } from "apollo/mutation"
@@ -13,6 +15,12 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
     useMutation(UPDATE_COMMENT_LIKE)
   const [updateCommentDislike, { loading: commentDislikeLoading, called: commentDislikeCalled }] =
     useMutation(UPDATE_COMMENT_DISLIKE)
+  const [updateCommunityLike, { loading: communityLikeLoading, called: communityLikeCalled }] =
+    useMutation(UPDATE_COMMUNITY_LIKE)
+  const [
+    updateCommunityDislike,
+    { loading: communityDislikeLoading, called: communityDislikeCalled },
+  ] = useMutation(UPDATE_COMMUNITY_DISLIKE)
 
   let updateLikeHandler
   let updateDislikeHandler
@@ -22,6 +30,9 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
   } else if (type == "comment") {
     updateLikeHandler = updateCommentLike
     updateDislikeHandler = updateCommentDislike
+  } else if (type == "community") {
+    updateLikeHandler = updateCommunityLike
+    updateDislikeHandler = updateCommunityDislike
   }
 
   const [likeArr, setLikeArr] = useState([])
@@ -46,7 +57,9 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
       (commentLikeCalled && !commentLikeLoading) ||
       (likeCalled && !likeLoading) ||
       (dislikeCalled && !dislikeLoading) ||
-      (commentDislikeCalled && !commentDislikeLoading)
+      (commentDislikeCalled && !commentDislikeLoading) ||
+      (communityLikeCalled && !communityLikeLoading) ||
+      (communityDislikeCalled && !communityDislikeLoading)
     ) {
       const tempLikeArr = like_users?.map((data) => data.id)
       console.log(tempLikeArr)

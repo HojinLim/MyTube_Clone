@@ -74,7 +74,6 @@ export const REGISTER_USER = gql`
     }
   }
 `
-
 export const LOGIN_USER = gql`
   mutation loginUser($identifier: String!, $password: String!) {
     login(input: { identifier: $identifier, password: $password }) {
@@ -272,6 +271,30 @@ export const UPDATE_COMMENT_DISLIKE = gql`
     }
   }
 `
+export const UPDATE_COMMUNITY_LIKE = gql`
+  mutation updateLike($id: ID!, $like_users: [ID]) {
+    updateCommunity(input: { where: { id: $id }, data: { like_users: $like_users } }) {
+      community {
+        id
+        like_users {
+          id
+        }
+      }
+    }
+  }
+`
+export const UPDATE_COMMUNITY_DISLIKE = gql`
+  mutation updateDislike($id: ID!, $dislike_users: [ID]) {
+    updateCommunity(input: { where: { id: $id }, data: { dislike_users: $dislike_users } }) {
+      community {
+        id
+        dislike_users {
+          id
+        }
+      }
+    }
+  }
+`
 export const UPDATE_SUB = gql`
   mutation updateUser($id: ID!, $user_id: [ID]!) {
     updateUser(input: { where: { id: $id }, data: { sub_users: $user_id } }) {
@@ -319,6 +342,22 @@ export const INCREMENT_VIEWS = gql`
     updateYoutubeMedia(input: { where: { id: $id }, data: { views: $views } }) {
       youtubeMedia {
         views
+      }
+    }
+  }
+`
+export const CREATE_POST = gql`
+  mutation createCommunity($created_user: ID, $contents: String, $photo: [ID]) {
+    createCommunity(
+      input: { data: { contents: $contents, photo: $photo, created_user: $created_user } }
+    ) {
+      community {
+        id
+        contents
+        photo {
+          id
+          url
+        }
       }
     }
   }

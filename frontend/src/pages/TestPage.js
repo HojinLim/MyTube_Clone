@@ -1,23 +1,44 @@
-import { dummyData } from "dummy"
-import { getAverageRGBFromJpgUrl } from "functions/getAverageRGBFromJpgUrl"
-import person from "assets/images/person.png"
-import logo from "assets/images/logos/logo.png"
-import React, { useEffect, useRef, useState } from "react"
-import toast, { Toaster } from "react-hot-toast"
-import DashboardIcon from "@mui/icons-material/Dashboard"
-import emailjs from "@emailjs/browser"
-import MenuIcon from "@mui/icons-material/Menu"
-import YoutubeLogo from "assets/images/logos/youtube-studio-logo.jpg"
-import Avatar from "@mui/material/Avatar"
-import { IconButton, Button, InputBase } from "@mui/material"
-import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined"
-import Tooltip from "@mui/material/Tooltip"
-import SearchIcon from "@mui/icons-material/Search"
-import { StudioHeader } from "components/Studio/StudioHeader"
+import { useMediaQuery } from "@mui/material"
+import React from "react"
+
 export const TestPage = () => {
+  const matches = useMediaQuery("(min-width:650px)")
   return (
-    <div>
-      <StudioHeader />
+    <div style={{ display: "flex", width: "100%", height: "100%" }}>
+      <div
+        className="later_outer"
+        style={
+          {
+            // backgroundColor: color && rgbToHex(color?.r, color?.g, color?.b),
+          }
+        }
+      >
+        <div
+          style={{
+            position: "relative",
+            backgroundColor: "blue",
+            height: "100%",
+            display: "flex",
+            borderRadius: "25px",
+            marginBottom: "120px",
+            width: "100%",
+            overflow: "scroll",
+          }}
+        >
+          dd
+        </div>
+      </div>
+      <div
+        style={{
+          flexDirection: "column",
+          display: "flex",
+          width: "100%",
+          backgroundColor: "peru",
+          height: "100%",
+        }}
+      >
+        ss
+      </div>
     </div>
   )
 }

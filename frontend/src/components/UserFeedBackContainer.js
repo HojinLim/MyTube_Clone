@@ -28,31 +28,26 @@ import { UPDATE_COMMENT } from "apollo/mutation"
 import { useNavigate } from "react-router-dom"
 import { CommentInput } from "./Watch/CommentInput"
 import useHandleLike from "hooks/useHandleLike"
-import { UPDATE_COMMENT_LIKE } from "apollo/mutation"
-import { UPDATE_COMMENT_DISLIKE } from "apollo/mutation"
-import { USER_INFO } from "config/constants"
 
 import { COLOR_BLUE_700 } from "config/constants"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 
 export const UserFeedBackContainer = ({
-  commentsLoading,
   comment,
+  commentsLoading,
   refetchComments,
   fixIsParent,
   handleToggle,
   setHandleToggle,
   identify,
 }) => {
-  const [isEdit, setIsEdit] = useState(false)
-
   const { id, subId, created_user, contents, created_at, like_users, dislike_users, isParent } =
     comment ?? {}
   const { username, profileImage } = created_user ?? {}
   console.log(created_user)
   const navi = useNavigate()
-
+  const [isEdit, setIsEdit] = useState(false)
   const user = useRecoilValue(accountState)
   const [text, setText] = useState(contents ?? "")
   const [deleteComment] = useMutation(DELETE_COMMENT)
@@ -101,6 +96,15 @@ export const UserFeedBackContainer = ({
   }
   const thumbDownHandler = () => {
     clickDislike()
+  }
+  const handleToggleHandler = () => {
+    setHandleToggle((prev) => {
+      if (prev.includes(identify)) {
+        return prev.filter((value) => value !== identify)
+      } else {
+        return [...prev, identify] // 새로운 배열을 반환하여 이전 상태를 수정하지 않습니다.
+      }
+    })
   }
 
   return (
@@ -188,7 +192,8 @@ export const UserFeedBackContainer = ({
                 fullWidth
               />
             ) : (
-              <Typography variant={fixIsParent ?? isParent ? "h6" : "h7"} gutterBottom>
+              <Typography variant={fixIsParent ? "h6" : "h7"} gutterBottom>
+                {/* <Typography variant={fixIsParent ?? isParent ? "h6" : "h7"} gutterBottom> */}
                 {contents}
               </Typography>
             )}
@@ -266,27 +271,20 @@ export const UserFeedBackContainer = ({
           />
         )}
 
-        {comment?.replies?.length > 0 && (fixIsParent ?? isParent) && (
+        {/* {comment?.replies?.length > 0 && (fixIsParent ?? isParent) && ( */}
+
+        {comment?.replies?.length > 0 && fixIsParent && (
+          // 더보기 버튼 토글
           <Button
-            onClick={() => {
-              setHandleToggle((prev) => {
-                if (prev.includes(identify)) {
-                  return prev.filter((value) => value !== identify)
-                } else {
-                  return [...prev, identify] // 새로운 배열을 반환하여 이전 상태를 수정하지 않습니다.
-                }
-              })
-            }}
+            onClick={handleToggleHandler}
             style={{
               width: "100%",
               height: "100%",
               maxWidth: "100px",
-
               borderRadius: "20px",
               maxHeight: "40px",
               margin: "10px 0px",
               color: COLOR_BLUE_700,
-
               fontWeight: 700,
             }}
           >

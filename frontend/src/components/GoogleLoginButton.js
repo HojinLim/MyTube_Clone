@@ -4,7 +4,7 @@ import { IconButton, Typography } from "@mui/material"
 import { styled, alpha } from "@mui/material/styles"
 import { useGoogleLogin } from "@react-oauth/google"
 import axios from "axios"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useSetRecoilState } from "recoil"
 import { accountState } from "atom/accountState"
 import { changeState } from "atom/accountState"
 import { useMutation } from "@apollo/client"
@@ -31,9 +31,9 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }))
 
 export const GoogleLoginButton = () => {
-  const [user, setUser] = useRecoilState(accountState)
+  const setUser = useSetRecoilState(accountState)
   const [createUser, { data, loading, error }] = useMutation(CREATE_USER)
-  const [loginUser, { loginData, loginLoading, loginError }] = useMutation(LOGIN_USER)
+  const [loginUser] = useMutation(LOGIN_USER)
   const [registerUser, { registerData, registerLoading, registerError }] =
     useMutation(REGISTER_USER)
 
@@ -60,17 +60,17 @@ export const GoogleLoginButton = () => {
             }
 
             loginUser({ variables: { identifier: email, password: sub } })
-              .then((res2) => {
-                console.log(res2, "스트라피 data")
-                console.log("str_JWT:", res2.data.login.jwt)
-                console.log(res2.data.login.user.id)
-                localStorage.setItem(STRAPI_TOKEN, res2.data.login.jwt)
+              .then((response) => {
+                console.log(response, "스트라피 data")
+                console.log("str_JWT:", response.data.login.jwt)
+                console.log(response.data.login.user.id)
+                localStorage.setItem(STRAPI_TOKEN, response.data.login.jwt)
                 localStorage.setItem(USER_INFO, JSON.stringify(user)) // Fixed this line
-
-                const updatedUser = { ...user, uid: res2.data.login.user.id } // Changed variable name to avoid conflict
-                localStorage.setItem(USER_INFO, JSON.stringify(updatedUser))
+                const updatedUser = { ...user, uid: response.data.login.user.id } // Changed variable name to avoid conflict
                 setUser(updatedUser)
+                localStorage.setItem(USER_INFO, JSON.stringify(updatedUser))
               })
+
               .catch((error) => {
                 // 유저가 없는거임 -> 회원가입
                 registerUser({

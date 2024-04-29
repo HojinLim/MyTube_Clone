@@ -16,9 +16,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import { flex_column } from "styles/globalStyle"
 
 import MultilineTextField from "components/common/MultilineTextField"
-import CustomMenu from "components/common/CustomMenu"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
-import { dummyData } from "dummy"
 import { formatTime } from "functions/formatTime"
 
 export const AfterUploadContainer = ({
@@ -39,6 +37,7 @@ export const AfterUploadContainer = ({
 }) => {
   const { size, name, type } = uploadedFile
   const videoRef = React.useRef(null)
+  const textRef = React.useRef(null)
   const [isShorts, setIsShorts] = React.useState(false)
 
   // useRef를 이용해 input태그에 접근
@@ -101,6 +100,7 @@ export const AfterUploadContainer = ({
           <li>시간: {duration}</li>
         </ul>
         {/* 미리보기 영상 */}
+
         <video
           ref={videoRef}
           width="360"
@@ -114,6 +114,7 @@ export const AfterUploadContainer = ({
         ></video>
       </div>
       <MultilineTextField
+        ref={textRef}
         label={"제목(필수 항목)"}
         initialText={inputText}
         onTextChange={handleTextChange}
@@ -183,6 +184,7 @@ export const AfterUploadContainer = ({
         <input
           ref={thumbInput}
           type="file"
+          accept="image/*"
           style={{ display: "none" }}
           onChange={handleThumbChange}
         />

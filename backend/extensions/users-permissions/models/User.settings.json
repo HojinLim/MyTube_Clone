@@ -97,6 +97,10 @@
     "comment": {
       "via": "dislike_users",
       "collection": "comments"
+    },
+    "communities": {
+      "via": "dislike_users",
+      "collection": "community"
     }
   }
 }

@@ -51,6 +51,10 @@
     },
     "ownerId": {
       "type": "string"
+    },
+    "communities": {
+      "via": "comments",
+      "collection": "community"
     }
   }
 }

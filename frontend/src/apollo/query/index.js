@@ -66,13 +66,6 @@ export const FIND_USERS_ID_BY_SORT = gql`
     }
   }
 `
-// export const FIND_USERS_ID_BY_SORT = gql`
-//   query YoutubeMediaById($sort: String!, $start: Int!, $limit: Int!) {
-//     youtubeMedias(where: { sort: $sort }, start: $start, limit: $limit) {
-//       id
-//     }
-//   }
-// `
 
 export const GET_ALL_VIDEOS = gql`
   query AllYoutube($id: ID) {
@@ -288,6 +281,60 @@ export const GET_SEARCH_VIDEOS = gql`
         id
         profileImage
         username
+      }
+    }
+  }
+`
+export const GET_ALL_COMMUNITIES = gql`
+  query AllCommunities($id: ID) {
+    communities(where: { created_user: $id }) {
+      id
+      contents
+      created_at
+      created_user {
+        id
+        username
+        profileImage
+      }
+      like_users {
+        id
+      }
+      dislike_users {
+        id
+      }
+      photo {
+        id
+        url
+      }
+      comments {
+        id
+      }
+    }
+  }
+`
+export const GET_COMMUNITY_BY_ID = gql`
+  query getCommunityById($id: ID!) {
+    community(id: $id) {
+      id
+      contents
+      created_at
+      created_user {
+        id
+        username
+        profileImage
+      }
+      like_users {
+        id
+      }
+      dislike_users {
+        id
+      }
+      photo {
+        id
+        url
+      }
+      comments {
+        id
       }
     }
   }

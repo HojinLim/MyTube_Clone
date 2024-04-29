@@ -427,7 +427,7 @@ export const WatchVideoPage = () => {
               className="screen_comment_container"
               style={isFullscreen ? { display: "none" } : {}}
             >
-              {console.log(comments)}
+              {/* {console.log(comments)} */}
               {!loading &&
                 commentData &&
                 comments &&
@@ -443,7 +443,6 @@ export const WatchVideoPage = () => {
                       handleToggle={handleToggle}
                       setHandleToggle={setHandleToggle}
                     />
-
                     {handleToggle?.includes(key) &&
                       data?.replies.map((value, subKey) => (
                         <UserFeedBackContainer

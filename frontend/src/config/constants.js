@@ -1,5 +1,3 @@
-// import { EditOutlinedIcon } from "@mui/icons-material/EditOutlined"
-
 export const STRAPI_TOKEN = "strapi-token"
 export const USER_INFO = "user"
 export const GET_IN_SITE = "false"

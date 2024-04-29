@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "communities",
+  "info": {
+    "name": "community",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "contents": {
+      "type": "string"
+    },
+    "photo": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "like_users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "communities",
+      "dominant": true
+    },
+    "dislike_users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "communities",
+      "dominant": true
+    },
+    "created_user": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "comments": {
+      "collection": "comments",
+      "via": "communities",
+      "dominant": true
+    }
+  }
+}

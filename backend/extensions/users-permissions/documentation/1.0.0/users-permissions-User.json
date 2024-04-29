@@ -1353,6 +1353,12 @@
                     "type": "string"
                   }
                 },
+                "communities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "created_by": {
                   "type": "string"
                 },
@@ -1455,6 +1461,12 @@
                     "type": "string"
                   }
                 },
+                "communities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "created_by": {
                   "type": "string"
                 },
@@ -1793,6 +1805,12 @@
                 "ownerId": {
                   "type": "string"
                 },
+                "communities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "published_at": {
                   "type": "datetime"
                 },
@@ -1853,6 +1871,64 @@
                 },
                 "ownerId": {
                   "type": "string"
+                },
+                "communities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "published_at": {
+                  "type": "datetime"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "communities": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "contents": {
+                  "type": "string"
+                },
+                "photo": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "like_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "dislike_users": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "created_user": {
+                  "type": "string"
+                },
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 },
                 "published_at": {
                   "type": "datetime"
@@ -1955,6 +2031,12 @@
             }
           },
           "comment": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "communities": {
             "type": "array",
             "items": {
               "type": "string"

@@ -5,7 +5,6 @@ import { MenuSelector } from "components/common/MenuSelector"
 import { VideoItem } from "components/later/VideoItem"
 import { PlayListSide } from "components/PlayList/PlayListSide"
 
-import { dummyData } from "dummy"
 import React, { useEffect } from "react"
 import { useRecoilValue } from "recoil"
 

@@ -111,7 +111,6 @@ export default function OpinionDrawer() {
 
   return (
     <div>
-      {/* <FeedbackOutlinedIcon onClick={toggleDrawer(true)} /> */}
       <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
         {list("right")}
       </Drawer>

@@ -14,6 +14,7 @@ import Settings from "@mui/icons-material/Settings"
 import Logout from "@mui/icons-material/Logout"
 import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined"
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline"
+import YouTubeIcon from "@mui/icons-material/YouTube"
 
 import { accountState } from "atom/accountState"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
@@ -42,6 +43,7 @@ export const UserProfileButton = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
   const handleLogout = () => {
     setAnchorEl(null)
     localStorage.removeItem("user")
@@ -68,7 +70,14 @@ export const UserProfileButton = () => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }} src={user?.picture}>
+            <Avatar
+              sx={
+                isStudio && open
+                  ? { width: 32, height: 32, border: "1px solid blue" }
+                  : { width: 32, height: 32 }
+              }
+              src={user?.picture}
+            >
               {user?.picture ? "" : user?.email.slice(0, 2).toUpperCase()}
             </Avatar>
           </IconButton>
@@ -132,11 +141,14 @@ export const UserProfileButton = () => {
         <MenuItem
           onClick={() => {
             isStudio ? navi("/") : navi("/studio")
-            // navi(`${isStudio} ? {"/"} : "/studio"`)
           }}
         >
           <ListItemIcon>
-            <PlayCircleOutlineIcon fontSize="small" />
+            {!isStudio ? (
+              <PlayCircleOutlineIcon fontSize="small" />
+            ) : (
+              <YouTubeIcon fontSize="small" />
+            )}
           </ListItemIcon>
           {!isStudio ? "YouTube스튜디오" : "YouTube"}
         </MenuItem>
