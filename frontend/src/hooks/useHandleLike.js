@@ -72,7 +72,6 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
       const isStoredDislike = dislike_users?.some((data) => data.id === user?.uid)
       setDisLikeAdded(isStoredDislike)
     }
-    console.log("hi")
   }, [like_users, dislike_users, refetch])
 
   const addLikeHandler = (array, param, func) => {
@@ -91,7 +90,6 @@ const useHandleLike = ({ type, like_users, dislike_users, refetch, user, id }) =
   }
 
   const removeLikeHandler = (array, param, func) => {
-    console.log("hi")
     const updatedArr = array.filter((value) => value !== user.uid)
     console.log("in", updatedArr)
     console.log(id + "의" + "데이터를 비추천누릅니다")

@@ -176,7 +176,7 @@ export default function SideBar() {
       <List>
         {middleList.map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton onClick={() => movePage(text)}>
+            <ListItemButton onClick={() => movePage(text)} disabled={index == 1}>
               <ListItemIcon>
                 {index === 0 && <VideoLibraryIcon style={commonStyle} />}
                 {index === 1 && <RestoreIcon style={commonStyle} />}
@@ -228,7 +228,7 @@ export default function SideBar() {
       <List>
         {["인기 급상승", "음악", "영화", "게임", "스포츠"].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton disabled>
               <ListItemIcon>
                 {index === 0 && <WhatshotIcon style={commonStyle} />}
                 {index === 1 && <MusicNoteIcon style={commonStyle} />}
@@ -248,7 +248,7 @@ export default function SideBar() {
       <List>
         {["YouTube Premium", "YouTube Music", "YouTube Kids"].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton disabled>
               <ListItemIcon>
                 {index === 0 && <SmartDisplay style={commonStyle} />}
                 {index === 1 && <SmartDisplay style={commonStyle} />}
@@ -264,6 +264,7 @@ export default function SideBar() {
         {["설정", "신고 기록", "고객센터", "의견 보내기"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton
+              disabled={index !== 3}
               onClick={() => {
                 if (index === 3) {
                   setOpenOpinion(true)

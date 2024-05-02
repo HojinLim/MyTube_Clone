@@ -7,7 +7,7 @@ import Modal from "@mui/material/Modal"
 import MicIcon from "@mui/icons-material/Mic"
 import CloseIcon from "@mui/icons-material/Close"
 import { useMicPermission } from "hooks/useMicPermission"
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition"
+import { useSpeechRecognition } from "react-speech-recognition"
 
 const style = {
   position: "absolute",
@@ -91,10 +91,8 @@ export default function MicModal() {
                 fontSize="large"
               />
             </IconButton>
-            <button onClick={SpeechRecognition.startListening}>Start</button>
-            <button onClick={SpeechRecognition.stopListening}>Stop</button>
-            <button onClick={resetTranscript}>Reset</button>
-            <p>{transcript}</p>
+
+            {/* <p>{transcript}</p> */}
             {console.log(transcript)}
           </div>
         </Box>

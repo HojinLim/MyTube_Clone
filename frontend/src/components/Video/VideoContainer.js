@@ -185,7 +185,12 @@ const VideoContainer = ({ data, refetch }) => {
             <CustomIconMenu
               iconButton={<MoreVertIcon />}
               menuItems={[
-                { icon: <PlaylistPlayIcon />, text: "현재 재생목록에 추가", onClick: () => {} },
+                {
+                  icon: <PlaylistPlayIcon />,
+                  text: "현재 재생목록에 추가",
+                  onClick: () => {},
+                  disabled: true,
+                },
                 {
                   icon: isAdded ? <DoDisturbIcon /> : <AccessTimeIcon />,
                   text: isAdded ? "나중에 볼 동영상에서 해제" : "나중에 볼 동영상에 저장",

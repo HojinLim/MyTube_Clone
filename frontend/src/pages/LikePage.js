@@ -26,7 +26,7 @@ export const LikePage = () => {
   }, [data, loading])
 
   return (
-    <div>
+    <div style={{ width: "100%", height: "100%" }}>
       <PlayListSide
         datas={data?.youtubeMedias[0]}
         length={data?.youtubeMedias?.length}
@@ -35,14 +35,14 @@ export const LikePage = () => {
 
       {/* 모두재생, 셔플 */}
 
-      <div className="video_container">
+      <div className="flexible-container">
         <div style={{ display: "flex" }}>
           <MenuSelector categories={["전체", "동영상", "Shorts"]} />
         </div>
 
         {data?.youtubeMedias?.map((data, key) => (
-          <div key={key}>
-            <VideoItem datas={data} />
+          <div className="item" key={key}>
+            <VideoItem datas={data} indentifier={key} />
           </div>
         ))}
       </div>

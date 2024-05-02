@@ -4,7 +4,15 @@ import React from "react"
 
 export const PostPage = () => {
   return (
-    <div>
+    <div
+      style={{
+        padding: "50px",
+        alignItems: "start",
+        display: "flex",
+        flexDirection: "column",
+        gap: "50px",
+      }}
+    >
       <CommunityBox />
     </div>
   )

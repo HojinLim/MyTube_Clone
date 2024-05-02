@@ -28,6 +28,9 @@ export const FIND_USER_ID_BY_NAME = gql`
         id
         title
         views
+        like_users {
+          id
+        }
         duration
         created_at
         sort
@@ -181,7 +184,9 @@ export const GET_LATER_VIDEO_BY_ID = gql`
       createdBy
       created_at
       duration
-
+      later_users {
+        id
+      }
       thumbnail {
         url
       }

@@ -14,13 +14,26 @@ import { timeForBetween } from "functions/timeForBetween"
 import { getAverageRGBFromJpgUrl } from "functions/getAverageRGBFromJpgUrl"
 import { rgbToHex } from "functions/rbgToHex"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
+import useUpdateLater from "hooks/useUpdateLater"
+import { useRecoilValue } from "recoil"
+import { accountState } from "atom/accountState"
 
-export const PlayListSide = ({ datas, length, sideTitle }) => {
+export const PlayListSide = (props) => {
+  const { datas, length, sideTitle, refetch } = props
+  console.log(props)
+
   const navigate = useNavigate()
   const [color, setColor] = useState(null)
   const [gradientBackground, setGradientBackground] = useState("")
-
-  const { id, thumbnail, title, createdBy, created_at } = datas ?? {}
+  const [isLike, setIsLike] = useState(false)
+  const { id, thumbnail, title, createdBy, created_at, later_users } = datas ?? {}
+  const user = useRecoilValue(accountState)
+  const { isAdded, addLaterVideoHandler } = useUpdateLater({
+    later_users: later_users,
+    refetch: refetch,
+    user: user,
+    id: id,
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +51,16 @@ export const PlayListSide = ({ datas, length, sideTitle }) => {
     fetchData()
   }, [thumbnail])
 
+  useEffect(() => {
+    if (location.pathname.includes("like")) {
+      setIsLike(true)
+    } else if (location.pathname.includes("like")) {
+      setIsLike(false)
+    }
+  }, [])
+  // const handleClick = (id) => {
+  //   onClick(id)
+  // }
   return (
     <div
       className="later_outer"
@@ -75,15 +98,13 @@ export const PlayListSide = ({ datas, length, sideTitle }) => {
             />
           </div>
           <div
-            // component="section"
             style={{
               width: "100%",
               height: "100%",
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              marginLeft: "40px",
-              margin: "20px 0px",
+              marginLeft: "50px",
             }}
           >
             <Typography color={"white"} variant="h6" fontWeight={"800"} marginBottom={"15px"}>
@@ -131,8 +152,10 @@ export const PlayListSide = ({ datas, length, sideTitle }) => {
               menuItems={[
                 {
                   icon: <MoreVertIcon />,
-                  text: "나중에 보기 삭제",
-                  onClick: () => {},
+                  text: isLike ? "좋아요 목록에서 삭제" : "나중에 보기 삭제",
+                  onClick: () => {
+                    if (!isLike) addLaterVideoHandler()
+                  },
                 },
               ]}
             />

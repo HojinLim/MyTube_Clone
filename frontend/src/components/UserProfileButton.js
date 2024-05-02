@@ -123,10 +123,12 @@ export const UserProfileButton = () => {
           <MenuItem onClick={handleClose}>
             <Avatar src={user?.picture} /> {user?.name}
           </MenuItem>
-          <MenuItem>
-            <Link className="channel-link" to="/studio">
-              내 채널보기
-            </Link>
+          <MenuItem
+            onClick={() => {
+              navi(`/@${user.name}`)
+            }}
+          >
+            <Link className="channel-link">내 채널보기</Link>
           </MenuItem>
         </div>
         <Divider />
@@ -153,7 +155,7 @@ export const UserProfileButton = () => {
           {!isStudio ? "YouTube스튜디오" : "YouTube"}
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem disabled onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>

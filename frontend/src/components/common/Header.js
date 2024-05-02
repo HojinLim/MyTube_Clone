@@ -146,9 +146,7 @@ function Header() {
         }}
       >
         {location.pathname === "/" && (
-          <MenuSelector
-            categories={["전체", "게임", "영화", "음악", "애니메이션", "감상한 동영상"]}
-          />
+          <MenuSelector categories={["전체", "게임", "영화", "음악", "애니메이션"]} />
         )}
       </div>
     </header>

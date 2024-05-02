@@ -1,12 +1,23 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
 import { CommunityBox } from "./CommunityBox"
 
 import { GET_ALL_COMMUNITIES } from "apollo/query"
 import { useLazyQuery, useQuery } from "@apollo/client"
+import { useRecoilValue } from "recoil"
+import { accountState } from "atom/accountState"
+import { CommunityInputBox } from "./CommunityInputBox"
+import { whichStudioState } from "atom/whichStudioState"
 
 export const CommunityContainer = () => {
+  const user = useRecoilValue(accountState)
+  const page = useRecoilValue(whichStudioState)
   const [getAllCommunities, { data, loading, refetch }] = useLazyQuery(GET_ALL_COMMUNITIES)
+
+  const [isMine, setIsMine] = useState(false)
+  useEffect(() => {
+    user.name == page ? setIsMine(true) : setIsMine(false)
+  }, [user, page])
 
   useEffect(() => {
     if (data && !loading) {
@@ -14,8 +25,8 @@ export const CommunityContainer = () => {
     }
   }, [data])
   useEffect(() => {
-    getAllCommunities({ variables: { id: "26" } })
-  }, [])
+    getAllCommunities({ variables: { id: user.uid } })
+  }, [refetch])
   console.log(data)
 
   return (
@@ -28,6 +39,7 @@ export const CommunityContainer = () => {
         gap: "50px",
       }}
     >
+      {isMine && <CommunityInputBox refetch={refetch} />}
       {data?.communities?.map((data, key) => (
         <React.Fragment key={key}>
           <CommunityBox data={data} refetch={refetch} />

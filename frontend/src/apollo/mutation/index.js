@@ -195,7 +195,6 @@ export const CREATE_COMMENT = gql`
 `
 
 // 나중에 볼 영상
-
 export const CREATE_LATER = gql`
   mutation createLater($uid: String, $youtube_id: [ID]) {
     createLater(input: { data: { uid: $uid, youtube_medias: $youtube_id } }) {
@@ -351,6 +350,20 @@ export const CREATE_POST = gql`
     createCommunity(
       input: { data: { contents: $contents, photo: $photo, created_user: $created_user } }
     ) {
+      community {
+        id
+        contents
+        photo {
+          id
+          url
+        }
+      }
+    }
+  }
+`
+export const DELETE_COMMUNITY = gql`
+  mutation deleteCommunity($id: ID!) {
+    deleteCommunity(input: { where: { id: $id } }) {
       community {
         id
         contents

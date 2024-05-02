@@ -57,9 +57,9 @@ export default function ContentsTab() {
           indicatorColor="secondary"
         >
           <Tab label="동영상" {...a11yProps(0)} />
-          <Tab label="Shorts" {...a11yProps(1)} />
+          {/* <Tab label="Shorts" {...a11yProps(1)} />
           <Tab label="게시물" {...a11yProps(2)} />
-          <Tab label="재생목록" {...a11yProps(3)} />
+          <Tab label="재생목록" {...a11yProps(3)} /> */}
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

@@ -22,6 +22,7 @@ export const CustomIconMenu = ({ background, style, iconButton, menuItems, color
   return (
     <>
       <IconButton
+        disabled={menuItems?.disabled ?? false}
         style={style ? { ...style, color: "black" } : { color: "black" }}
         id="custom-menu-button"
         aria-controls={open ? "custom-menu" : undefined}

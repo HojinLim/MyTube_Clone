@@ -44,6 +44,7 @@
     "react-speech-recognition": "^3.10.0",
     "recoil": "^0.7.7",
     "redux": "^5.0.1",
+    "sass": "^1.76.0",
     "screenfull": "^6.0.2",
     "styled-components": "^6.1.8",
     "stylis": "4.0.10",

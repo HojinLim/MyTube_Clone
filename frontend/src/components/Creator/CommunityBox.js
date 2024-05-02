@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
-import { Typography } from "@mui/material"
-import { IconButton, Button } from "@mui/material"
-import person from "assets/images/person.png"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
+
+import { Typography, Container, Avatar, Button, Box, IconButton, Divider } from "@mui/material"
+
+// 아이콘
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
@@ -12,21 +13,29 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt"
 import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded"
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined"
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined"
-import { useNavigate } from "react-router-dom"
+
 import { timeForBetween } from "functions/timeForBetween"
-import { useLazyQuery } from "@apollo/client"
+import { useLazyQuery, useMutation } from "@apollo/client"
 import { GET_COMMUNITY_BY_ID } from "apollo/query"
 import { CustomIconMenu } from "components/common/CustomIconMenu"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import useHandleLike from "hooks/useHandleLike"
+import { copyCurrentUrl } from "functions/copyCurrentUrl"
+import { DELETE_COMMUNITY } from "apollo/mutation"
+import toast from "react-hot-toast"
+import SimpleDialog from "components/common/SimpleDialog"
 export const CommunityBox = (props) => {
+  const location = useLocation()
+  const [detailed, setDetailed] = useState(false)
   const [community, setCommunity] = useState(null)
   const [isParam, setIsParm] = useState(false)
+  const [clickCancel, setClickCancel] = useState(false)
   const params = useParams()
   const user = useRecoilValue(accountState)
   const [getCommunityById, { data, refetch, loading }] = useLazyQuery(GET_COMMUNITY_BY_ID)
-
+  const [deleteCommunity, {}] = useMutation(DELETE_COMMUNITY)
+  console.log(props)
   useEffect(() => {
     if (props?.data) {
       setCommunity(props.data)
@@ -41,34 +50,33 @@ export const CommunityBox = (props) => {
       setCommunity(data.community)
     }
   }, [data, community])
-
+  console.log(community)
   const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
     type: "community",
     like_users: community?.like_users,
     dislike_users: community?.dislike_users,
-    refetch: refetch ?? props?.refetch,
+    refetch: refetch ?? props?.refetch(),
     user: user,
     id: community?.id,
   })
-
+  useEffect(() => {
+    location.pathname.startsWith("/post") ? setDetailed(true) : setDetailed(false)
+  }, [])
+  // console.log()
   const navigate = useNavigate()
-
+  const deleteCommunityHanlder = () => {
+    console.log(community?.id)
+    deleteCommunity({
+      variables: { id: community?.id },
+      onCompleted: () => {
+        if (!detailed) props?.refetch()
+        toast.success("삭제 완료")
+        if (location.pathname.startsWith("/post")) navigate(-1)
+      },
+    })
+  }
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        overflow: "auto",
-        width: "100%",
-        height: "100%",
-        maxHeight: "900px",
-        maxWidth: "900px",
-        border: "1px solid lightgray",
-        borderRadius: "25px",
-        padding: "20px",
-      }}
-    >
-      {/* 1*/}
+    <div className="community-box-container">
       <div
         style={{
           display: "flex",
@@ -78,10 +86,7 @@ export const CommunityBox = (props) => {
         }}
       >
         <div style={{ display: "flex" }}>
-          <img
-            src={community?.created_user?.profileImage}
-            style={{ maxHeight: "40px", borderRadius: "25px" }}
-          />
+          <Avatar src={community?.created_user?.profileImage} />
 
           <div
             style={{
@@ -111,20 +116,37 @@ export const CommunityBox = (props) => {
             }}
             iconButton={<MoreVertIcon />}
             menuItems={[
-              {
-                icon: <EditOutlinedIcon />,
-                text: "수정",
-                onClick: () => {},
-              },
+              // {
+              //   icon: <EditOutlinedIcon />,
+              //   text: "수정",
+              //   onClick: () => {},
+              // },
               {
                 icon: <DeleteOutlineOutlinedIcon />,
                 text: "삭제",
-                onClick: () => {},
+                onClick: () => {
+                  setClickCancel(true)
+                },
               },
             ]}
           />
         </div>
       </div>
+      {clickCancel && (
+        <SimpleDialog
+          initState
+          title="정말 삭제하시겠습니까?"
+          cancelText="취소"
+          confirmText="삭제"
+          execute={() => {
+            setClickCancel(false)
+            deleteCommunityHanlder()
+          }}
+          cancel={() => {
+            setClickCancel(false)
+          }}
+        />
+      )}
       {/* 2*/}
 
       <div
@@ -142,6 +164,12 @@ export const CommunityBox = (props) => {
         </div>
 
         <img
+          className="clickable"
+          onClick={() => {
+            if (!detailed) {
+              navigate(`/post/${community?.id}`)
+            }
+          }}
           style={{ height: "100%", width: "50%", maxHeight: "600px" }}
           src={process.env.REACT_APP_BACKEND_URL_UPLOAD + community?.photo[0]?.url ?? ""}
           width={"100%"}
@@ -155,7 +183,11 @@ export const CommunityBox = (props) => {
         <IconButton style={{ color: "black" }} onClick={clickDislike}>
           {isDisLikeAdded ? <ThumbDownRoundedIcon /> : <ThumbDownOffAltIcon />}
         </IconButton>
-        <IconButton style={{ color: "black", margin: "0px 15px" }}>
+        <IconButton
+          disabled
+          style={{ color: "black", margin: "0px 15px" }}
+          onClick={() => copyCurrentUrl()}
+        >
           <ReplyOutlinedIcon />
         </IconButton>
         {!isParam && (

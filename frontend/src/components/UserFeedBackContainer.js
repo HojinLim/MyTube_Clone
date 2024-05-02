@@ -121,7 +121,7 @@ export const UserFeedBackContainer = ({
               flexDirection: "row",
               display: "flex",
               marginY: "15px",
-              marginLeft: "10%",
+              paddingLeft: "5em",
             }
       }
     >
@@ -220,7 +220,6 @@ export const UserFeedBackContainer = ({
             </div>
           )}
         </div>
-
         {/* 유저 피드백 상호 버튼 */}
         <div
           style={{
@@ -270,9 +269,8 @@ export const UserFeedBackContainer = ({
             setOpenInput={setOpenInput}
           />
         )}
-
         {/* {comment?.replies?.length > 0 && (fixIsParent ?? isParent) && ( */}
-
+        {/* //{" "} */}
         {comment?.replies?.length > 0 && fixIsParent && (
           // 더보기 버튼 토글
           <Button

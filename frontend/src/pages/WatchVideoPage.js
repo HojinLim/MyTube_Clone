@@ -53,6 +53,7 @@ import { CustomIconMenu } from "components/common/CustomIconMenu"
 
 import { GET_IN_SITE } from "config/constants"
 import { VideoPlaySlider } from "styles/globalStyle"
+import { playListState } from "atom/playListState"
 
 export const WatchVideoPage = () => {
   const params = useParams()
@@ -114,6 +115,11 @@ export const WatchVideoPage = () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
   }, [volumn])
+  useEffect(() => {
+    return () => {
+      console.log("언마운트")
+    }
+  }, [])
 
   const [currentVideos, setCurrentVideos] = useState()
   const [restVideos, setRestVideos] = useState()
@@ -145,12 +151,14 @@ export const WatchVideoPage = () => {
       },
     })
   }, [params?.id])
+  const [playList, setPlayList] = useRecoilState(playListState)
   useEffect(() => {
     // refetch()
     setVideo(data?.youtubeMedia)
     console.log(videos?.youtubeMedias)
     const restVideos = videos?.youtubeMedias?.filter((video) => video?.id !== videoId)
     setRestVideos(restVideos)
+    restVideos?.map((video) => setPlayList((prev) => [...prev, video.id]))
     // console.log(restVideos)
   }, [data, videos])
 
@@ -174,6 +182,7 @@ export const WatchVideoPage = () => {
     }
   }, [commentData])
   console.log(commentData)
+
   useEffect(() => {
     getComments()
     setComments(commentData)
@@ -203,6 +212,7 @@ export const WatchVideoPage = () => {
     return () => {
       screenfull.off("change")
       localStorage.setItem(GET_IN_SITE, "false")
+      setPlayList([])
     }
   }, [])
 
@@ -211,8 +221,6 @@ export const WatchVideoPage = () => {
 
   // comments, 정렬 관련
   const [comments, setComments] = useState([])
-  const [sortState, setSortState] = useState(false)
-  const [popularState, setPopularState] = useState(false)
 
   // 최신순 정렬
   const sortHandler = () => {
@@ -223,6 +231,7 @@ export const WatchVideoPage = () => {
     const sorted = commentData?.comments?.sort((a, b) => b?.like_users.length - a.like_users.length)
     setComments(sorted)
   }
+  const nextVideoHandler = () => {}
   return (
     <div className="detail_page_container">
       <div className="left_container">
@@ -287,9 +296,9 @@ export const WatchVideoPage = () => {
                 >
                   {!onPlaying ? <PlayArrowIcon fontSize="large" /> : <PauseIcon fontSize="large" />}
                 </Button>
-                <Button>
+                {/* <Button onClick={nextVideoHandler}>
                   <SkipNextIcon fontSize="large" />
-                </Button>
+                </Button> */}
                 {/* 볼륨 조절 */}
                 <Button
                   onClick={muteHandler}
@@ -412,9 +421,7 @@ export const WatchVideoPage = () => {
 
             {/* 나머지 데이터 */}
             <div className={"videos_bottom_container"}>
-              <MenuSelector
-                categories={["모두", "주인장 제공", "최근에 업로드된 동영상", "감상한 동영상"]}
-              />
+              <MenuSelector categories={["모두", "최근에 업로드된 동영상"]} />
               {restVideos?.map((video, key) => (
                 <NextVideoContainer key={key} data={video} />
               ))}
@@ -473,9 +480,7 @@ export const WatchVideoPage = () => {
       {!isMoviescreen && !isFullscreen && (
         <div className="videos_side_container">
           {/* 다음 영상 틀 */}
-          <MenuSelector
-            categories={["모두", "주인장 제공", "최근에 업로드된 동영상", "감상한 동영상"]}
-          />
+          <MenuSelector categories={["모두", "주인장 제공", "최근에 업로드된 동영상"]} />
           <div style={{ display: "flex", flexDirection: "column", height: "100%", width: "100%" }}>
             {restVideos?.map((video, key) => (
               <NextVideoContainer key={key} data={video} />

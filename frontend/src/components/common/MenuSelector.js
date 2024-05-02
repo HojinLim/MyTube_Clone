@@ -6,7 +6,8 @@ import Tooltip from "@mui/material/Tooltip"
 import { useSetRecoilState } from "recoil"
 import { menuState } from "atom/menuState"
 
-export const MenuSelector = ({ categories }) => {
+export const MenuSelector = (props) => {
+  const { categories, setState } = props
   const [selectedButton, setSelectedButton] = useState(categories[0])
   const setMenu = useSetRecoilState(menuState)
   const ClickedStyle = {
@@ -15,6 +16,7 @@ export const MenuSelector = ({ categories }) => {
     margin: "3px",
   }
   const menuHandler = (category) => {
+    if (setState) setState(category)
     setSelectedButton(category)
 
     switch (category) {

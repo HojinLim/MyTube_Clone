@@ -102,7 +102,7 @@ export const Sidebar = () => {
         </MenuList>
       </div>
       <div className="menu_bottom_container">
-        <MenuList sx={{ width: "200px", maxWidth: "100%" }}>
+        {/* <MenuList sx={{ width: "200px", maxWidth: "100%" }}>
           <Tooltip title="설정">
             <MenuItem
               selected={selectedItem === "settings"}
@@ -141,7 +141,7 @@ export const Sidebar = () => {
               <ListItemText>의견보내기</ListItemText>
             </MenuItem>
           </Tooltip>
-        </MenuList>
+        </MenuList> */}
       </div>
       <div className="menu-divider"></div>
     </nav>

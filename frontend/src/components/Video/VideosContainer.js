@@ -30,7 +30,7 @@ export default function VideosContainer() {
       <StyledGrid>
         {videos?.youtubeMedias
           .filter((data) => data?.isPublic === true)
-          .filter((data) => menu === "all" || data?.sort === menu) // menu가 '전체'면 필터링을 하지 않음
+          .filter((data) => menu === "all" || data?.sort === menu)
           .map((data, key) => (
             <VideoContainer key={key} data={data} refetch={refetch} loading={loading} />
           ))}

@@ -18,7 +18,7 @@ export const HomeCategory = () => {
         top: "2rem",
       }}
     >
-      <MenuSelector categories={["전체", "게임", "음악", "애니메이션", "감상한 동영상"]} />
+      <MenuSelector categories={["전체", "게임", "음악", "애니메이션"]} />
     </div>
   )
 }

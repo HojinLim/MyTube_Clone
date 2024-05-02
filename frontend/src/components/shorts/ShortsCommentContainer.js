@@ -32,6 +32,16 @@ export const ShortsCommentContainer = (props) => {
   const [handleToggle, setHandleToggle] = useState([])
   const [text, setText] = useState("")
 
+  // 최신순 정렬
+  const sortHandler = () => {
+    setComment(comments?.slice()?.reverse())
+  }
+  // 인기순- 내림차순 정렬
+  const popularHandler = () => {
+    const sorted = comments?.sort((a, b) => b?.like_users.length - a.like_users.length)
+    setComment(sorted)
+  }
+
   useEffect(() => {
     setComment(comments)
   }, [comments])
@@ -78,11 +88,11 @@ export const ShortsCommentContainer = (props) => {
                 menuItems={[
                   {
                     text: "인기 댓글순",
-                    onClick: () => {},
+                    onClick: popularHandler,
                   },
                   {
                     text: "최신순",
-                    onClick: () => {},
+                    onClick: sortHandler,
                   },
                 ]}
               />
@@ -103,7 +113,7 @@ export const ShortsCommentContainer = (props) => {
         {/* 댓글란 */}
         <div style={{ height: "80%", overflow: "scroll" }}>
           {!desMode &&
-            comments
+            comment
               ?.filter((value) => value?.isParent)
               .map((data, key) => (
                 <div key={key}>

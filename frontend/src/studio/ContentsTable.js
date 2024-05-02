@@ -150,22 +150,10 @@ function ContentsTableToolbar(props) {
         <></>
       )}
 
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Tooltip title="Delete">
           <IconButton onClick={onDelete}>
             <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <CustomIconMenu
-              iconButton={<FilterListIcon />}
-              menuItems={[
-                { text: "test", onclick: () => {} },
-                { text: "test2", onclick: () => {} },
-              ]}
-            />
           </IconButton>
         </Tooltip>
       )}
@@ -393,7 +381,8 @@ export default function ContentsTable() {
                     </TableCell>
                     <TableCell align="right">{row.views}</TableCell>
                     {/* 댓글 수 */}
-                    <TableCell align="right">{row.comment}</TableCell>
+                    {console.log(row)}
+                    <TableCell align="right">{"2"}</TableCell>
                     {/* 좋아요 수 */}
                     <TableCell align="right">{row.like_users.length}</TableCell>
                   </TableRow>

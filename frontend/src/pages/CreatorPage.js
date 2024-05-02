@@ -19,14 +19,16 @@ import { CommunityContainer } from "components/Creator/CommunityContainer"
 import { useLazyQuery, useQuery } from "@apollo/client"
 import { FIND_USER_ID_BY_NAME } from "apollo/query"
 import { useHandleSub } from "hooks/useHandleSub"
-import { useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
 import { useFindUserData } from "hooks/useFindUserData"
 import SimpleDialog from "components/common/SimpleDialog"
+import { whichStudioState } from "atom/whichStudioState"
 export const CreatorPage = () => {
   const params = useParams()
   const [value, setValue] = useState(0)
   const [subscript, setSubscript] = useState(false)
+  const [page, setPage] = useRecoilState(whichStudioState)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -45,6 +47,12 @@ export const CreatorPage = () => {
     owner_id: owner_id,
     my_id: user?.uid,
   })
+  useEffect(() => {
+    setPage(nickname[1])
+    return () => {
+      setPage(null)
+    }
+  }, [])
   const [clickCancel, setClickCancel] = useState(false)
   const clickSubHandler = () => {
     if (!subed) {
@@ -80,10 +88,10 @@ export const CreatorPage = () => {
             <Typography variant="caption" style={{ margin: "10px 0px" }}>
               {nickname} - 구독자 {subArr?.length}명 - 동영상 {created_youtubes?.length}개
             </Typography>
-            <Typography className="creator-inform-click" variant="body2">
+            {/* <Typography className="creator-inform-click" variant="body2">
               정보
-            </Typography>
-            <Link href="#">example.com</Link>
+            </Typography> */}
+            {/* <Link href="#">example.com</Link> */}
             <Button
               disabled={isYours ? true : false}
               onClick={clickSubHandler}
@@ -126,7 +134,7 @@ export const CreatorPage = () => {
         >
           <Tab label="홈" />
           <Tab label="동영상" />
-          <Tab label="재생목록" />
+          {/* <Tab label="재생목록" /> */}
           <Tab label="커뮤니티" />
         </Tabs>
         <IconButton>
@@ -139,8 +147,8 @@ export const CreatorPage = () => {
       {/* 홈 컨테이너 */}
       {value === 0 && <HomeContainer datas={created_youtubes} />}
       {value === 1 && <VideoContainer datas={created_youtubes} />}
-      {value === 2 && <PlayListContainer datas={created_youtubes} />}
-      {value === 3 && <CommunityContainer />}
+      {/* {value === 2 && <PlayListContainer datas={created_youtubes} />} */}
+      {value === 2 && <CommunityContainer />}
     </div>
   )
 }
