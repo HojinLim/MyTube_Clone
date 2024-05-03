@@ -25,7 +25,9 @@ export const CommentInput = ({
   setOpenInput,
   parentData,
   videoOwner,
+  isPost,
 }) => {
+  // console.log(isPost)
   // console.log(videoOwner)
   const [visibleText, setVisibleText] = useState("")
   const [realText, setRealText] = useState("")
@@ -58,14 +60,21 @@ export const CommentInput = ({
     console.log("submit")
     // 댓글
     if (keyword == "댓글") {
+      const variables = {
+        created_user: user?.uid,
+        contents: visibleText,
+        isParent: true,
+        ownerId: videoOwner,
+      }
+
+      if (!isPost) {
+        variables.created_youtube = subId
+      } else {
+        variables.created_community = subId
+      }
+
       createComment({
-        variables: {
-          created_user: user?.uid,
-          created_youtube: subId,
-          contents: visibleText,
-          isParent: true,
-          ownerId: videoOwner,
-        },
+        variables,
         onCompleted: () => {
           // console.log(res)
           toast.success(`${keyword} 작성 완료!`)
@@ -80,13 +89,20 @@ export const CommentInput = ({
       } else {
         // 댓글의 답글
       }
+      const variables = {
+        created_user: user?.uid,
+        contents: visibleText,
+        isParent: false,
+      }
+
+      if (!isPost) {
+        variables.created_youtube = subId
+      } else {
+        variables.created_community = subId
+      }
+
       createComment({
-        variables: {
-          created_user: user?.uid,
-          created_youtube: subId,
-          contents: visibleText,
-          isParent: false,
-        },
+        variables,
         onCompleted: (res) => {
           console.log(res)
 

@@ -10,7 +10,7 @@ body, html {
 }
 ::-webkit-scrollbar {
   width: 0px !important;
-  height: 0px !important; 
+  height: 0px !important;
  }
 .logo:hover{
   cursor: pointer;
@@ -738,4 +738,22 @@ height: 100%;
 }
 .flex{
   display: flex;
+}
+
+.preview{
+  width: 100%;
+  border: 1px solid lightgray;
+  height: 200px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+overflow: hidden;
+
+}
+.preview.active {
+  background-color: #efeef3;
+  border-color: #111;
+  border: 3px dotted lightgray;
 }

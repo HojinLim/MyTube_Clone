@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { Typography, Container, Avatar, Button, Box, IconButton, Divider } from "@mui/material"
 import { CommonIconButton } from "components/common/CommonIconButton"
@@ -9,8 +9,13 @@ import { useMutation } from "@apollo/client"
 import { CREATE_POST } from "apollo/mutation"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
-import { whichStudioState } from "atom/whichStudioState"
+
 export const CommunityInputBox = (props) => {
+  // 이미지 드래그 다운
+  const [isActive, setActive] = useState(false)
+  const handleDragStart = () => setActive(true)
+  const handleDragEnd = () => setActive(false)
+
   const { refetch } = props
   const [openImage, setOpenImage] = useState(false)
   const imageInput = useRef(null)
@@ -20,9 +25,21 @@ export const CommunityInputBox = (props) => {
   const user = useRecoilValue(accountState)
   const [text, setText] = useState("")
 
-  const handleThumbChange = (e) => {
-    const file = e.target.files[0]
+  const handleDrop = (event) => {
+    event.preventDefault()
 
+    const file = event.dataTransfer.files[0]
+    console.log(event.dataTransfer.files)
+    console.log(file)
+    // readImage(file)
+    setActive(false)
+
+    onChangeThumb(file)
+
+    // 드롭된 파일 핸들링
+    // ...
+  }
+  const onChangeThumb = (file) => {
     if (file) {
       // Set the thumbnail image for preview
       setUploadThumbImage(file)
@@ -34,6 +51,11 @@ export const CommunityInputBox = (props) => {
       }
       reader.readAsDataURL(file)
     }
+  }
+
+  const handleThumbChange = (e) => {
+    const file = e.target.files[0]
+    onChangeThumb(file)
   }
 
   const upload = () => {
@@ -130,7 +152,6 @@ export const CommunityInputBox = (props) => {
             width: "100%",
             height: "100%",
             paddingRight: "30px",
-            // justifyContent: "center",
           }}
         >
           {uploadedThumb && (
@@ -142,6 +163,7 @@ export const CommunityInputBox = (props) => {
                 maxHeight: "150px",
                 objectFit: "cover",
                 alignSelf: "center",
+                margin: "20px 0px",
               }}
             />
           )}
@@ -158,81 +180,89 @@ export const CommunityInputBox = (props) => {
               borderRadius: "25px",
               padding: "20px",
               marginBottom: "30px",
+              borderTop: "30px",
             }}
             placeholder="무슨 생각을 가지고 계신가요?"
           />
           {openImage && (
             <div
-              style={{
-                width: "100%",
-                border: "1px solid lightgray",
-                height: "200px",
-                position: "relative",
-                justifyContent: "center",
-                alignItems: "center",
-                display: "flex",
-                flexDirection: "column",
-              }}
+              className={`preview${isActive ? " active" : ""}`}
+              onDragEnter={handleDragStart} // dragstart 핸들러 추가
+              onDragLeave={handleDragEnd}
+              onDrop={handleDrop}
+              onDragOver={(e) => e.preventDefault()}
             >
-              <IconButton
-                onClick={() => setOpenImage(false)}
-                style={{
-                  borderRadius: "75%",
-                  position: "absolute",
-                  right: 0,
-                  top: 0,
+              <>
+                <IconButton
+                  onClick={() => setOpenImage(false)}
+                  style={{
+                    borderRadius: "75%",
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
 
-                  width: "40px",
-                  height: "40px",
+                    width: "40px",
+                    height: "40px",
 
-                  color: "black",
-                  border: "1px solid #eee",
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-              <ImageOutlinedIcon />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-                  <Typography>최대 5개의 이미지 또는 GIF를 드래그하거나</Typography>
-                  <div
-                    onClick={() => imageInput.current.click()}
-                    style={{ color: "lightblue" }}
-                    className="clickable"
-                  >
-                    컴퓨터에서 선택
-                  </div>
-                  <input
-                    className="hidden-input"
-                    ref={imageInput}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleThumbChange}
-                  />
+                    color: "black",
+                    border: "1px solid #eee",
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    pointerEvents: "none",
+                    // border: "1px solid black",
+                  }}
+                >
                   <div
                     style={{
-                      marginTop: "58px",
                       display: "flex",
                       alignItems: "center",
                       flexDirection: "column",
+                      // border: "1px solid black",
                     }}
                   >
-                    <Typography variant="caption">
-                      가로 세로 비율이 2:5에서 5:2 사이인 이미지를 업로드하세요.
-                    </Typography>
-                    <Typography variant="caption">
-                      사용 권한이 있는 이미지 또는 GIF만 선택하세요.
-                    </Typography>
+                    <ImageOutlinedIcon />
+                    <Typography>최대 5개의 이미지 또는 GIF를 드래그하거나</Typography>
+                    <div
+                      onClick={() => imageInput.current.click()}
+                      style={{ color: "lightblue", pointerEvents: "auto" }}
+                      className="clickable"
+                    >
+                      컴퓨터에서 선택
+                    </div>
+                    <input
+                      className="hidden-input"
+                      ref={imageInput}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleThumbChange}
+                    />
+                    <div
+                      style={{
+                        marginTop: "58px",
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Typography variant="caption">
+                        가로 세로 비율이 2:5에서 5:2 사이인 이미지를 업로드하세요.
+                      </Typography>
+                      <Typography variant="caption">
+                        사용 권한이 있는 이미지 또는 GIF만 선택하세요.
+                      </Typography>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </>
             </div>
           )}
         </div>
@@ -244,7 +274,13 @@ export const CommunityInputBox = (props) => {
           height: "20%",
         }}
       >
-        <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           {!openImage && (
             <Button style={{ borderRadius: "20px" }} onClick={() => setOpenImage(true)}>
               <ImageOutlinedIcon />

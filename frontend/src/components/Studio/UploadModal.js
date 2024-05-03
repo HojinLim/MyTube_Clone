@@ -51,6 +51,11 @@ export default function UploadModal() {
   const [isPublic, setIsPublic] = React.useState(true)
   const [duration, setDuration] = React.useState()
   const [sort, setSort] = React.useState()
+
+  const [isActive, setActive] = React.useState(false)
+  const handleDragStart = () => setActive(true)
+  const handleDragEnd = () => setActive(false)
+
   const handleOpen = () => setOpen(true)
   const handleClose = () => {
     setUploaded(false)
@@ -59,6 +64,21 @@ export default function UploadModal() {
     setUploaded(null)
 
     setOpen(false)
+  }
+
+  const handleDrop = (event) => {
+    event.preventDefault()
+
+    const file = event.dataTransfer.files[0]
+    console.log(event.dataTransfer.files)
+    console.log(file)
+    // readImage(file)
+    setActive(false)
+
+    onChangeThumb(file)
+
+    // 드롭된 파일 핸들링
+    // ...
   }
 
   // 제목 입력

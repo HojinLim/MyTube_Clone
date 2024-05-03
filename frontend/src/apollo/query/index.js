@@ -243,6 +243,28 @@ export const GET_COMMENTS_BY_ID = gql`
   }
 `
 
+export const GET_COMMENTS_BY_ID_COMMUNITY = gql`
+  query GetComments($id: ID!) {
+    comments(where: { created_community: $id }) {
+      id
+      contents
+
+      like_users {
+        id
+      }
+      dislike_users {
+        id
+      }
+      created_user {
+        id
+        profileImage
+        username
+      }
+      created_at
+    }
+  }
+`
+
 // 좋아요 영상
 // *READ*
 export const GET_LIKES_BY_UID = gql`

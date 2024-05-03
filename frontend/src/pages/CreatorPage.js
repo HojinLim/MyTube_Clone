@@ -24,16 +24,25 @@ import { accountState } from "atom/accountState"
 import { useFindUserData } from "hooks/useFindUserData"
 import SimpleDialog from "components/common/SimpleDialog"
 import { whichStudioState } from "atom/whichStudioState"
+import { communityState } from "atom/commonState"
 export const CreatorPage = () => {
   const params = useParams()
   const [value, setValue] = useState(0)
   const [subscript, setSubscript] = useState(false)
   const [page, setPage] = useRecoilState(whichStudioState)
+  const [comState, setCommunityState] = useRecoilState(communityState)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
+    setCommunityState(newValue)
   }
-
+  useEffect(() => {
+    setCommunityState(0)
+    return () => {
+      setCommunityState(null)
+    }
+  }, [])
+  console.log(value)
   const nickname = params.nickname.split("@")
   const user = useRecoilValue(accountState)
 
@@ -127,7 +136,7 @@ export const CreatorPage = () => {
       </div>
       <div style={{ display: "flex" }}>
         <Tabs
-          value={value}
+          value={comState}
           onChange={handleChange}
           aria-label="basic tabs example"
           indicatorColor="secondary"
@@ -145,10 +154,10 @@ export const CreatorPage = () => {
       <Divider />
 
       {/* 홈 컨테이너 */}
-      {value === 0 && <HomeContainer datas={created_youtubes} />}
-      {value === 1 && <VideoContainer datas={created_youtubes} />}
+      {comState === 0 && <HomeContainer datas={created_youtubes} />}
+      {comState === 1 && <VideoContainer datas={created_youtubes} />}
       {/* {value === 2 && <PlayListContainer datas={created_youtubes} />} */}
-      {value === 2 && <CommunityContainer />}
+      {comState === 2 && <CommunityContainer />}
     </div>
   )
 }

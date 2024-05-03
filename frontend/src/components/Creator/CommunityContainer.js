@@ -40,7 +40,7 @@ export const CommunityContainer = () => {
       }}
     >
       {isMine && <CommunityInputBox refetch={refetch} />}
-      {data?.communities?.map((data, key) => (
+      {data?.communities?.reverse().map((data, key) => (
         <React.Fragment key={key}>
           <CommunityBox data={data} refetch={refetch} />
         </React.Fragment>
