@@ -17,19 +17,31 @@ import { CustomIconMenu } from "components/common/CustomIconMenu"
 import useUpdateLater from "hooks/useUpdateLater"
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
+import { Skeleton } from "@mui/material"
+import useHandleLike from "hooks/useHandleLike"
 
 export const PlayListSide = (props) => {
-  const { datas, length, sideTitle, refetch } = props
+  const { datas, length, sideTitle, refetch, loading } = props
   console.log(props)
 
   const navigate = useNavigate()
   const [color, setColor] = useState(null)
   const [gradientBackground, setGradientBackground] = useState("")
   const [isLike, setIsLike] = useState(false)
-  const { id, thumbnail, title, createdBy, created_at, later_users } = datas ?? {}
+  const { id, thumbnail, title, createdBy, created_at, later_users, like_users, dislike_users } =
+    datas ?? {}
   const user = useRecoilValue(accountState)
   const { isAdded, addLaterVideoHandler } = useUpdateLater({
     later_users: later_users,
+    refetch: refetch,
+    user: user,
+    id: id,
+  })
+
+  const { isLikeAdded, isDisLikeAdded, clickLike, clickDislike } = useHandleLike({
+    type: "video",
+    like_users: like_users,
+    dislike_users: dislike_users,
     refetch: refetch,
     user: user,
     id: id,
@@ -58,9 +70,7 @@ export const PlayListSide = (props) => {
       setIsLike(false)
     }
   }, [])
-  // const handleClick = (id) => {
-  //   onClick(id)
-  // }
+
   return (
     <div
       className="later_outer"
@@ -80,33 +90,28 @@ export const PlayListSide = (props) => {
               justifyContent: "center",
             }}
           >
-            <img
-              className="pointerlable"
-              onClick={() => {
-                navigate(`/watch/${id}`)
-                window.location.reload()
-              }}
-              src={process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail?.url}
-              style={{
-                backgroundColor: "wheat",
-                width: "100%",
-                maxWidth: "336px",
-                maxHeight: "200px",
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height="100%" />
+            ) : (
+              <img
+                className="pointerlable"
+                onClick={() => {
+                  navigate(`/watch/${id}`)
+                  window.location.reload()
+                }}
+                src={process.env.REACT_APP_BACKEND_URL_UPLOAD + thumbnail?.url}
+                style={{
+                  backgroundColor: "wheat",
+                  width: "100%",
+                  maxWidth: "336px",
+                  maxHeight: "200px",
 
-                borderRadius: "20px",
-              }}
-            />
+                  borderRadius: "20px",
+                }}
+              />
+            )}
           </div>
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-              marginLeft: "50px",
-            }}
-          >
+          <div className="playSide-info-container">
             <Typography color={"white"} variant="h6" fontWeight={"800"} marginBottom={"15px"}>
               {sideTitle}
             </Typography>
@@ -139,14 +144,14 @@ export const PlayListSide = (props) => {
                 </Box>
               </div>
             </div>
-
+            {console.log(isLike)}
             <CustomIconMenu
               style={{
                 backgroundColor: "#fff",
                 borderRadius: "20px",
                 maxWidth: "30px",
                 maxHeight: "30px",
-                color: "white",
+                // color: "white",
               }}
               iconButton={<MoreVertIcon />}
               menuItems={[
@@ -154,7 +159,11 @@ export const PlayListSide = (props) => {
                   icon: <MoreVertIcon />,
                   text: isLike ? "좋아요 목록에서 삭제" : "나중에 보기 삭제",
                   onClick: () => {
-                    if (!isLike) addLaterVideoHandler()
+                    if (!isLike) {
+                      addLaterVideoHandler()
+                    } else {
+                      clickLike()
+                    }
                   },
                 },
               ]}
@@ -162,17 +171,7 @@ export const PlayListSide = (props) => {
           </div>
         </div>
         {/* 모두재생, 셔플 */}
-        <div
-          component="section"
-          style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: "20px",
-            justifyContent: "space-between",
-            display: "flex",
-            margin: "auto",
-          }}
-        >
+        <div className="playSide-btn-container" component="section">
           <Button
             style={{
               height: "100%",

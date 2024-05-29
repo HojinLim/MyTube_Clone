@@ -7,9 +7,8 @@ import { PlayListSide } from "components/PlayList/PlayListSide"
 
 import { useRecoilValue } from "recoil"
 import { accountState } from "atom/accountState"
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client"
+import { useLazyQuery } from "@apollo/client"
 import { GET_LATER_VIDEO_BY_ID } from "apollo/query"
-import useUpdateLater from "hooks/useUpdateLater"
 
 export const LaterPage = () => {
   const user = useRecoilValue(accountState)
@@ -18,20 +17,13 @@ export const LaterPage = () => {
   const [getLaterVideo, { data, error, loading, called, refetch }] =
     useLazyQuery(GET_LATER_VIDEO_BY_ID)
 
-  // const { isAdded, addLaterVideoHandler } = useUpdateLater({
-  //   later_users: data?.youtubeMedias?.later_users,
-  //   refetch: refetch,
-  //   user: user,
-  //   id: clickedId,
-  // })
-
   useEffect(() => {
     if (!called || loading) {
       getLaterVideo({ variables: { id: user?.uid } })
     }
     console.log(data?.youtubeMedias)
   }, [data, user, called])
-  console.log(clickedId)
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <PlayListSide
@@ -40,10 +32,10 @@ export const LaterPage = () => {
         sideTitle={"나중에 볼 영상"}
         setClickedId={setClickedId}
         refetch={refetch}
+        loading={loading}
       />
 
       {/* 모두재생, 셔플 */}
-
       <div className="flexible-container">
         <div style={{ display: "flex" }}>
           <MenuSelector categories={["전체", "동영상", "Shorts"]} />

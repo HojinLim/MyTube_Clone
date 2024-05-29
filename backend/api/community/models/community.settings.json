@@ -42,8 +42,8 @@
       "model": "user"
     },
     "comments": {
-      "collection": "comments",
       "via": "communities",
+      "collection": "comments",
       "dominant": true
     }
   }

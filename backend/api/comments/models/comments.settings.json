@@ -53,8 +53,11 @@
       "type": "string"
     },
     "communities": {
-      "via": "comments",
-      "collection": "community"
+      "collection": "community",
+      "via": "comments"
+    },
+    "created_community": {
+      "model": "community"
     }
   }
 }

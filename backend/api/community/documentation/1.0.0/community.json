@@ -971,6 +971,9 @@
                     "type": "string"
                   }
                 },
+                "created_community": {
+                  "type": "string"
+                },
                 "published_at": {
                   "type": "datetime"
                 },

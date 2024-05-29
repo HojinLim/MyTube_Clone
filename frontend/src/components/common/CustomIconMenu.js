@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 
-export const CustomIconMenu = ({ background, style, iconButton, menuItems, color }) => {
+export const CustomIconMenu = ({ className, background, style, iconButton, menuItems, color }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -22,6 +22,7 @@ export const CustomIconMenu = ({ background, style, iconButton, menuItems, color
   return (
     <>
       <IconButton
+        className={className}
         disabled={menuItems?.disabled ?? false}
         style={style ? { ...style, color: "black" } : { color: "black" }}
         id="custom-menu-button"

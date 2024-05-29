@@ -580,6 +580,9 @@
                     "type": "string"
                   }
                 },
+                "created_community": {
+                  "type": "string"
+                },
                 "published_at": {
                   "type": "datetime"
                 },
@@ -644,6 +647,9 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "created_community": {
+                "type": "string"
               },
               "published_at": {
                 "type": "datetime"
@@ -1208,6 +1214,55 @@
               }
             }
           },
+          "created_community": {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "contents": {
+                "type": "string"
+              },
+              "photo": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "like_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "dislike_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "created_user": {
+                "type": "string"
+              },
+              "comments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "published_at": {
+                "type": "datetime"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -1260,6 +1315,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "created_community": {
+            "type": "string"
           },
           "published_at": {
             "type": "datetime"

@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "05/02/2024 10:09:15 AM"
+    "x-generation-date": "05/07/2024 9:43:35 AM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -3758,6 +3758,9 @@
                     "type": "string"
                   }
                 },
+                "created_community": {
+                  "type": "string"
+                },
                 "published_at": {
                   "type": "datetime"
                 },
@@ -3822,6 +3825,9 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "created_community": {
+                "type": "string"
               },
               "published_at": {
                 "type": "datetime"
@@ -4386,6 +4392,55 @@
               }
             }
           },
+          "created_community": {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "contents": {
+                "type": "string"
+              },
+              "photo": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "like_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "dislike_users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "created_user": {
+                "type": "string"
+              },
+              "comments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "published_at": {
+                "type": "datetime"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
+          },
           "published_at": {
             "type": "datetime"
           }
@@ -4438,6 +4493,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "created_community": {
+            "type": "string"
           },
           "published_at": {
             "type": "datetime"
@@ -4906,6 +4964,9 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "created_community": {
+                  "type": "string"
                 },
                 "published_at": {
                   "type": "datetime"
@@ -6463,6 +6524,9 @@
                     "type": "string"
                   }
                 },
+                "created_community": {
+                  "type": "string"
+                },
                 "published_at": {
                   "type": "datetime"
                 },
@@ -6529,6 +6593,9 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "created_community": {
+                  "type": "string"
                 },
                 "published_at": {
                   "type": "datetime"
